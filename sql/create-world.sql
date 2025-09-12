@@ -22,6 +22,23 @@ ORDER BY
 
 GRANT SELECT, UPDATE ON world.countries TO public;
 
+DROP PROCEDURE update_selected_countries;
+
+CREATE OR REPLACE PROCEDURE update_selected_countries(enabled_countries jsonb)
+AS $$
+DECLARE
+    ec json;
+BEGIN
+    FOR ec IN SELECT jsonb_array_elements(enabled_countries) LOOP
+        UPDATE world.countries SET "is_enabled" = (ec->>'is_checked')::BOOLEAN
+        WHERE id = (ec->>'id')::CHAR(2);
+    END LOOP;
+    RETURN;
+END;
+$$
+LANGUAGE plpgsql;
+
+
 DROP VIEW IF EXISTS public.country_details;
 
 CREATE VIEW
