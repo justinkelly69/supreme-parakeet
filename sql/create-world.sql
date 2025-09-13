@@ -38,6 +38,29 @@ END;
 $$
 LANGUAGE plpgsql;
 
+create or replace function update_many_countries(payload json) returns setof world.countries as $$
+  update wc set wc.is_enabled = payload.is_checked
+  from world.countries as wc
+  where wc.id = payload.id
+  returning wc.*;      
+$$ language plpgsql;
+
+CREATE OR REPLACE FUNCTION update_checked_status(items JSONB)
+RETURNS VOID
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    item JSONB;
+BEGIN
+    -- Loop through each object in the array
+    FOR item IN SELECT jsonb_array_elements(items)
+    LOOP
+        UPDATE world.countries 
+        SET is_enabled = (item->>'is_enabled')::boolean 
+        WHERE id = item->>'id';
+    END LOOP;
+END;
+$$;
 
 DROP VIEW IF EXISTS public.country_details;
 
