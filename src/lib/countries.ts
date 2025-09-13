@@ -23,8 +23,9 @@ const supabase = createClient()
 
 export const updateSelectedCountries = async (countries: Country[]) => {
     try {
-        const enabledCountries = getSelectedCountries(countries)
-        await supabase.rpc('update_checked_status', { items: enabledCountries })
+        await supabase.rpc('update_selected_countries', { 
+            selected_countries: getSelectedCountries(countries) 
+        })
     }
     catch (err) {
         console.error('Failed to update countries:', err)

@@ -1,2 +1,0 @@
-CREATE SCHEMA world;
-CREATE SCHEMA iso;

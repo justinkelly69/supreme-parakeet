@@ -31,7 +31,9 @@ const CountriesTable = (props: {
         <main>
             <ul className="top-panel">
                 <li>
-                    <button onClick={async () => updateSelectedCountries(props.countries)}>Save</button>
+                    <button onClick={() =>
+                        updateSelectedCountries(props.countries)
+                    }>Save</button>
                 </li>
             </ul>
             <table>
@@ -96,7 +98,7 @@ const CountryRow = (props: {
             <td>
                 <button onClick={e =>
                     props.setCountryIndex(props.index)
-                }>Select</button>
+                }>View</button>
             </td>
         </tr>
     );

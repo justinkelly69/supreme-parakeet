@@ -5,14 +5,14 @@ CREATE SCHEMA IF NOT EXISTS world;
 DROP TABLE IF EXISTS world.countries;
 
 CREATE TABLE
-    IF NOT EXISTS world.countries (
+    IF NOT EXISTS world.selected_countries (
         "id" CHAR(2) NOT NULL UNIQUE,
         "is_enabled" BOOLEAN NOT NULL DEFAULT FALSE,
-        CONSTRAINT "fk_countries" FOREIGN KEY ("id") REFERENCES iso.countries ("id")
+        CONSTRAINT "fk_selected_countries" FOREIGN KEY ("id") REFERENCES iso.countries ("id")
     );
 
 INSERT INTO
-    world.countries (id)
+    world.selected_countries (id)
 SELECT
     "id"
 FROM
@@ -20,44 +20,20 @@ FROM
 ORDER BY
     "name";
 
-GRANT SELECT, UPDATE ON world.countries TO public;
+GRANT SELECT, UPDATE ON world.selected_countries TO public;
 
-DROP PROCEDURE update_selected_countries;
-
-CREATE OR REPLACE PROCEDURE update_selected_countries(enabled_countries jsonb)
-AS $$
-DECLARE
-    ec json;
-BEGIN
-    FOR ec IN SELECT jsonb_array_elements(enabled_countries) LOOP
-        UPDATE world.countries SET "is_enabled" = (ec->>'is_checked')::BOOLEAN
-        WHERE id = (ec->>'id')::CHAR(2);
-    END LOOP;
-    RETURN;
-END;
-$$
-LANGUAGE plpgsql;
-
-create or replace function update_many_countries(payload json) returns setof world.countries as $$
-  update wc set wc.is_enabled = payload.is_checked
-  from world.countries as wc
-  where wc.id = payload.id
-  returning wc.*;      
-$$ language plpgsql;
-
-CREATE OR REPLACE FUNCTION update_checked_status(items JSONB)
+CREATE OR REPLACE FUNCTION update_selected_countries(selected_countries JSONB)
 RETURNS VOID
 LANGUAGE plpgsql
 AS $$
 DECLARE
-    item JSONB;
+    selected_country JSONB;
 BEGIN
-    -- Loop through each object in the array
-    FOR item IN SELECT jsonb_array_elements(items)
+    FOR selected_country IN SELECT jsonb_array_elements(selected_countries)
     LOOP
-        UPDATE world.countries 
-        SET is_enabled = (item->>'is_enabled')::boolean 
-        WHERE id = item->>'id';
+        UPDATE world.selected_countries 
+        SET is_enabled = (selected_country->>'is_enabled')::boolean 
+        WHERE id = selected_country->>'id';
     END LOOP;
 END;
 $$;
@@ -89,7 +65,7 @@ FROM
     LEFT JOIN iso.languages lg ON lg."id" = cl."language_id" 
     LEFT JOIN iso.country_currencies cc ON co."id" = cc."country_id"
     LEFT JOIN iso.currencies cu ON cu."id" = cc."currency_id" 
-    LEFT JOIN world.countries wc ON wc."id" = co."id"
+    LEFT JOIN world.selected_countries wc ON wc."id" = co."id"
 GROUP BY
     co."id",
     cn."name",
