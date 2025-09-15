@@ -1,5 +1,5 @@
 import * as React from "react"
-import { ChangeEventHandler } from "react"
+import { ChangeEventHandler, Ref } from "react"
 
 type OptionArgs = {
     value: string,
@@ -12,6 +12,7 @@ const Select = (props: {
     options: OptionArgs[],
     value?: string,
     defaultValue?: string,
+    ref:Ref<HTMLSelectElement>
 }) => {
 
     const options = props.options.map((option, index) => {
@@ -28,7 +29,8 @@ const Select = (props: {
         <select
             defaultValue={props.defaultValue}
             value={props.value}
-            onChange={props.onChange}>
+            onChange={props.onChange}
+            ref={props.ref}>
             {options}
         </select>
     )

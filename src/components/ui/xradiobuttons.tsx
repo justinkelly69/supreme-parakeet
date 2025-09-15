@@ -1,5 +1,5 @@
 import * as React from "react"
-import { ChangeEventHandler } from "react"
+import { ChangeEventHandler, Ref } from "react"
 
 export type RadioButtonData = {
     value: string,
@@ -14,6 +14,7 @@ export const RadioButton = (props: {
     className?: string,
     labelClass?: string,
     onChange: ChangeEventHandler<HTMLInputElement>
+    ref: Ref<HTMLInputElement>
 }) => {
     return (
         <label className={props.labelClass}>
@@ -23,6 +24,7 @@ export const RadioButton = (props: {
                 className={props.className}
                 defaultChecked={props.checked}
                 onChange={props.onChange}
+                ref={props.ref}
             />
             {props.label}
         </label>
@@ -35,8 +37,10 @@ export const RadioButtons = (props: {
     className?: string,
     labelClass?: string,
     radioButtonsData: RadioButtonData[],
-    checkedValue: string ,
+    checkedValue: string,
     setCheckedValue: Function,
+    ref: Ref<HTMLInputElement>
+
 }) => {
     const radiobuttons = props.radioButtonsData.map((option, index) => {
         return (
@@ -54,6 +58,7 @@ export const RadioButtons = (props: {
                             console.log(props.name, option.value)
                         }
                     }}
+                    ref={props.ref}
                 />
             </li>
         )
@@ -68,8 +73,8 @@ export const RadioButtons = (props: {
 
 export const clearRadioButtons = (name: string) => {
     const inputs = document.getElementsByTagName('input')
-    for(const input of inputs) {
-        if(input.type === 'radio' && input.name === name) {
+    for (const input of inputs) {
+        if (input.type === 'radio' && input.name === name) {
             input.checked = false
         }
     }

@@ -1,5 +1,5 @@
 import * as React from "react"
-import { ChangeEventHandler } from "react"
+import { ChangeEventHandler, Ref } from "react"
 
 export type CheckBoxData = {
     checked: boolean,
@@ -14,6 +14,7 @@ export const Checkbox = (props: {
     className?: string,
     labelClass?: string,
     onChange: ChangeEventHandler<HTMLInputElement>
+    ref: Ref<HTMLInputElement>
 }) => {
     return (
         <label className={props.labelClass}>
@@ -22,6 +23,7 @@ export const Checkbox = (props: {
                 className={props.className}
                 defaultChecked={props.checked}
                 onChange={props.onChange} 
+                ref={props.ref}
             />
             {props.label}
         </label>
@@ -35,6 +37,7 @@ export const CheckboxGroup = (props: {
     checkboxData: CheckBoxData[],
     checkedValues: string[],
     setCheckedValues: Function,
+    ref: Ref<HTMLInputElement>
 }) => {
 
     const checkedValueSet = (values: string[], checkboxes: CheckBoxData[]) => {
@@ -82,6 +85,7 @@ export const CheckboxGroup = (props: {
                         }
                         props.setCheckedValues(checkedValueArray(checkedValues))
                     }}
+                    ref={props.ref}
                 />
             </li>
         )

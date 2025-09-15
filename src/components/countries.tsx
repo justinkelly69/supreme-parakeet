@@ -60,6 +60,7 @@ const CountriesHeader = (props: {
                         <Button
                             className="save-countries"
                             onClick={() => updateSelectedCountries(props.countries)}
+                            ref={null}
                         >
                             Save
                         </Button>
@@ -74,6 +75,7 @@ const CountriesHeader = (props: {
                             { value: "ENABLED", label: "Enabled" },
                             { value: "DISABLED", label: "Disabled" },
                         ]}
+                        ref={null}
                     />
                 </li>
                 <li>
@@ -84,6 +86,7 @@ const CountriesHeader = (props: {
                         checkedValues={props.selectedContinents}
                         setCheckedValues={props.setSelectedContinents}
                         checkboxData={props.continentData}
+                        ref={null}
                     />
                 </li>
                 <li>
@@ -91,6 +94,7 @@ const CountriesHeader = (props: {
                         onClick={() => {
                             console.log(JSON.stringify(props.selectedContinents))
                         }}
+                        ref={null}
                     >
                         Selected Continents
                     </Button>
@@ -108,9 +112,12 @@ const CountriesHeader = (props: {
                         ]}
                         checkedValue={stooge}
                         setCheckedValue={setStooge}
+                        ref={null}
                     />
                     <Button className="clear-buttonz"
-                        onClick={e => clearRadioButtons('stooges')}>
+                        onClick={e => clearRadioButtons('stooges')}
+                        ref={null}
+                    >
                         Clear Stooges
                     </Button>
                 </li>
@@ -201,6 +208,7 @@ const CountryRow = (props: {
                                 )
                             )
                         }}
+                        ref={null}
                     />
                 </td>
             )}
