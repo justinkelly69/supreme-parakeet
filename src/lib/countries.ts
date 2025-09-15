@@ -1,3 +1,4 @@
+import { CheckBoxData } from '@/components/ui/xcheckbox';
 import { createClient } from '@/utils/supabase/client'
 
 export type Country = {
@@ -11,7 +12,7 @@ export type Country = {
     prefix: string,
     is_eu: boolean,
     is_enabled: boolean,
-    is_changed: boolean,
+    was_enabled: boolean,
 };
 
 export type EnabledCountry = {
@@ -19,12 +20,48 @@ export type EnabledCountry = {
     is_enabled: boolean,
 }
 
+export type Continent = {
+    id: string,
+    name: string,
+}
+
 const supabase = createClient()
+
+
+export const getContinents = async (setContinents: Function) => {
+    try {
+        const { data, error } = await supabase.schema('iso').from('continents').select('id, name')
+        if (error) {
+            console.error('Error fetching continents:', error)
+            return
+        }
+        setContinents((data ?? []).map((continent: Continent) => ({
+            id: continent.id,
+            name: continent.name,
+        })))
+    }
+    catch (err) {
+        console.error('Failed to fetch continents:', err)
+    }
+}
+
+export const setContinentData = (continents: Continent[]) => {
+    const out: CheckBoxData[] = []
+
+    for(const continent of continents){
+        out.push({
+            name: continent.id,
+            label: continent.name,
+            checked: true,
+        })
+    }
+    return out
+}
 
 export const updateSelectedCountries = async (countries: Country[]) => {
     try {
-        await supabase.rpc('update_selected_countries', { 
-            selected_countries: getSelectedCountries(countries) 
+        await supabase.rpc('update_selected_countries', {
+            selected_countries: getSelectedCountries(countries)
         })
     }
     catch (err) {
@@ -53,7 +90,7 @@ export const getCountries = async (setCountries: Function) => {
                 prefix: item.prefix,
                 is_eu: item.is_eu,
                 is_enabled: item.is_enabled,
-                is_changed: item.is_enabled,
+                was_enabled: item.is_enabled,
             }))
         )
     } catch (err) {
@@ -66,10 +103,10 @@ export const getSelectedCountries = (countries: Country[]): EnabledCountry[] => 
 
     for (let i = 0; i < countries.length; i++) {
         const c = countries[i]
-        if (c.is_enabled !== c.is_changed) {
+        if (c.is_enabled !== c.was_enabled) {
             out.push({
                 id: c.id,
-                is_enabled: c.is_changed
+                is_enabled: c.was_enabled
             })
         }
     }
@@ -81,10 +118,10 @@ export const selectCountry = (countries: Country[], index: number, checked: bool
 
     for (let i = 0; i < countries.length; i++) {
         const c = countries[i]
-        let isChecked = c.is_changed
+        let wasEnabled = c.was_enabled
 
         if (index === i) {
-            isChecked = checked
+            wasEnabled = checked
         }
 
         co.push({
@@ -98,7 +135,7 @@ export const selectCountry = (countries: Country[], index: number, checked: bool
             prefix: c.prefix,
             is_eu: c.is_eu,
             is_enabled: c.is_enabled,
-            is_changed: isChecked
+            was_enabled: wasEnabled
         })
     }
     return co
