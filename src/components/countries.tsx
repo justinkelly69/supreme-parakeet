@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { Continent, Country, selectCountry, setContinentData, updateSelectedCountries } from "@/lib/countries";
 import Button from "./ui/xbutton";
 import Select from "./ui/xselect";
-import Checkbox, { CheckBoxData } from "./ui/xcheckbox";
-import CheckboxGroup from "./ui/xcheckgroup";
+import { Checkbox, CheckBoxData, CheckboxGroup } from "./ui/xcheckboxes";
+import { RadioButtons, clearRadioButtons } from "./ui/xradiobuttons";
 
 
 export const CountriesPage = (props: {
@@ -50,6 +50,7 @@ const CountriesHeader = (props: {
     selectedContinents: string[],
     setSelectedContinents: Function,
 }) => {
+    const [stooge, setStooge] = useState('larry')
 
     return (
         <header className="top-panel">
@@ -92,6 +93,25 @@ const CountriesHeader = (props: {
                         }}
                     >
                         Selected Continents
+                    </Button>
+                </li>
+                <li>
+                    <RadioButtons
+                        label='buttons'
+                        name='stooges'
+                        className='buttonz'
+                        labelClass='buttonz-labelz'
+                        radioButtonsData={[
+                            { 'label': 'Larry', 'value': 'larry' },
+                            { 'label': 'Curly', 'value': 'curly' },
+                            { 'label': 'Moe', 'value': 'moe' },
+                        ]}
+                        checkedValue={stooge}
+                        setCheckedValue={setStooge}
+                    />
+                    <Button className="clear-buttonz"
+                        onClick={e => clearRadioButtons('stooges')}>
+                        Clear Stooges
                     </Button>
                 </li>
             </ul>

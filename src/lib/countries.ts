@@ -1,4 +1,4 @@
-import { CheckBoxData } from '@/components/ui/xcheckbox';
+import { CheckBoxData } from '@/components/ui/xcheckboxes';
 import { createClient } from '@/utils/supabase/client'
 
 export type Country = {

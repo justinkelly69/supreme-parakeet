@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react'
 import { CountriesPage } from '@/components/countries'
 import { Continent, Country, getContinents, getCountries } from '@/lib/countries'
-import { CheckBoxData } from '@/components/ui/xcheckbox'
 
 export default function Page() {
     const [countries, setCountries] = useState<Country[]>([])
@@ -23,8 +22,3 @@ export default function Page() {
         />
     )
 }
-
-    // countries: Country[],
-    // setCountries: Function,
-    // continentData: CheckBoxData[],
-    // continents: string[]

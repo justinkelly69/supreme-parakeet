@@ -1,5 +1,5 @@
 import * as React from "react"
-import { ChangeEventHandler, JSX } from "react"
+import { ChangeEventHandler } from "react"
 
 type OptionArgs = {
     value: string,

@@ -1,8 +1,34 @@
 import * as React from "react"
 import { ChangeEventHandler } from "react"
-import Checkbox, { CheckBoxData } from "./xcheckbox"
 
-const CheckboxGroup = (props: {
+export type CheckBoxData = {
+    checked: boolean,
+    name: string,
+    label: string,
+}
+
+export const Checkbox = (props: {
+    label: string,
+    name: string,
+    checked?: boolean,
+    className?: string,
+    labelClass?: string,
+    onChange: ChangeEventHandler<HTMLInputElement>
+}) => {
+    return (
+        <label className={props.labelClass}>
+            <input type="checkbox"
+                name={props.name}
+                className={props.className}
+                defaultChecked={props.checked}
+                onChange={props.onChange} 
+            />
+            {props.label}
+        </label>
+    )
+}
+
+export const CheckboxGroup = (props: {
     label: string,
     className?: string,
     labelClass?: string,
@@ -91,5 +117,3 @@ export const setCheckedValues = (checkBoxData: CheckBoxData[], values: string[])
     }
     return dataOut
 }
-
-export default CheckboxGroup
