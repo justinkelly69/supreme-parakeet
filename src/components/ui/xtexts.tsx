@@ -1,5 +1,16 @@
 import * as React from "react"
 import { Ref } from "react"
+import styled from 'styled-components';
+
+const Input = styled.input<{ $inputColor?: string; }>`
+  padding: 0.5em;
+  margin: 0.5em;
+  color: ${props => props.$inputColor || "#BF4F74"};
+  background: papayawhip;
+  border: none;
+  border-radius: 3px;
+`;
+
 
 export const Text = (props: {
     id: string,
@@ -10,10 +21,11 @@ export const Text = (props: {
     maxlength?: number,
     pattern?: string,
     className?: string,
+    onChange?:Function,
     ref: Ref<HTMLInputElement>
 }) => {
     return (
-        <input type="text"
+        <Input type="text"
             id={props.id}
             name={props.name}
             value={props.value}
@@ -22,6 +34,7 @@ export const Text = (props: {
             maxLength={props.maxlength}
             pattern={props.pattern}
             className={props.className}
+            onChange={props.onChange}
             ref={props.ref}
         />
     )

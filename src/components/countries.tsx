@@ -4,6 +4,7 @@ import Button from "./ui/xbutton";
 import Select from "./ui/xselect";
 import { Checkbox, CheckBoxData, CheckboxGroup } from "./ui/xcheckboxes";
 import { RadioButtons, clearRadioButtons } from "./ui/xradiobuttons";
+import { Text } from "./ui/xtexts";
 
 
 export const CountriesPage = (props: {
@@ -51,6 +52,7 @@ const CountriesHeader = (props: {
     setSelectedContinents: Function,
 }) => {
     const [stooge, setStooge] = useState('larry')
+    const [text, setText] = useState('')
 
     return (
         <header className="top-panel">
@@ -120,6 +122,20 @@ const CountriesHeader = (props: {
                     >
                         Clear Stooges
                     </Button>
+                </li>
+                <li>
+                    <Text
+                        id='txt'
+                        name='txt'
+                        value={text}
+                        placeholder='Place Holder'
+                        size={20}
+                        maxlength={30}
+                        className='klass'
+                        onChange={(e: { target: { value: React.SetStateAction<string>; }; }) => setText(e.target.value)}
+                        ref={null}
+                    /><br/>
+                    <div>{text}</div>
                 </li>
             </ul>
         </header>
