@@ -1,12 +1,15 @@
 import * as React from "react"
-import { Ref } from "react"
+import { ChangeEventHandler, Ref } from "react"
 import styled from 'styled-components';
 
-const Input = styled.input<{ $inputColor?: string; }>`
+const Input = styled.input<{ 
+    $inputColor?: string,
+    $backgroundColor?: string,
+ }>`
   padding: 0.5em;
   margin: 0.5em;
-  color: ${props => props.$inputColor || "#BF4F74"};
-  background: papayawhip;
+  color: ${props => props.$inputColor || "#140653ff"};
+  background: ${props => props.$backgroundColor || "#f7eca3ff"};;
   border: none;
   border-radius: 3px;
 `;
@@ -21,7 +24,7 @@ export const Text = (props: {
     maxlength?: number,
     pattern?: string,
     className?: string,
-    onChange?:Function,
+    onChange:ChangeEventHandler<HTMLInputElement>,
     ref: Ref<HTMLInputElement>
 }) => {
     return (

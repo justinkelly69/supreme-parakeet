@@ -56,20 +56,20 @@ const CountriesHeader = (props: {
 
     return (
         <header className="top-panel">
-            <ul>
-                <li>
+            <div className="top-panel-items">
+                <div className="top-panel-item top-panel-1">
                     {props.showEnabled === 'BOTH' && (
                         <Button
-                            className="save-countries"
+                            className="save-countries-button"
                             onClick={() => updateSelectedCountries(props.countries)}
                             ref={null}
                         >
                             Save
                         </Button>
                     )}
-                </li>
-                <li>
-                    <Select className="show-enabled"
+                </div>
+                <div className="top-panel-item top-panel-2">
+                    <Select className="show-enabled-dropdown"
                         value={props.showEnabled}
                         onChange={(e) => props.setShowEnabled(e.target.value)}
                         options={[
@@ -79,19 +79,20 @@ const CountriesHeader = (props: {
                         ]}
                         ref={null}
                     />
-                </li>
-                <li>
+                </div>
+                <div className="top-panel-item top-panel-3">
                     <CheckboxGroup
                         label="Select Continents"
-                        className="cb-group"
-                        labelClass="cb-label"
+                        className="continent-list"
+                        labelClass="continent-list-item"
+                        boxClass="continent-list-box"
                         checkedValues={props.selectedContinents}
                         setCheckedValues={props.setSelectedContinents}
                         checkboxData={props.continentData}
                         ref={null}
                     />
-                </li>
-                <li>
+                </div>
+                {/* <li>
                     <Button className="save-countries"
                         onClick={() => {
                             console.log(JSON.stringify(props.selectedContinents))
@@ -100,8 +101,8 @@ const CountriesHeader = (props: {
                     >
                         Selected Continents
                     </Button>
-                </li>
-                <li>
+                </li> */}
+                {/* <li>
                     <RadioButtons
                         label='buttons'
                         name='stooges'
@@ -122,8 +123,8 @@ const CountriesHeader = (props: {
                     >
                         Clear Stooges
                     </Button>
-                </li>
-                <li>
+                </li> */}
+                {/* <li>
                     <Text
                         id='txt'
                         name='txt'
@@ -136,8 +137,8 @@ const CountriesHeader = (props: {
                         ref={null}
                     /><br/>
                     <div>{text}</div>
-                </li>
-            </ul>
+                </li> */}
+            </div>
         </header>
     )
 }
@@ -213,7 +214,7 @@ const CountryRow = (props: {
                         label=""
                         name={country.id}
                         checked={country.is_enabled}
-                        className="checkbox"
+                        boxClass="checkbox"
                         labelClass="checkbox_label"
                         onChange={(e) => {
                             props.setCountries(

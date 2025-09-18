@@ -27,6 +27,7 @@ const Select = (props: {
 
     return (
         <select
+            className={props.className}
             defaultValue={props.defaultValue}
             value={props.value}
             onChange={props.onChange}
