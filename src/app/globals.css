@@ -111,41 +111,28 @@ a {
 
 .continent-list-box {}
 
-/* Countries Table */
-
-main {
-  text-align: center;
+.main {
+  /* margin: 0 auto; */
 }
 
-.countries_table {
-  border-top: 1px solid var(--table-border-color);
-  border-right: 1px solid var(--table-border-color);
+/* COUNTRIES GRID */
+
+.countries-bg {
+  background-color: cadetblue;
 }
 
-.countries_table th,
-.countries_table td {
-  padding: .4em;
-  border-left: 1px solid var(--table-border-color);
-  border-bottom: 1px solid var(--table-border-color);
+.country-cell {
+  display: inline-block;
+  background-color: lightskyblue;
+  padding: 0;
 }
 
-/* .countries_table > tbody {
-  height: 20em;
-  overflow-y: scroll;
- }*/
-
-/* .id_col {
-  width: 1em;
+.country-cell-data {
+  margin-top: auto;
+  margin-bottom: auto;
+  background-color: lightcoral;
 }
 
-.continent_col {}
-
-.name_col {}
-
-.flag_col {}
-
-.eu_col {}
-
-.enabled_col {}
-
-.details_col {} */
+.country-cell-selected {
+  background-color: palegreen;
+}
