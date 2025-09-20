@@ -122,17 +122,19 @@ a {
 }
 
 .country-cell {
-  display: inline-block;
-  background-color: lightskyblue;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: whitesmoke;
   padding: 0;
 }
 
-.country-cell-data {
-  margin-top: auto;
-  margin-bottom: auto;
-  background-color: lightcoral;
+ .country-cell-selected {
+  background-color: rgb(43, 217, 43);
 }
 
-.country-cell-selected {
-  background-color: palegreen;
+.country-cell-data {
+  
 }
+
+

@@ -45,24 +45,19 @@ export const GridContainer = (props: {
 }
 
 export const GridItem = (props: {
-    data?: boolean,
+    selected?: boolean,
     className: string,
     children: React.JSX.Element | React.JSX.Element[] | string | null
 }) => {
-    if (props.data === true) {
-        return (
-            <div className={props.className}>
-                <div className={`${props.className}-data`}>
-                    {props.children}
-                </div>
-            </div>
-        )
-    }
-    else {
-        return (
-            <div className={props.className}>
+    const className: string = props.selected ?
+        `${props.className} ${props.className}-selected` :
+        `${props.className}`
+
+    return (
+        <div className={className}>
+            <div className={`${props.className}-data`}>
                 {props.children}
             </div>
-        )
-    }
+        </div>
+    )
 }

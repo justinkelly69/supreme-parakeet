@@ -142,12 +142,13 @@ const CountriesTable = (props: {
                 justifyContent="center"
                 //alignItems="center"
                 gap="1px"
-                className="countries-bg"
+                className="countries"
             >
                 {selectedCountries.map((country, index) =>
                     <CountryRow
                         key={country.id}
                         index={index}
+                        className="country-cell"
                         setCountryIndex={props.setCountryIndex}
                         countries={selectedCountries}
                         setCountries={props.setCountries}
@@ -163,23 +164,24 @@ const CountriesTable = (props: {
 const CountryRow = (props: {
     index: number,
     setCountryIndex: Function,
+    className: string,
     countries: Country[],
     setCountries: Function,
     showEnabled: string,
     selectedContinents: string[]
 }) => {
     const country = props.countries[props.index]
-    const className = country.is_enabled ? "country-cell country-cell-selected" : "country-cell"
+    const isEnabled = country.is_enabled
 
     return (
         <>
-            <GridItem className={className} data={false}>{country.id}</GridItem>
-            <GridItem className={className} data={false}>{country.continent_name}</GridItem>
-            <GridItem className={className} data={false}>{country.name}</GridItem>
-            <GridItem className={className}>{country.flag}</GridItem>
-            <GridItem className={className} data={false}>{country.is_eu ? 'Yes' : 'No'}</GridItem>
+            <GridItem className={props.className} selected={isEnabled}>{country.id}</GridItem>
+            <GridItem className={props.className} selected={isEnabled}>{country.continent_name}</GridItem>
+            <GridItem className={props.className} selected={isEnabled}>{country.name}</GridItem>
+            <GridItem className={props.className} selected={isEnabled}>{country.flag}</GridItem>
+            <GridItem className={props.className} selected={isEnabled}>{country.is_eu ? 'Yes' : 'No'}</GridItem>
             {props.showEnabled === 'BOTH' && (
-                <GridItem className={className} data={false}>
+                <GridItem className={props.className} selected={isEnabled}>
                     <Checkbox
                         label=""
                         name={country.id}
@@ -199,7 +201,7 @@ const CountryRow = (props: {
                     />
                 </GridItem>
             )}
-            <GridItem className={className} data={false}>
+            <GridItem className={props.className} selected={isEnabled}>
                 <button onClick={e =>
                     props.setCountryIndex(props.index)
                 }>View</button>
