@@ -4,7 +4,7 @@ import Button from "./ui/xbutton";
 import Select from "./ui/xselect";
 import { Checkbox, CheckBoxData, CheckboxGroup } from "./ui/xcheckboxes";
 import { RadioButtons, clearRadioButtons } from "./ui/xradiobuttons";
-import { Text } from "./ui/xtexts";
+import { Text, TextArea } from "./ui/xtexts";
 import { GridContainer, GridItem, em, fr } from "./ui/xgrid";
 
 
@@ -14,11 +14,11 @@ export const CountriesPage = (props: {
     continents: Continent[],
     setContinents: Function,
 }) => {
-    const [countryIndex, setCountryIndex] = useState(-1)
+    const [selectedCountry, setSelectedCountry] = useState<Country | null>(null)
     const [selectedContinents, setSelectedContinents] = useState([])
     const [showEnabled, setShowEnabled] = useState('ENABLED')
 
-    return countryIndex < 0 ?
+    return selectedCountry === null ?
         <>
             <CountriesHeader
                 countries={props.countries}
@@ -31,7 +31,7 @@ export const CountriesPage = (props: {
             <CountriesTable
                 countries={props.countries}
                 setCountries={props.setCountries}
-                setCountryIndex={setCountryIndex}
+                setCountryIndex={setSelectedCountry}
                 setShowEnabled={setShowEnabled}
                 showEnabled={showEnabled}
                 selectedContinents={selectedContinents}
@@ -39,8 +39,8 @@ export const CountriesPage = (props: {
         </>
         :
         <CountryDetail
-            country={props.countries[countryIndex]}
-            setCountryIndex={setCountryIndex}
+            selectedCountry={selectedCountry}
+            setSelectedCountry={setSelectedCountry}
         />
 }
 
@@ -129,8 +129,6 @@ const CountriesTable = (props: {
             selectedCountries = selectedCountries.filter((e => e.is_enabled === false))
         }
     }
-    console.log(JSON.stringify(props.selectedContinents, null, 4))
-    console.log(JSON.stringify(selectedCountries, null, 4))
 
     const numRows = selectedCountries.length
 
@@ -140,22 +138,23 @@ const CountriesTable = (props: {
                 cols={colWidths}
                 rows={`repeat(${numRows}, 1fr)`}
                 justifyContent="center"
-                //alignItems="center"
                 gap="1px"
                 className="countries"
             >
-                {selectedCountries.map((country, index) =>
-                    <CountryRow
-                        key={country.id}
-                        index={index}
-                        className="country-cell"
-                        setCountryIndex={props.setCountryIndex}
-                        countries={selectedCountries}
-                        setCountries={props.setCountries}
-                        showEnabled={props.showEnabled}
-                        selectedContinents={props.selectedContinents}
-                    />
-                )}
+                {selectedCountries.map((country, index) => {
+                    return (
+                        <CountryRow
+                            key={country.id}
+                            index={index}
+                            className="country-cell"
+                            setSelectedCountry={props.setCountryIndex}
+                            selectedCountries={selectedCountries}
+                            setCountries={props.setCountries}
+                            showEnabled={props.showEnabled}
+                            selectedContinents={props.selectedContinents}
+                        />
+                    )
+                })}
             </GridContainer>
         </main >
     );
@@ -163,14 +162,14 @@ const CountriesTable = (props: {
 
 const CountryRow = (props: {
     index: number,
-    setCountryIndex: Function,
+    setSelectedCountry: Function,
     className: string,
-    countries: Country[],
+    selectedCountries: Country[],
     setCountries: Function,
     showEnabled: string,
     selectedContinents: string[]
 }) => {
-    const country = props.countries[props.index]
+    const country = props.selectedCountries[props.index]
     const isEnabled = country.is_enabled
 
     return (
@@ -191,7 +190,7 @@ const CountryRow = (props: {
                         onChange={(e) => {
                             props.setCountries(
                                 selectCountry(
-                                    props.countries,
+                                    props.selectedCountries,
                                     props.index,
                                     e.target.checked
                                 )
@@ -202,8 +201,11 @@ const CountryRow = (props: {
                 </GridItem>
             )}
             <GridItem className={props.className} selected={isEnabled}>
-                <button onClick={e =>
-                    props.setCountryIndex(props.index)
+                <button onClick={e => {
+                    props.setSelectedCountry(
+                        props.selectedCountries.find(e => e.id === country.id)
+                    )
+                }
                 }>View</button>
             </GridItem>
         </>
@@ -211,20 +213,104 @@ const CountryRow = (props: {
 }
 
 const CountryDetail = (props: {
-    country: Country,
-    setCountryIndex: Function,
+    selectedCountry: Country | null,
+    setSelectedCountry: Function,
 }) => {
+
+    const colWidths: string = em([30, 10])
+    const rowWidths: string = em([2, 4, 20, 20])
+
     return (
-        <div>
-            <h2>{props.country.name} Details</h2>
-            <p>Continent: {props.country.continent_name}</p>
-            <p>Flag: {props.country.flag}</p>
-            <p>TLD: {props.country.tld}</p>
-            <p>Dial Prefix: {props.country.prefix}</p>
-            <p>EU Member: {props.country.is_eu ? 'Yes' : 'No'}</p>
-            <p>Enabled: {props.country.is_enabled ? 'Yes' : 'No'}</p>
-            <button onClick={e => props.setCountryIndex(-1)}>Back to list</button>
-        </div>
+        <main className="main">
+            <GridContainer
+                cols={colWidths}
+                rows={rowWidths}
+                justifyContent="center"
+                alignItems="center"
+                gap="1px"
+                className="country"
+            >
+                <GridItem className="country-back">
+                    <Button
+                        onClick={e => props.setSelectedCountry(null)}
+                        className={""}
+                        children={"Back to List"}
+                        ref={null}
+                    />
+                </GridItem>
+                <GridItem className="country-save">
+                    <>
+                        <Button
+                            onClick={e => e}
+                            className={""}
+                            children={"Save"}
+                            ref={null}
+                        />
+                        <Button
+                            onClick={e => e}
+                            className={""}
+                            children={"Cancel"}
+                            ref={null}
+                        />
+                    </>
+                </GridItem>
+                <GridItem className="country-heading">
+                    {` ${props.selectedCountry?.continent_name} > ${props.selectedCountry?.name}`}
+                </GridItem>
+                <GridItem className="country-flag">
+                    {`${props.selectedCountry?.flag}`}
+                </GridItem>
+                <GridItem className="country-map">
+                    <TextArea
+                        id="country_map"
+                        name="country_map"
+                        value="Map"
+                        placeholder="Map"
+                        rows={10}
+                        cols={30}
+                        className="country-map"
+                        ref={null}
+                    />
+                </GridItem>
+                <GridItem className="country-details">
+                    {"Map Settings"}
+                </GridItem>
+                <GridItem className="country-description">
+                    <TextArea
+                        id="country_description"
+                        name="country_description"
+                        value="Description"
+                        placeholder="Description"
+                        rows={10}
+                        cols={30}
+                        className="country-description"
+                        ref={null}
+                    />
+                </GridItem>
+                <GridItem className="country-details">
+                    <table className="country-detils-table">
+                        <tbody>
+                            <tr>
+                                <th>TLD:</th>
+                                <td>{props.selectedCountry?.tld}</td>
+                            </tr>
+                            <tr>
+                                <th>Dialling Code:</th>
+                                <td>{props.selectedCountry?.prefix}</td>
+                            </tr>
+                            <tr>
+                                <th>EU Member: </th>
+                                <td>{props.selectedCountry?.is_eu ? 'Yes' : 'No'}</td>
+                            </tr>
+                            <tr>
+                                <th>Enabled:</th>
+                                <td>{props.selectedCountry?.is_enabled ? 'Yes' : 'No'}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </GridItem>
+            </GridContainer>
+        </main>
     );
 }
 

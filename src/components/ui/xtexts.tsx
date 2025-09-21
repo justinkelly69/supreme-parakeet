@@ -81,13 +81,12 @@ export const TextArea = (props: {
         <textarea
             id={props.id}
             name={props.name}
+            defaultValue={props.value}
             placeholder={props.placeholder}
             rows={props.rows}
             cols={props.cols}
             className={props.className}
             ref={props.ref}
-        >
-            {props.value}
-        </textarea>
+        />
     )
 }
