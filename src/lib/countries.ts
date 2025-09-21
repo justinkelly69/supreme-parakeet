@@ -2,7 +2,6 @@ import { CheckBoxData } from '@/components/ui/xcheckboxes';
 import { createClient } from '@/utils/supabase/client'
 
 export type Country = {
-    index: number,
     id: string,
     continent_id: string,
     continent_name: string,
@@ -48,7 +47,7 @@ export const getContinents = async (setContinents: Function) => {
 export const setContinentData = (continents: Continent[]) => {
     const out: CheckBoxData[] = []
 
-    for(const continent of continents){
+    for (const continent of continents) {
         out.push({
             name: continent.id,
             label: continent.name,
@@ -79,8 +78,7 @@ export const getCountries = async (setCountries: Function) => {
         }
 
         setCountries(
-            (data ?? []).map((item: any, index: number) => ({
-                index: index,
+            (data ?? []).map((item: any) => ({
                 id: item.id,
                 continent_id: item.continent_id,
                 continent_name: item.continent_name,
@@ -113,19 +111,49 @@ export const getSelectedCountries = (countries: Country[]): EnabledCountry[] => 
     return out
 }
 
-export const selectCountry = (countries: Country[], index: number, checked: boolean): Country[] => {
+export const filterSelectedCountries = (
+    selectedContinents: string[],
+    countries: Country[],
+    showEnabled: string,
+): Country[] => {
+    let selectedCountries: Country[] = []
+
+    for (const c of selectedContinents) {
+        const countriesByContinent = countries.filter((e => e.continent_id === c))
+
+        for (const co of countriesByContinent) {
+            selectedCountries.push(co)
+        }
+
+        if (showEnabled === 'ENABLED') {
+            selectedCountries = selectedCountries.filter((e => e.is_enabled === true))
+        }
+
+        else if (showEnabled === 'DISABLED') {
+            selectedCountries = selectedCountries.filter((e => e.is_enabled === false))
+        }
+    }
+    return selectedCountries
+}
+
+
+
+export const selectCountry = (
+    countries: Country[],
+    country: Country,
+    checked: boolean
+): Country[] => {
     const co: Country[] = []
 
     for (let i = 0; i < countries.length; i++) {
         const c = countries[i]
         let wasEnabled = c.was_enabled
 
-        if (index === i) {
+        if (countries[i].id === country.id) {
             wasEnabled = checked
         }
 
         co.push({
-            index: index,
             id: c.id,
             continent_id: c.continent_id,
             continent_name: c.continent_name,

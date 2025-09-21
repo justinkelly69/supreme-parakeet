@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Continent, Country, selectCountry, setContinentData, updateSelectedCountries } from "@/lib/countries";
+import { Continent, Country, filterSelectedCountries, selectCountry, setContinentData, updateSelectedCountries } from "@/lib/countries";
 import Button from "./ui/xbutton";
 import Select from "./ui/xselect";
 import { Checkbox, CheckBoxData, CheckboxGroup } from "./ui/xcheckboxes";
@@ -31,7 +31,8 @@ export const CountriesPage = (props: {
             <CountriesTable
                 countries={props.countries}
                 setCountries={props.setCountries}
-                setCountryIndex={setSelectedCountry}
+                setSelectedCountry={setSelectedCountry}
+                selectedCountry={selectedCountry}
                 setShowEnabled={setShowEnabled}
                 showEnabled={showEnabled}
                 selectedContinents={selectedContinents}
@@ -52,8 +53,6 @@ const CountriesHeader = (props: {
     selectedContinents: string[],
     setSelectedContinents: Function,
 }) => {
-    const [stooge, setStooge] = useState('larry')
-    const [text, setText] = useState('')
 
     return (
         <header className="top-panel">
@@ -102,7 +101,8 @@ const CountriesTable = (props: {
     children: any[];
     countries: Country[],
     setCountries: Function,
-    setCountryIndex: Function,
+    setSelectedCountry: Function,
+    selectedCountry: Country | null,
     setShowEnabled: Function,
     showEnabled: string,
     selectedContinents: string[],
@@ -112,42 +112,28 @@ const CountriesTable = (props: {
         em([2, 8, 18, 2, 2, 2, 3]) :
         em([2, 8, 18, 2, 2, 3])
 
-    let selectedCountries: Country[] = []
-
-    for (const c of props.selectedContinents) {
-        const countries = props.countries.filter((e => e.continent_id === c))
-
-        for (const co of countries) {
-            selectedCountries.push(co)
-        }
-
-        if (props.showEnabled === 'ENABLED') {
-            selectedCountries = selectedCountries.filter((e => e.is_enabled === true))
-        }
-
-        else if (props.showEnabled === 'DISABLED') {
-            selectedCountries = selectedCountries.filter((e => e.is_enabled === false))
-        }
-    }
-
-    const numRows = selectedCountries.length
+    const selectedCountries = filterSelectedCountries(
+        props.selectedContinents,
+        props.countries,
+        props.showEnabled,
+    )
 
     return (
         <main className="main">
             <GridContainer
                 cols={colWidths}
-                rows={`repeat(${numRows}, 1fr)`}
+                rows={`repeat(${selectedCountries.length}, 1fr)`}
                 justifyContent="center"
                 gap="1px"
                 className="countries"
             >
-                {selectedCountries.map((country, index) => {
+                {selectedCountries.map((country) => {
                     return (
                         <CountryRow
                             key={country.id}
-                            index={index}
                             className="country-cell"
-                            setSelectedCountry={props.setCountryIndex}
+                            setSelectedCountry={props.setSelectedCountry}
+                            country={country}
                             selectedCountries={selectedCountries}
                             setCountries={props.setCountries}
                             showEnabled={props.showEnabled}
@@ -161,37 +147,68 @@ const CountriesTable = (props: {
 }
 
 const CountryRow = (props: {
-    index: number,
     setSelectedCountry: Function,
+    country: Country,
     className: string,
     selectedCountries: Country[],
     setCountries: Function,
     showEnabled: string,
     selectedContinents: string[]
 }) => {
-    const country = props.selectedCountries[props.index]
-    const isEnabled = country.is_enabled
 
     return (
         <>
-            <GridItem className={props.className} selected={isEnabled}>{country.id}</GridItem>
-            <GridItem className={props.className} selected={isEnabled}>{country.continent_name}</GridItem>
-            <GridItem className={props.className} selected={isEnabled}>{country.name}</GridItem>
-            <GridItem className={props.className} selected={isEnabled}>{country.flag}</GridItem>
-            <GridItem className={props.className} selected={isEnabled}>{country.is_eu ? 'Yes' : 'No'}</GridItem>
+            <GridItem
+                className={props.className}
+                selected={props.country.is_enabled}
+            >
+                {props.country.id}
+            </GridItem>
+
+            <GridItem
+                className={props.className}
+                selected={props.country.is_enabled}
+            >
+                {props.country.continent_name}
+            </GridItem>
+
+            <GridItem
+                className={props.className}
+                selected={props.country.is_enabled}
+            >
+                {props.country.name}
+            </GridItem>
+
+            <GridItem
+                className={props.className}
+                selected={props.country.is_enabled}
+            >
+                {props.country.flag}
+            </GridItem>
+
+            <GridItem
+                className={props.className}
+                selected={props.country.is_enabled}
+            >
+                {props.country.is_eu ? 'Yes' : 'No'}
+            </GridItem>
+
             {props.showEnabled === 'BOTH' && (
-                <GridItem className={props.className} selected={isEnabled}>
+                <GridItem
+                    className={props.className}
+                    selected={props.country.is_enabled}
+                >
                     <Checkbox
                         label=""
-                        name={country.id}
-                        checked={country.is_enabled}
+                        name={props.country.id}
+                        checked={props.country.is_enabled}
                         boxClass="checkbox"
                         labelClass="checkbox_label"
                         onChange={(e) => {
                             props.setCountries(
                                 selectCountry(
                                     props.selectedCountries,
-                                    props.index,
+                                    props.country,
                                     e.target.checked
                                 )
                             )
@@ -200,13 +217,21 @@ const CountryRow = (props: {
                     />
                 </GridItem>
             )}
-            <GridItem className={props.className} selected={isEnabled}>
-                <button onClick={e => {
-                    props.setSelectedCountry(
-                        props.selectedCountries.find(e => e.id === country.id)
-                    )
-                }
-                }>View</button>
+
+            <GridItem
+                className={props.className}
+                selected={props.country.is_enabled}
+            >
+                <Button
+                    onClick={e => {
+                        props.setSelectedCountry(
+                            props.country
+                        )
+                    }}
+                    className={""}
+                    children={"View"}
+                    ref={null}
+                />
             </GridItem>
         </>
     )
@@ -238,6 +263,7 @@ const CountryDetail = (props: {
                         ref={null}
                     />
                 </GridItem>
+
                 <GridItem className="country-save">
                     <>
                         <Button
@@ -254,12 +280,15 @@ const CountryDetail = (props: {
                         />
                     </>
                 </GridItem>
+
                 <GridItem className="country-heading">
                     {` ${props.selectedCountry?.continent_name} > ${props.selectedCountry?.name}`}
                 </GridItem>
+
                 <GridItem className="country-flag">
                     {`${props.selectedCountry?.flag}`}
                 </GridItem>
+
                 <GridItem className="country-map">
                     <TextArea
                         id="country_map"
@@ -272,9 +301,11 @@ const CountryDetail = (props: {
                         ref={null}
                     />
                 </GridItem>
+
                 <GridItem className="country-details">
                     {"Map Settings"}
                 </GridItem>
+
                 <GridItem className="country-description">
                     <TextArea
                         id="country_description"
@@ -287,6 +318,7 @@ const CountryDetail = (props: {
                         ref={null}
                     />
                 </GridItem>
+
                 <GridItem className="country-details">
                     <table className="country-detils-table">
                         <tbody>
@@ -309,6 +341,7 @@ const CountryDetail = (props: {
                         </tbody>
                     </table>
                 </GridItem>
+                
             </GridContainer>
         </main>
     );
