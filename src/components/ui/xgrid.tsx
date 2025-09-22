@@ -1,18 +1,13 @@
 import * as React from "react"
 
+export const em = (values: number[]) => valueSequence(values, "em")
 
-export const em = (widths: number[]) => {
-    const out = []
-    for (const w of widths) {
-        out.push(`${w}em`)
-    }
-    return out.join(' ')
-}
+export const fr = (values: number[]) => valueSequence(values, "fr")
 
-export const fr = (widths: number[]) => {
+const valueSequence = (values: number[], type:string) => {
     const out = []
-    for (const w of widths) {
-        out.push(`${w}fr`)
+    for (const w of values) {
+        out.push(`${w}${type}`)
     }
     return out.join(' ')
 }

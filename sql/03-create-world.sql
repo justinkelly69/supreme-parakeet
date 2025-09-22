@@ -6,8 +6,12 @@ DROP TABLE IF EXISTS world.countries;
 
 CREATE TABLE
     IF NOT EXISTS world.selected_countries (
-        "id" CHAR(2) NOT NULL UNIQUE,
-        "is_enabled" BOOLEAN NOT NULL DEFAULT FALSE,
+        "id"           CHAR(2) NOT NULL UNIQUE,
+        "is_enabled"   BOOLEAN NOT NULL DEFAULT FALSE,
+        "description"  VARCHAR(4000),
+        "longitude"    INTEGER NOT NULL DEFAULT 0,
+        "latitude"     INTEGER NOT NULL DEFAULT 0,
+        "zoom"         INTEGER NOT NULL DEFAULT 0,
         CONSTRAINT "fk_selected_countries" FOREIGN KEY ("id") REFERENCES iso.countries ("id")
     );
 
@@ -23,7 +27,7 @@ ORDER BY
 GRANT SELECT, UPDATE ON world.selected_countries TO public;
 
 CREATE OR REPLACE FUNCTION update_selected_countries(selected_countries JSONB)
-RETURNS VOID
+RETURNS  VOID
 LANGUAGE plpgsql
 AS $$
 DECLARE
@@ -32,8 +36,8 @@ BEGIN
     FOR selected_country IN SELECT jsonb_array_elements(selected_countries)
     LOOP
         UPDATE world.selected_countries 
-        SET is_enabled = (selected_country->>'is_enabled')::boolean 
-        WHERE id = selected_country->>'id';
+        SET    is_enabled = (selected_country->>'is_enabled')::boolean 
+        WHERE  id = selected_country->>'id';
     END LOOP;
 END;
 $$;
@@ -51,6 +55,10 @@ SELECT
     co."tld",
     co."prefix",
     co."is_eu",
+    wc."description",
+    wc."latitude",
+    wc."longitude",
+    wc."zoom",
     wc."is_enabled",
     JSON_AGG (
         json_build_object ('id', lg."id", 'name', lg."name", 'is_enabled', lg."is_enabled")
@@ -60,16 +68,20 @@ SELECT
     ) AS currencies
 FROM
     iso.countries co
-    LEFT JOIN iso.continents cn ON cn."id" = co."continent_id"
-    LEFT JOIN iso.country_languages cl ON co."id" = cl."country_id"
-    LEFT JOIN iso.languages lg ON lg."id" = cl."language_id" 
-    LEFT JOIN iso.country_currencies cc ON co."id" = cc."country_id"
-    LEFT JOIN iso.currencies cu ON cu."id" = cc."currency_id" 
+    LEFT JOIN iso.continents cn           ON cn."id" = co."continent_id"
+    LEFT JOIN iso.country_languages cl    ON co."id" = cl."country_id"
+    LEFT JOIN iso.languages lg            ON lg."id" = cl."language_id" 
+    LEFT JOIN iso.country_currencies cc   ON co."id" = cc."country_id"
+    LEFT JOIN iso.currencies cu           ON cu."id" = cc."currency_id" 
     LEFT JOIN world.selected_countries wc ON wc."id" = co."id"
 GROUP BY
     co."id",
     cn."name",
-    wc."is_enabled"
+    wc."is_enabled",
+    wc."description",
+    wc."latitude",
+    wc."longitude",
+    wc."zoom"
 ORDER BY
     co."name";
 

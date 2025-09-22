@@ -12,6 +12,10 @@ export type Country = {
     is_eu: boolean,
     is_enabled: boolean,
     was_enabled: boolean,
+    description: string,
+    latitude: number,
+    longitude: number,
+    zoom: number,
 };
 
 export type EnabledCountry = {
@@ -26,22 +30,77 @@ export type Continent = {
 
 const supabase = createClient()
 
+export const fetchContinents = async (
+    setContinents: Function,
+    setIsLoading: Function
+) => {
+    setIsLoading(true)
 
-export const getContinents = async (setContinents: Function) => {
-    try {
-        const { data, error } = await supabase.schema('iso').from('continents').select('id, name')
-        if (error) {
-            console.error('Error fetching continents:', error)
-            return
-        }
-        setContinents((data ?? []).map((continent: Continent) => ({
-            id: continent.id,
-            name: continent.name,
-        })))
+    const { data, error } = await supabase
+        .schema('iso')
+        .from('continents')
+        .select('id, name')
+
+    if (error) {
+        console.error('Error fetching continents:', error)
+        return
     }
-    catch (err) {
-        console.error('Failed to fetch continents:', err)
+
+    setContinents((data ?? []).map((continent: Continent) => ({
+        id: continent.id,
+        name: continent.name,
+    })))
+
+    setIsLoading(false)
+}
+
+export const fetchCountries = async (
+    setIsLoading: Function,
+    setCountries: Function,
+) => {
+    setIsLoading(true)
+
+    const { data, error } = await supabase.from('country_details').select(`
+            id, 
+            continent_id, 
+            continent_name, 
+            name, 
+            flag, 
+            tld, 
+            prefix, 
+            is_eu, 
+            is_enabled, 
+            description, 
+            longitude, 
+            latitude, 
+            zoom
+        `)
+
+    if (error) {
+        console.error('Error fetching countries:', error)
+        return
     }
+
+    setCountries(
+        (data ?? []).map((item: any) => ({
+            id: item.id,
+            continent_id: item.continent_id,
+            continent_name: item.continent_name,
+            name: item.name,
+            flag: item.flag,
+            tld: item.tld,
+            prefix: item.prefix,
+            is_eu: item.is_eu,
+            is_enabled: item.is_enabled,
+            was_enabled: item.is_enabled,
+            description: item.description,
+            longitude: item.longitude,
+            latitude: item.latitude,
+            zoom: item.zoom,
+        }))
+    )
+
+    setIsLoading(false)
 }
 
 export const setContinentData = (continents: Continent[]) => {
@@ -60,7 +119,7 @@ export const setContinentData = (continents: Continent[]) => {
 export const updateSelectedCountries = async (countries: Country[]) => {
     try {
         await supabase.rpc('update_selected_countries', {
-            selected_countries: getSelectedCountries(countries)
+            selected_countries: getEnabledCountries(countries)
         })
     }
     catch (err) {
@@ -68,35 +127,10 @@ export const updateSelectedCountries = async (countries: Country[]) => {
     }
 }
 
-export const getCountries = async (setCountries: Function) => {
-    try {
-        const { data, error } = await supabase.from('country_details').select(
-            'id, continent_id, continent_name, name, flag, tld, prefix, is_eu, is_enabled')
-        if (error) {
-            console.error('Error fetching countries:', error)
-            return
-        }
 
-        setCountries(
-            (data ?? []).map((item: any) => ({
-                id: item.id,
-                continent_id: item.continent_id,
-                continent_name: item.continent_name,
-                name: item.name,
-                flag: item.flag,
-                tld: item.tld,
-                prefix: item.prefix,
-                is_eu: item.is_eu,
-                is_enabled: item.is_enabled,
-                was_enabled: item.is_enabled,
-            }))
-        )
-    } catch (err) {
-        console.error('Failed to fetch countries:', err)
-    }
-}
 
-export const getSelectedCountries = (countries: Country[]): EnabledCountry[] => {
+// Filter out the countries that have changed
+export const getEnabledCountries = (countries: Country[]): EnabledCountry[] => {
     const out: EnabledCountry[] = []
 
     for (let i = 0; i < countries.length; i++) {
@@ -111,15 +145,16 @@ export const getSelectedCountries = (countries: Country[]): EnabledCountry[] => 
     return out
 }
 
+// Get selected countries and filter by enabled
 export const filterSelectedCountries = (
-    selectedContinents: string[],
+    selectedContinentIDs: string[],
     countries: Country[],
     showEnabled: string,
 ): Country[] => {
     let selectedCountries: Country[] = []
 
-    for (const c of selectedContinents) {
-        const countriesByContinent = countries.filter((e => e.continent_id === c))
+    for (const continentId of selectedContinentIDs) {
+        const countriesByContinent = countries.filter((e => e.continent_id === continentId))
 
         for (const co of countriesByContinent) {
             selectedCountries.push(co)
@@ -136,8 +171,7 @@ export const filterSelectedCountries = (
     return selectedCountries
 }
 
-
-
+// update selected country 
 export const selectCountry = (
     countries: Country[],
     country: Country,
@@ -154,16 +188,8 @@ export const selectCountry = (
         }
 
         co.push({
-            id: c.id,
-            continent_id: c.continent_id,
-            continent_name: c.continent_name,
-            name: c.name,
-            flag: c.flag,
-            tld: c.tld,
-            prefix: c.prefix,
-            is_eu: c.is_eu,
-            is_enabled: c.is_enabled,
-            was_enabled: wasEnabled
+            ...c,
+            was_enabled: wasEnabled,
         })
     }
     return co

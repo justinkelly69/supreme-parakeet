@@ -1,12 +1,14 @@
+'use client'
+
 import React, { useState } from "react";
-import { Continent, Country, filterSelectedCountries, selectCountry, setContinentData, updateSelectedCountries } from "@/lib/countries";
+import {
+    Continent, Country, filterSelectedCountries, selectCountry,
+    setContinentData, updateSelectedCountries
+} from "@/lib/countries";
 import Button from "./ui/xbutton";
 import Select from "./ui/xselect";
 import { Checkbox, CheckBoxData, CheckboxGroup } from "./ui/xcheckboxes";
-import { RadioButtons, clearRadioButtons } from "./ui/xradiobuttons";
-import { Text, TextArea } from "./ui/xtexts";
-import { GridContainer, GridItem, em, fr } from "./ui/xgrid";
-
+import { GridContainer, GridItem, em } from "./ui/xgrid";
 
 export const CountriesPage = (props: {
     countries: Country[],
@@ -16,9 +18,9 @@ export const CountriesPage = (props: {
 }) => {
     const [selectedCountry, setSelectedCountry] = useState<Country | null>(null)
     const [selectedContinents, setSelectedContinents] = useState([])
-    const [showEnabled, setShowEnabled] = useState('ENABLED')
+    const [showEnabled, setShowEnabled] = useState('BOTH')
 
-    return selectedCountry === null ?
+    return (
         <>
             <CountriesHeader
                 countries={props.countries}
@@ -38,11 +40,7 @@ export const CountriesPage = (props: {
                 selectedContinents={selectedContinents}
                 children={[]} />
         </>
-        :
-        <CountryDetail
-            selectedCountry={selectedCountry}
-            setSelectedCountry={setSelectedCountry}
-        />
+    )
 }
 
 const CountriesHeader = (props: {
@@ -224,9 +222,7 @@ const CountryRow = (props: {
             >
                 <Button
                     onClick={e => {
-                        props.setSelectedCountry(
-                            props.country
-                        )
+                        props.setSelectedCountry(props.country)
                     }}
                     className={""}
                     children={"View"}
@@ -235,115 +231,5 @@ const CountryRow = (props: {
             </GridItem>
         </>
     )
-}
-
-const CountryDetail = (props: {
-    selectedCountry: Country | null,
-    setSelectedCountry: Function,
-}) => {
-
-    const colWidths: string = em([30, 10])
-    const rowWidths: string = em([2, 4, 20, 20])
-
-    return (
-        <main className="main">
-            <GridContainer
-                cols={colWidths}
-                rows={rowWidths}
-                justifyContent="center"
-                alignItems="center"
-                gap="1px"
-                className="country"
-            >
-                <GridItem className="country-back">
-                    <Button
-                        onClick={e => props.setSelectedCountry(null)}
-                        className={""}
-                        children={"Back to List"}
-                        ref={null}
-                    />
-                </GridItem>
-
-                <GridItem className="country-save">
-                    <>
-                        <Button
-                            onClick={e => e}
-                            className={""}
-                            children={"Save"}
-                            ref={null}
-                        />
-                        <Button
-                            onClick={e => e}
-                            className={""}
-                            children={"Cancel"}
-                            ref={null}
-                        />
-                    </>
-                </GridItem>
-
-                <GridItem className="country-heading">
-                    {` ${props.selectedCountry?.continent_name} > ${props.selectedCountry?.name}`}
-                </GridItem>
-
-                <GridItem className="country-flag">
-                    {`${props.selectedCountry?.flag}`}
-                </GridItem>
-
-                <GridItem className="country-map">
-                    <TextArea
-                        id="country_map"
-                        name="country_map"
-                        value="Map"
-                        placeholder="Map"
-                        rows={10}
-                        cols={30}
-                        className="country-map"
-                        ref={null}
-                    />
-                </GridItem>
-
-                <GridItem className="country-details">
-                    {"Map Settings"}
-                </GridItem>
-
-                <GridItem className="country-description">
-                    <TextArea
-                        id="country_description"
-                        name="country_description"
-                        value="Description"
-                        placeholder="Description"
-                        rows={10}
-                        cols={30}
-                        className="country-description"
-                        ref={null}
-                    />
-                </GridItem>
-
-                <GridItem className="country-details">
-                    <table className="country-detils-table">
-                        <tbody>
-                            <tr>
-                                <th>TLD:</th>
-                                <td>{props.selectedCountry?.tld}</td>
-                            </tr>
-                            <tr>
-                                <th>Dialling Code:</th>
-                                <td>{props.selectedCountry?.prefix}</td>
-                            </tr>
-                            <tr>
-                                <th>EU Member: </th>
-                                <td>{props.selectedCountry?.is_eu ? 'Yes' : 'No'}</td>
-                            </tr>
-                            <tr>
-                                <th>Enabled:</th>
-                                <td>{props.selectedCountry?.is_enabled ? 'Yes' : 'No'}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </GridItem>
-                
-            </GridContainer>
-        </main>
-    );
 }
 
