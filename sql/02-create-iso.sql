@@ -1,66 +1,59 @@
 DROP SCHEMA IF EXISTS iso CASCADE;
-
 CREATE SCHEMA IF NOT EXISTS iso;
 
 -- continents
-CREATE TABLE
-    IF NOT EXISTS iso.continents (
-        "id" CHAR(2) NOT NULL PRIMARY KEY,
-        "name" VARCHAR(20) NOT NULL
-    );
+CREATE TABLE IF NOT EXISTS iso.continents (
+    "id" CHAR(2) NOT NULL PRIMARY KEY,
+    "name" VARCHAR(20) NOT NULL
+);
 
 -- countries
-CREATE TABLE
-    IF NOT EXISTS iso.countries (
-        "id" CHAR(2) PRIMARY KEY,
-        "continent_id" CHAR(2) NOT NULL,
-        "name" VARCHAR(100) NOT NULL,
-        "flag" CHAR(2) NOT NULL,
-        "tld" CHAR(2) NOT NULL,
-        "prefix" VARCHAR(100) NOT NULL,
-        "is_eu" BOOLEAN NOT NULL DEFAULT FALSE,
-        "is_enabled" BOOLEAN NOT NULL DEFAULT FALSE,
-        CONSTRAINT "fk_continent" FOREIGN KEY ("continent_id") REFERENCES iso.continents ("id")
-    );
+CREATE TABLE IF NOT EXISTS iso.countries (
+    "id" CHAR(2) PRIMARY KEY,
+    "continent_id" CHAR(2) NOT NULL,
+    "name" VARCHAR(100) NOT NULL,
+    "flag" CHAR(2) NOT NULL,
+    "tld" CHAR(2) NOT NULL,
+    "prefix" VARCHAR(100) NOT NULL,
+    "is_eu" BOOLEAN NOT NULL DEFAULT FALSE,
+    "is_enabled" BOOLEAN NOT NULL DEFAULT FALSE,
+    CONSTRAINT "fk_continent" FOREIGN KEY ("continent_id") REFERENCES iso.continents ("id")
+);
 
 --languages
-CREATE TABLE
-    IF NOT EXISTS iso.languages (
-        "id" CHAR(3) PRIMARY KEY,
-        "name" VARCHAR(100) UNIQUE,
-        "is_enabled" BOOLEAN NOT NULL DEFAULT FALSE
-    );
+CREATE TABLE IF NOT EXISTS iso.languages (
+    "id" CHAR(3) PRIMARY KEY,
+    "name" VARCHAR(100) UNIQUE,
+    "is_enabled" BOOLEAN NOT NULL DEFAULT FALSE
+);
 
 -- country_languages
-CREATE TABLE
-    IF NOT EXISTS iso.country_languages (
-        "id" SERIAL PRIMARY KEY,
-        "country_id" CHAR(2) NOT NULL,
-        "language_id" CHAR(3) NOT NULL,
-        "is_enabled" BOOLEAN NOT NULL DEFAULT FALSE,
-        CONSTRAINT "fk_country" FOREIGN KEY ("country_id") REFERENCES iso.countries ("id"),
-        CONSTRAINT "fk_language" FOREIGN KEY ("language_id") REFERENCES iso.languages ("id"),
-        UNIQUE ("country_id", "language_id")
-    );
+CREATE TABLE IF NOT EXISTS iso.country_languages (
+    "id" SERIAL PRIMARY KEY,
+    "country_id" CHAR(2) NOT NULL,
+    "language_id" CHAR(3) NOT NULL,
+    "is_enabled" BOOLEAN NOT NULL DEFAULT FALSE,
+    CONSTRAINT "fk_country" FOREIGN KEY ("country_id") REFERENCES iso.countries ("id"),
+    CONSTRAINT "fk_language" FOREIGN KEY ("language_id") REFERENCES iso.languages ("id"),
+    UNIQUE ("country_id", "language_id")
+);
 
 -- currencies
-CREATE TABLE
-    IF NOT EXISTS iso.currencies (
-        "id" CHAR(3) NOT NULL PRIMARY KEY,
-        "name" VARCHAR(100) NOT NULL
-    );
+CREATE TABLE IF NOT EXISTS iso.currencies (
+    "id" CHAR(3) NOT NULL PRIMARY KEY,
+    "name" VARCHAR(100) NOT NULL
+);
 
 -- country_currencies
-CREATE TABLE
-    IF NOT EXISTS iso.country_currencies (
-        "id" SERIAL PRIMARY KEY,
-        "country_id" CHAR(2),
-        "currency_id" CHAR(3),
-        "is_enabled" BOOLEAN NOT NULL DEFAULT FALSE,
-        CONSTRAINT "fk_country" FOREIGN KEY ("country_id") REFERENCES iso.countries ("id"),
-        CONSTRAINT "fk_currency" FOREIGN KEY ("currency_id") REFERENCES iso.currencies ("id"),
-        UNIQUE ("country_id", "currency_id")
-    );
+CREATE TABLE IF NOT EXISTS iso.country_currencies (
+    "id" SERIAL PRIMARY KEY,
+    "country_id" CHAR(2),
+    "currency_id" CHAR(3),
+    "is_enabled" BOOLEAN NOT NULL DEFAULT FALSE,
+    CONSTRAINT "fk_country" FOREIGN KEY ("country_id") REFERENCES iso.countries ("id"),
+    CONSTRAINT "fk_currency" FOREIGN KEY ("currency_id") REFERENCES iso.currencies ("id"),
+    UNIQUE ("country_id", "currency_id")
+);
 
 -- insert data
 INSERT INTO

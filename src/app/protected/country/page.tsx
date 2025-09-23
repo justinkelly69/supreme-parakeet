@@ -1,5 +1,3 @@
-'use client'
-
 import { useEffect, useState } from 'react'
 import { CountriesPage } from '@/components/countries'
 import { Continent, Country, fetchContinents, fetchCountries } from '@/lib/countries'
