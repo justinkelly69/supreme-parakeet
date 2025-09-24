@@ -1,8 +1,9 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { CountriesPage } from '@/components/countries'
+import { CountriesPage } from '@/components/countries/countries'
 import { Continent, Country, fetchContinents, fetchCountries } from '@/lib/countries'
+import styles from './page.module.css'
 
 const Page = () => {
     const [countries, setCountries] = useState<Country[]>([])

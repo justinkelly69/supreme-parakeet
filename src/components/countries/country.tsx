@@ -1,17 +1,10 @@
-
-import React, { useState } from "react";
-import { Continent, Country, filterSelectedCountries, selectCountry, setContinentData, updateSelectedCountries } from "@/lib/countries";
-import Button from "./ui/xbutton";
-import Select from "./ui/xselect";
-import { Checkbox, CheckBoxData, CheckboxGroup } from "./ui/xcheckboxes";
-import { RadioButtons, clearRadioButtons } from "./ui/xradiobuttons";
-import { Text, TextArea } from "./ui/xtexts";
-import { GridContainer, GridItem, em, fr } from "./ui/xgrid";
-//import MapboxExample from "./map";
+import { Country } from "@/lib/countries";
+import { Button } from "../ui/xbutton";
+import { TextArea } from "../ui/xtexts";
+import { GridContainer, GridItem, em } from "../ui/xgrid";
 import mapboxgl from "mapbox-gl";
 import 'mapbox-gl/dist/mapbox-gl.css';
-
-
+import React from "react";
 
 export const CountryDetail = (props: {
     selectedCountry: Country,
@@ -19,6 +12,7 @@ export const CountryDetail = (props: {
 }) => {
     const mapContainer = React.useRef<any>(null);
     const map = React.useRef<mapboxgl.Map | null>(null);
+
     const [longitude, setLongitude] = React.useState(props.selectedCountry.longitude);
     const [latitude, setLatitude] = React.useState(props.selectedCountry.latitude);
     const [zoom, setZoom] = React.useState(props.selectedCountry.zoom);
@@ -66,20 +60,18 @@ export const CountryDetail = (props: {
                 </GridItem>
 
                 <GridItem className="country-save">
-                    <>
-                        <Button
-                            onClick={e => e}
-                            className={""}
-                            children={"Save"}
-                            ref={null}
-                        />
-                        <Button
-                            onClick={e => e}
-                            className={""}
-                            children={"Cancel"}
-                            ref={null}
-                        />
-                    </>
+                    <Button
+                        onClick={e => e}
+                        className={""}
+                        children={"Save"}
+                        ref={null}
+                    />
+                    <Button
+                        onClick={e => e}
+                        className={""}
+                        children={"Cancel"}
+                        ref={null}
+                    />
                 </GridItem>
 
                 <GridItem className="country-heading">

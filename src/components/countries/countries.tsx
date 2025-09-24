@@ -5,16 +5,18 @@ import {
     Continent, Country, filterSelectedCountries, selectCountry,
     setContinentData, updateSelectedCountries
 } from "@/lib/countries";
-import Button from "./ui/xbutton";
-import Select from "./ui/xselect";
-import { Checkbox, CheckBoxData, CheckboxGroup } from "./ui/xcheckboxes";
-import { GridContainer, GridItem, em } from "./ui/xgrid";
+import { Button } from "../ui/xbutton";
+import Select from "../ui/xselect";
+import { Checkbox, CheckBoxData, CheckboxGroup } from "../ui/xcheckboxes";
+import { GridContainer, GridItem, em } from "../ui/xgrid";
 
 export const CountriesPage = (props: {
     countries: Country[],
     setCountries: Function,
     continents: Continent[],
     setContinents: Function,
+    //selectedCountry: Country,
+    //setSelectedCountry: Function
 }) => {
     const [selectedCountry, setSelectedCountry] = useState<Country | null>(null)
     const [selectedContinents, setSelectedContinents] = useState([])
