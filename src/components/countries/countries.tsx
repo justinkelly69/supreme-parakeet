@@ -1,16 +1,18 @@
 'use client'
 
-import React, { useState } from "react";
+import React, { useState, createContext, useContext } from "react";
 import {
     Continent, Country, filterSelectedCountries, selectCountry,
-    setContinentData, updateSelectedCountries
+    setContinentData, updateSelectedCountries, StyleContextType
 } from "@/lib/countries";
+import { StyleContext } from "@/app/protected/countries/page";
 import { Button } from "../ui/xbutton";
 import Select from "../ui/xselect";
 import { Checkbox, CheckBoxData, CheckboxGroup } from "../ui/xcheckboxes";
 import { GridContainer, GridItem, em } from "../ui/xgrid";
 
 export const CountriesPage = (props: {
+    //styles: { readonly [key: string]: string; },
     countries: Country[],
     setCountries: Function,
     continents: Continent[],
@@ -21,6 +23,8 @@ export const CountriesPage = (props: {
     const [selectedCountry, setSelectedCountry] = useState<Country | null>(null)
     const [selectedContinents, setSelectedContinents] = useState([])
     const [showEnabled, setShowEnabled] = useState('BOTH')
+
+    const style = useContext(StyleContext)
 
     return (
         <>
@@ -54,13 +58,17 @@ const CountriesHeader = (props: {
     setSelectedContinents: Function,
 }) => {
 
+    const style = useContext(StyleContext)
+
+    console.log(JSON.stringify(style, null, 4))
+
     return (
-        <header className="top-panel">
-            <div className="top-panel-items">
-                <div className="top-panel-item top-panel-1">
+        <header className={style["top-panel"]}>
+            <div className={style["top-panel-items"]}>
+                <div className={`${style["top-panel-item"]} ${style["top-panel-1"]}`}>
                     {props.showEnabled === 'BOTH' && (
                         <Button
-                            className="save-countries-button"
+                            className={`${style["save-countries-button"]}`}
                             onClick={() => updateSelectedCountries(props.countries)}
                             ref={null}
                         >
@@ -68,8 +76,8 @@ const CountriesHeader = (props: {
                         </Button>
                     )}
                 </div>
-                <div className="top-panel-item top-panel-2">
-                    <Select className="show-enabled-dropdown"
+                <div className={`${style["top-panel-item"]} ${style["top-panel-2"]}`}>
+                    <Select className={`${style["show-enabled-dropdown"]}`}
                         value={props.showEnabled}
                         onChange={(e) => props.setShowEnabled(e.target.value)}
                         options={[
@@ -80,7 +88,7 @@ const CountriesHeader = (props: {
                         ref={null}
                     />
                 </div>
-                <div className="top-panel-item top-panel-3">
+                <div className={`${style["top-panel-item"]} ${style["top-panel-3"]}`}>
                     <CheckboxGroup
                         label="Select Continents"
                         className="continent-list"
@@ -108,6 +116,7 @@ const CountriesTable = (props: {
     selectedContinents: string[],
 }) => {
 
+    const style = useContext(StyleContext)
     const colWidths = props.showEnabled === 'BOTH' ?
         em([2, 8, 18, 2, 2, 2, 3]) :
         em([2, 8, 18, 2, 2, 3])
@@ -155,7 +164,7 @@ const CountryRow = (props: {
     showEnabled: string,
     selectedContinents: string[]
 }) => {
-
+const style = useContext(StyleContext)
     return (
         <>
             <GridItem

@@ -1,6 +1,8 @@
 import { CheckBoxData } from '@/components/ui/xcheckboxes';
 import { createClient } from '@/utils/supabase/client'
 
+export type StyleContextType = { [key: string]: string; }
+
 export type Country = {
     id: string,
     continent_id: string,

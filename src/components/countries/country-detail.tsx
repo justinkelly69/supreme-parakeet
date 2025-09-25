@@ -1,11 +1,12 @@
 
-import React from "react";
+import React, { useContext } from "react";
 import { Country } from "@/lib/countries";
 import { Button } from "../ui/xbutton";
 import { TextArea } from "../ui/xtexts";
 import { GridContainer, GridItem, em } from "../ui/xgrid";
 import mapboxgl from "mapbox-gl";
 import 'mapbox-gl/dist/mapbox-gl.css';
+import { StyleContext } from "@/app/protected/countries/page";
 
 
 
@@ -18,6 +19,8 @@ export const CountryDetail = (props: {
     const [longitude, setLongitude] = React.useState(props.selectedCountry.longitude);
     const [latitude, setLatitude] = React.useState(props.selectedCountry.latitude);
     const [zoom, setZoom] = React.useState(props.selectedCountry.zoom);
+
+    const style = useContext(StyleContext)
 
     const MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoianVzdGlua2VsbHk2OSIsImEiOiJjbWZ1NjRxd20wcWMwMmpxemd2NDhnaWhsIn0.lxbyz7IFID7MAHADJ1k2yg'
 
