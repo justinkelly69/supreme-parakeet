@@ -42,10 +42,11 @@ export const GridContainer = (props: {
 export const GridItem = (props: {
     selected?: boolean,
     className: string,
-    children: React.JSX.Element | React.JSX.Element[] | string | null
+    children: React.JSX.Element | React.JSX.Element[] | string | null,
+    style?:any,
 }) => {
     const className: string = props.selected ?
-        `${props.className} ${props.className}-selected` :
+        `[${props.className}] ${props.className}-selected` :
         `${props.className}`
 
     return (

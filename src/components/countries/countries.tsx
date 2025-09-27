@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, createContext, useContext } from "react";
+import { useRouter } from 'next/navigation';
 import {
     Continent, Country, filterSelectedCountries, selectCountry,
     setContinentData, updateSelectedCountries, StyleContextType
@@ -10,17 +11,18 @@ import { Button } from "../ui/xbutton";
 import Select from "../ui/xselect";
 import { Checkbox, CheckBoxData, CheckboxGroup } from "../ui/xcheckboxes";
 import { GridContainer, GridItem, em } from "../ui/xgrid";
+import Link from "next/link";
+import { TextArea } from "../ui/xtexts";
+
+import mapboxgl from "mapbox-gl";
+import 'mapbox-gl/dist/mapbox-gl.css';
 
 export const CountriesPage = (props: {
-    //styles: { readonly [key: string]: string; },
     countries: Country[],
     setCountries: Function,
     continents: Continent[],
     setContinents: Function,
-    //selectedCountry: Country,
-    //setSelectedCountry: Function
 }) => {
-    const [selectedCountry, setSelectedCountry] = useState<Country | null>(null)
     const [selectedContinents, setSelectedContinents] = useState([])
     const [showEnabled, setShowEnabled] = useState('BOTH')
 
@@ -39,8 +41,6 @@ export const CountriesPage = (props: {
             <CountriesTable
                 countries={props.countries}
                 setCountries={props.setCountries}
-                setSelectedCountry={setSelectedCountry}
-                selectedCountry={selectedCountry}
                 setShowEnabled={setShowEnabled}
                 showEnabled={showEnabled}
                 selectedContinents={selectedContinents}
@@ -57,10 +57,7 @@ const CountriesHeader = (props: {
     selectedContinents: string[],
     setSelectedContinents: Function,
 }) => {
-
     const style = useContext(StyleContext)
-
-    console.log(JSON.stringify(style, null, 4))
 
     return (
         <header className={style["top-panel"]}>
@@ -109,14 +106,13 @@ const CountriesTable = (props: {
     children: any[];
     countries: Country[],
     setCountries: Function,
-    setSelectedCountry: Function,
-    selectedCountry: Country | null,
     setShowEnabled: Function,
     showEnabled: string,
     selectedContinents: string[],
 }) => {
 
     const style = useContext(StyleContext)
+
     const colWidths = props.showEnabled === 'BOTH' ?
         em([2, 8, 18, 2, 2, 2, 3]) :
         em([2, 8, 18, 2, 2, 3])
@@ -141,7 +137,6 @@ const CountriesTable = (props: {
                         <CountryRow
                             key={country.id}
                             className="country-cell"
-                            setSelectedCountry={props.setSelectedCountry}
                             country={country}
                             selectedCountries={selectedCountries}
                             setCountries={props.setCountries}
@@ -156,7 +151,6 @@ const CountriesTable = (props: {
 }
 
 const CountryRow = (props: {
-    setSelectedCountry: Function,
     country: Country,
     className: string,
     selectedCountries: Country[],
@@ -164,7 +158,9 @@ const CountryRow = (props: {
     showEnabled: string,
     selectedContinents: string[]
 }) => {
-const style = useContext(StyleContext)
+    const style = useContext(StyleContext)
+    const enabled = props.country.is_enabled ? "is-enabled" : ""
+
     return (
         <>
             <GridItem
@@ -231,16 +227,158 @@ const style = useContext(StyleContext)
                 className={props.className}
                 selected={props.country.is_enabled}
             >
-                <Button
-                    onClick={e => {
-                        props.setSelectedCountry(props.country)
-                    }}
-                    className={""}
-                    children={"View"}
-                    ref={null}
-                />
+                <Link
+                    href="/protected/countries/[id]"
+                    as={`/protected/countries/${props.country.id}`}
+                >
+                    {props.country.name}
+                </Link>
+
             </GridItem>
         </>
     )
 }
 
+export const CountryDetail = (props: {
+    country: Country,
+    setCountry: Function,
+}) => {
+    const router = useRouter()
+
+    const mapContainer = React.useRef<any>(null);
+    const map = React.useRef<mapboxgl.Map | null>(null);
+    const [longitude, setLongitude] = React.useState(props.country.longitude);
+    const [latitude, setLatitude] = React.useState(props.country.latitude);
+    const [zoom, setZoom] = React.useState(props.country.zoom);
+
+    const style = useContext(StyleContext)
+
+    const MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoianVzdGlua2VsbHk2OSIsImEiOiJjbWZ1NjRxd20wcWMwMmpxemd2NDhnaWhsIn0.lxbyz7IFID7MAHADJ1k2yg'
+
+    React.useEffect(() => {
+        if (map.current) return; // initialize map only once
+
+        console.log('country', JSON.stringify(props.country, null, 4))
+
+        mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
+        map.current = new mapboxgl.Map({
+            container: mapContainer.current,
+            style: 'mapbox://styles/mapbox/streets-v11',
+            center: [props.country.longitude, props.country.latitude],
+            zoom: zoom
+        });
+        // map.current.addSource('property-data', {
+        //     type: 'geojson',
+        //     data: 'path/to/data.geojson'
+        // });
+    }, []);
+
+    const colWidths: string = em([30, 10])
+    const rowWidths: string = em([2, 4, 20, 20])
+
+    return (
+        <main className="main">
+            <GridContainer
+                cols={colWidths}
+                rows={rowWidths}
+                justifyContent="center"
+                alignItems="center"
+                gap="1px"
+                className="country"
+            >
+                <GridItem className="country-back">
+                    <div></div>
+                </GridItem>
+
+                <GridItem className="country-save">
+                    <>
+                        <Button
+                            onClick={e => e}
+                            className={""}
+                            children={"Save"}
+                            ref={null}
+                        />
+                        <Button
+                            onClick={e => router.back()}
+                            className={""}
+                            children={"Cancel"}
+                            ref={null}
+                        />
+                    </>
+                </GridItem>
+
+                <GridItem className="country-heading">
+                    {` ${props.country.continent_name} > ${props.country.name}`}
+                </GridItem>
+
+                <GridItem className="country-flag">
+                    {`${props.country.flag}`}
+                </GridItem>
+
+                <GridItem className="country-map">
+                    <div
+                        style={{ height: '100%', backgroundColor: 'red', borderWidth: '2px', borderColor: 'black' }}
+                        ref={mapContainer}
+                        className="map-container"
+                    />
+                </GridItem>
+
+                <GridItem className="country-details">
+                    <table className="country-detils-table">
+                        <tbody>
+                            <tr>
+                                <th>Longitude:</th>
+                                <td>{props.country.longitude}</td>
+                            </tr>
+                            <tr>
+                                <th>Latitude:</th>
+                                <td>{props.country.latitude}</td>
+                            </tr>
+                            <tr>
+                                <th>Zoom: </th>
+                                <td>{props.country.zoom}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </GridItem>
+
+                <GridItem className="country-description">
+                    <TextArea
+                        id="country_description"
+                        name="country_description"
+                        value="Description"
+                        placeholder="Description"
+                        rows={10}
+                        cols={30}
+                        className="country-description"
+                        ref={null}
+                    />
+                </GridItem>
+
+                <GridItem className="country-details">
+                    <table className="country-detils-table">
+                        <tbody>
+                            <tr>
+                                <th>TLD:</th>
+                                <td>{props.country.tld}</td>
+                            </tr>
+                            <tr>
+                                <th>Dialling Code:</th>
+                                <td>{props.country.prefix}</td>
+                            </tr>
+                            <tr>
+                                <th>EU Member: </th>
+                                <td>{props.country.is_eu ? 'Yes' : 'No'}</td>
+                            </tr>
+                            <tr>
+                                <th>Enabled:</th>
+                                <td>{props.country.is_enabled ? 'Yes' : 'No'}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </GridItem>
+
+            </GridContainer>
+        </main>
+    );
+}

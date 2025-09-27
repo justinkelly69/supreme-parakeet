@@ -7,8 +7,6 @@ import styles from './page.module.css'
 
 export const StyleContext = createContext<StyleContextType>(styles)
 
-
-
 const Page = () => {
     const [countries, setCountries] = useState<Country[]>([])
     const [continents, setContinents] = useState<Continent[]>([])

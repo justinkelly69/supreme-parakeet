@@ -1,7 +1,10 @@
 import React from 'react'
 import mapboxgl from 'mapbox-gl'
 
-export default function App() {
+export default function Map(props: {
+    geoData: any,
+    
+}) {
     const mapContainer = React.useRef<any>(null);
     const map = React.useRef<mapboxgl.Map | null>(null);
     const [lng, setLng] = React.useState(-74.0632);
