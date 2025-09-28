@@ -21,29 +21,28 @@ const MyCountry = ({
     const [isLoading, setIsLoading] = useState(true)
 
     const router = useRouter()
-
     const { id } = use(params)
-    //console.log('id', id)
 
     useEffect(() => {
         fetchCountry(
             setIsLoading,
             setCountry,
-            id)
+            id,
+        )
     }, [])
 
     const MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoianVzdGlua2VsbHk2OSIsImEiOiJjbWZ1NjRxd20wcWMwMmpxemd2NDhnaWhsIn0.lxbyz7IFID7MAHADJ1k2yg'
 
     return (
         country ?
-        isLoading ? 'Loading...' :
-            <CountryDetail
-                country={country}
-                setCountry={setCountry}
-            />
-        : null
+            isLoading ? 'Loading...' :
+                <CountryDetail
+                    country={country}
+                    setCountry={setCountry}
+                />
+            : null
     )
 
-} 
+}
 
 export default MyCountry

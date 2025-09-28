@@ -23,7 +23,7 @@ export const CountriesPage = (props: {
     continents: Continent[],
     setContinents: Function,
 }) => {
-    const [selectedContinents, setSelectedContinents] = useState([])
+    const [selectedContinents, setSelectedContinents] = useState(["AF", "AN", "AS", "EU", "NA", "OC", "SA"])
     const [showEnabled, setShowEnabled] = useState('BOTH')
 
     const style = useContext(StyleContext)
@@ -58,20 +58,12 @@ const CountriesHeader = (props: {
     setSelectedContinents: Function,
 }) => {
     const style = useContext(StyleContext)
+    console.log(JSON.stringify(props.selectedContinents))
 
     return (
         <header className={style["top-panel"]}>
             <div className={style["top-panel-items"]}>
                 <div className={`${style["top-panel-item"]} ${style["top-panel-1"]}`}>
-                    {props.showEnabled === 'BOTH' && (
-                        <Button
-                            className={`${style["save-countries-button"]}`}
-                            onClick={() => updateSelectedCountries(props.countries)}
-                            ref={null}
-                        >
-                            Save
-                        </Button>
-                    )}
                 </div>
                 <div className={`${style["top-panel-item"]} ${style["top-panel-2"]}`}>
                     <Select className={`${style["show-enabled-dropdown"]}`}
@@ -88,9 +80,10 @@ const CountriesHeader = (props: {
                 <div className={`${style["top-panel-item"]} ${style["top-panel-3"]}`}>
                     <CheckboxGroup
                         label="Select Continents"
-                        className="continent-list"
-                        labelClass="continent-list-item"
-                        boxClass="continent-list-box"
+                        className={style["continent-list"]}
+                        labelClass={style["continent-list-label"]}
+                        boxClass={style["continent-list-box"]}
+                        listItemClass={style["continent-list-item"]}
                         checkedValues={props.selectedContinents}
                         setCheckedValues={props.setSelectedContinents}
                         checkboxData={props.continentData}
@@ -113,9 +106,9 @@ const CountriesTable = (props: {
 
     const style = useContext(StyleContext)
 
-    const colWidths = props.showEnabled === 'BOTH' ?
-        em([2, 8, 18, 2, 2, 2, 3]) :
-        em([2, 8, 18, 2, 2, 3])
+    // const colWidths = props.showEnabled === 'BOTH' ?
+    //     em([2, 8, 18, 2, 2, 2, 3]) :
+    //     em([2, 8, 18, 2, 2, 3])
 
     const selectedCountries = filterSelectedCountries(
         props.selectedContinents,
@@ -126,7 +119,7 @@ const CountriesTable = (props: {
     return (
         <main className="main">
             <GridContainer
-                cols={colWidths}
+                cols={em([2, 8, 18, 2, 2, 3])}
                 rows={`repeat(${selectedCountries.length}, 1fr)`}
                 justifyContent="center"
                 gap="1px"
@@ -195,33 +188,10 @@ const CountryRow = (props: {
                 className={props.className}
                 selected={props.country.is_enabled}
             >
-                {props.country.is_eu ? 'Yes' : 'No'}
+                <span className={style["is-eu"]}>
+                    {props.country.is_eu ? 'EU' : ''}
+                </span>
             </GridItem>
-
-            {props.showEnabled === 'BOTH' && (
-                <GridItem
-                    className={props.className}
-                    selected={props.country.is_enabled}
-                >
-                    <Checkbox
-                        label=""
-                        name={props.country.id}
-                        checked={props.country.is_enabled}
-                        boxClass="checkbox"
-                        labelClass="checkbox_label"
-                        onChange={(e) => {
-                            props.setCountries(
-                                selectCountry(
-                                    props.selectedCountries,
-                                    props.country,
-                                    e.target.checked
-                                )
-                            )
-                        }}
-                        ref={null}
-                    />
-                </GridItem>
-            )}
 
             <GridItem
                 className={props.className}
@@ -230,8 +200,9 @@ const CountryRow = (props: {
                 <Link
                     href="/protected/countries/[id]"
                     as={`/protected/countries/${props.country.id}`}
+                    className={style["country-edit-button"]}
                 >
-                    {props.country.name}
+                    {"Edit"}
                 </Link>
 
             </GridItem>
@@ -273,110 +244,145 @@ export const CountryDetail = (props: {
         // });
     }, []);
 
-    const colWidths: string = em([30, 10])
-    const rowWidths: string = em([2, 4, 20, 20])
+    const colWidths: string = em([50, 20])
+    const rowHeights: string = em([1.4, 4, 20, 20])
 
     return (
         <main className="main">
             <GridContainer
                 cols={colWidths}
-                rows={rowWidths}
+                rows={rowHeights}
                 justifyContent="center"
                 alignItems="center"
-                gap="1px"
+                gap="0"
                 className="country"
             >
-                <GridItem className="country-back">
-                    <div></div>
-                </GridItem>
+                <div className={style["top-strip-left"]}>
+                    <ul className={style["top-menu-list"]}>
+                        <li className={style["top-menu-item"]}><strong>TLD:</strong>{" "}{props.country.tld}</li>
+                        <li className={style["top-menu-item"]}><strong>Dial Code:</strong>{" "}{props.country.prefix}</li>
+                        <li className={style["top-menu-item"]}><strong>EU:</strong>{" "}{props.country.is_eu ?
+                            <span className={style["is-eu"]}>YES</span> :
+                            <span className={style["no-eu"]}>NO</span>
+                        }</li>
+                        <li className={style["top-menu-item"]}><strong>Long:</strong>{" "}{props.country.longitude}</li>
+                        <li className={style["top-menu-item"]}><strong>Lat:</strong>{" "}{props.country.latitude}</li>
+                        <li className={style["top-menu-item"]}><strong>Zoom:</strong>{" "}{props.country.zoom}</li>
+                    </ul>
+                </div>
 
-                <GridItem className="country-save">
-                    <>
-                        <Button
-                            onClick={e => e}
-                            className={""}
-                            children={"Save"}
-                            ref={null}
-                        />
-                        <Button
-                            onClick={e => router.back()}
-                            className={""}
-                            children={"Cancel"}
-                            ref={null}
-                        />
-                    </>
-                </GridItem>
+                <div className={style["top-strip-right"]}>
+                    <ul className={style["top-menu-list"]}>
+                        <li className={style["top-menu-item"]}>
+                            <Button
+                                onClick={e => e}
+                                className={style["country-edit-button"]}
+                                children={"Enable"}
+                                ref={null}
+                            />
+                        </li>
+                        <li className={style["top-menu-item"]}>
+                            <Button
+                                onClick={e => e}
+                                className={style["country-edit-button"]}
+                                children="Save"
+                                ref={null}
+                            />
+                        </li>
+                        <li className={style["top-menu-item"]}>
+                            <Button
+                                onClick={e => router.back()}
+                                className={style["country-edit-button"]}
+                                children="Cancel"
+                                ref={null}
+                            />
+                        </li>
+                    </ul>
+                </div>
 
-                <GridItem className="country-heading">
-                    {` ${props.country.continent_name} > ${props.country.name}`}
-                </GridItem>
+                <div className={style["country-heading"]}>
+                    <div className={style["country-heading-position"]}>
+                        {props.country.name}
+                    </div>
+                </div>
 
-                <GridItem className="country-flag">
-                    {`${props.country.flag}`}
-                </GridItem>
+                <div className={style["country-flag"]}>
+                    <div className={style["country-flag-position"]}>
+                        {`${props.country.flag}`}
+                    </div>
+                </div>
 
-                <GridItem className="country-map">
+                <div className={style["country-map"]}>
                     <div
-                        style={{ height: '100%', backgroundColor: 'red', borderWidth: '2px', borderColor: 'black' }}
+                        style={{ height: '100%', width: '100%' }}
                         ref={mapContainer}
-                        className="map-container"
+                        className={style["map-container"]}
                     />
-                </GridItem>
+                </div>
 
-                <GridItem className="country-details">
-                    <table className="country-detils-table">
-                        <tbody>
-                            <tr>
-                                <th>Longitude:</th>
-                                <td>{props.country.longitude}</td>
-                            </tr>
-                            <tr>
-                                <th>Latitude:</th>
-                                <td>{props.country.latitude}</td>
-                            </tr>
-                            <tr>
-                                <th>Zoom: </th>
-                                <td>{props.country.zoom}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </GridItem>
+                <div className={style["country-details"]}>
+                    <div className={style["country-details-table"]}>
+                        <div className={style["country-details-label"]}>Continent:</div>
+                        <div className={style["country-details-data"]}>{props.country.continent_name}</div>
+                        <div className={style["country-details-label"]}>Longitude:</div>
+                        <div className={style["country-details-data"]}>{props.country.longitude}</div>
+                        <div className={style["country-details-label"]}>Latitude:</div>
+                        <div className={style["country-details-data"]}>{props.country.latitude}</div>
+                        <div className={style["country-details-label"]}>Zoom:</div>
+                        <div className={style["country-details-data"]}>{props.country.zoom}</div>
+                        <div className={style["country-details-label"]}>Population:</div>
+                        <div className={style["country-details-data"]}></div>
+                        <div className={style["country-details-label"]}>Capital City:</div>
+                        <div className={style["country-details-data"]}></div>
+                        <div className={style["country-details-label"]}>Languages:</div>
+                        <div className={style["country-details-data"]}></div>
+                        <div className={style["country-details-label"]}>Currency:</div>
+                        <div className={style["country-details-data"]}></div>
+                        <div className={style["country-details-label"]}>EU Member:</div>
+                        <div className={style["country-details-data"]}>{props.country.is_eu ?
+                            <span className={style["is-eu"]}>YES</span> :
+                            <span className={style["no-eu"]}>NO</span>
+                        }</div>
+                        <div className={style["country-details-label"]}>Domain:</div>
+                        <div className={style["country-details-data"]}>{props.country.tld}</div>
+                        <div className={style["country-details-label"]}>Dial Prefix:</div>
+                        <div className={style["country-details-data"]}>+{props.country.prefix}</div>
+                    </div>
+                </div>
 
-                <GridItem className="country-description">
+                <div className={style["country-description"]}>
                     <TextArea
                         id="country_description"
                         name="country_description"
-                        value="Description"
+                        value=""
                         placeholder="Description"
                         rows={10}
                         cols={30}
-                        className="country-description"
+                        className={style["country-description"]}
                         ref={null}
                     />
-                </GridItem>
+                </div>
 
-                <GridItem className="country-details">
-                    <table className="country-detils-table">
-                        <tbody>
-                            <tr>
-                                <th>TLD:</th>
-                                <td>{props.country.tld}</td>
-                            </tr>
-                            <tr>
-                                <th>Dialling Code:</th>
-                                <td>{props.country.prefix}</td>
-                            </tr>
-                            <tr>
-                                <th>EU Member: </th>
-                                <td>{props.country.is_eu ? 'Yes' : 'No'}</td>
-                            </tr>
-                            <tr>
-                                <th>Enabled:</th>
-                                <td>{props.country.is_enabled ? 'Yes' : 'No'}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </GridItem>
+                <div className={style["country-cities"]}>
+                    <div className={style["city-heading"]}>Cities</div>
+                    <ul className={style["city-list"]}>
+                        <li>
+                            <a>London</a>
+                        </li>
+                        <li>
+                            <a>Paris</a>
+                        </li>
+                        <li>
+                            <a>New York</a>
+                        </li>
+                        <li>
+                            <a>Berlin</a>
+                        </li>
+                        <li>
+                            <a>+</a>
+                        </li>
+                    </ul>
+                </div>
 
             </GridContainer>
         </main>

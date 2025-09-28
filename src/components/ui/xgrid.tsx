@@ -46,7 +46,7 @@ export const GridItem = (props: {
     style?:any,
 }) => {
     const className: string = props.selected ?
-        `[${props.className}] ${props.className}-selected` :
+        `${props.className} ${props.className}-selected` :
         `${props.className}`
 
     return (

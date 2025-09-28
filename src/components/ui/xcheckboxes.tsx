@@ -22,7 +22,7 @@ export const Checkbox = (props: {
                 name={props.name}
                 className={props.boxClass}
                 defaultChecked={props.checked}
-                onChange={props.onChange} 
+                onChange={props.onChange}
                 ref={props.ref}
             />
             {props.label}
@@ -34,7 +34,8 @@ export const CheckboxGroup = (props: {
     label: string,
     className?: string,
     labelClass?: string,
-    boxClass?:string,
+    boxClass?: string,
+    listItemClass?: string,
     checkboxData: CheckBoxData[],
     checkedValues: string[],
     setCheckedValues: Function,
@@ -70,7 +71,9 @@ export const CheckboxGroup = (props: {
 
     const checkboxes = props.checkboxData.map((option, index) => {
         return (
-            <li key={index}>
+            <li key={index}
+                className={props.listItemClass}
+            >
                 <Checkbox
                     checked={checkedValues.has(option.name)}
                     label={option.label}
