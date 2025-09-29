@@ -8,9 +8,9 @@ import {
 } from "@/lib/countries";
 import { StyleContext } from "@/app/protected/countries/page";
 import { Button } from "../ui/xbutton";
-import Select from "../ui/xselect";
+import Select, { OptionArgs } from "../ui/xselect";
 import { Checkbox, CheckBoxData, CheckboxGroup } from "../ui/xcheckboxes";
-import { GridContainer, GridItem, em } from "../ui/xgrid";
+import { GridContainer, GridItem, em, emTotal } from "../ui/xgrid";
 import Link from "next/link";
 import { TextArea } from "../ui/xtexts";
 
@@ -23,75 +23,21 @@ export const CountriesPage = (props: {
     continents: Continent[],
     setContinents: Function,
 }) => {
-    const [selectedContinents, setSelectedContinents] = useState(["AF", "AN", "AS", "EU", "NA", "OC", "SA"])
-    const [showEnabled, setShowEnabled] = useState('BOTH')
+    const [selectedContinent, setSelectedContinent] = useState("EU")
+    const [showEnabled, setShowEnabled] = useState(["ENABLED", "DISABLED"])
 
     const style = useContext(StyleContext)
 
     return (
-        <>
-            <CountriesHeader
-                countries={props.countries}
-                setShowEnabled={setShowEnabled}
-                showEnabled={showEnabled}
-                continentData={setContinentData(props.continents)}
-                selectedContinents={selectedContinents}
-                setSelectedContinents={setSelectedContinents}
-            />
-            <CountriesTable
-                countries={props.countries}
-                setCountries={props.setCountries}
-                setShowEnabled={setShowEnabled}
-                showEnabled={showEnabled}
-                selectedContinents={selectedContinents}
-                children={[]} />
-        </>
-    )
-}
-
-const CountriesHeader = (props: {
-    countries: Country[],
-    setShowEnabled: Function,
-    showEnabled: string,
-    continentData: CheckBoxData[],
-    selectedContinents: string[],
-    setSelectedContinents: Function,
-}) => {
-    const style = useContext(StyleContext)
-    console.log(JSON.stringify(props.selectedContinents))
-
-    return (
-        <header className={style["top-panel"]}>
-            <div className={style["top-panel-items"]}>
-                <div className={`${style["top-panel-item"]} ${style["top-panel-1"]}`}>
-                </div>
-                <div className={`${style["top-panel-item"]} ${style["top-panel-2"]}`}>
-                    <Select className={`${style["show-enabled-dropdown"]}`}
-                        value={props.showEnabled}
-                        onChange={(e) => props.setShowEnabled(e.target.value)}
-                        options={[
-                            { value: "BOTH", label: "Both" },
-                            { value: "ENABLED", label: "Enabled" },
-                            { value: "DISABLED", label: "Disabled" },
-                        ]}
-                        ref={null}
-                    />
-                </div>
-                <div className={`${style["top-panel-item"]} ${style["top-panel-3"]}`}>
-                    <CheckboxGroup
-                        label="Select Continents"
-                        className={style["continent-list"]}
-                        labelClass={style["continent-list-label"]}
-                        boxClass={style["continent-list-box"]}
-                        listItemClass={style["continent-list-item"]}
-                        checkedValues={props.selectedContinents}
-                        setCheckedValues={props.setSelectedContinents}
-                        checkboxData={props.continentData}
-                        ref={null}
-                    />
-                </div>
-            </div>
-        </header>
+        <CountriesTable
+            countries={props.countries}
+            setCountries={props.setCountries}
+            setShowEnabled={setShowEnabled}
+            showEnabled={showEnabled}
+            continentData={setContinentData(props.continents)}
+            selectedContinent={selectedContinent}
+            setSelectedContinent={setSelectedContinent}
+            children={[]} />
     )
 }
 
@@ -100,45 +46,136 @@ const CountriesTable = (props: {
     countries: Country[],
     setCountries: Function,
     setShowEnabled: Function,
-    showEnabled: string,
-    selectedContinents: string[],
+    showEnabled: string[],
+    continentData: CheckBoxData[],
+    selectedContinent: string,
+    setSelectedContinent: Function,
 }) => {
 
     const style = useContext(StyleContext)
 
-    // const colWidths = props.showEnabled === 'BOTH' ?
-    //     em([2, 8, 18, 2, 2, 2, 3]) :
-    //     em([2, 8, 18, 2, 2, 3])
-
     const selectedCountries = filterSelectedCountries(
-        props.selectedContinents,
+        props.selectedContinent,
         props.countries,
         props.showEnabled,
     )
 
+    const widths = [2.6, 18, 2, 2, 3]
+    const colWidths = em(widths)
+    const totalWidth = emTotal(widths)
+
+    const klassName = style["country-cell-header"]
+
+    const continentArgs: OptionArgs[] = []
+    for (let cd of props.continentData) {
+        continentArgs.push({
+            value: cd.name,
+            label: cd.label,
+        })
+    }
+
+    const enabledArgs: CheckBoxData[] = [
+        { name: "ENABLED", label: "Enabled", checked: true },
+        { name: "DISABLED", label: "Disabled", checked: true },
+    ]
+
     return (
-        <main className="main">
-            <GridContainer
-                cols={em([2, 8, 18, 2, 2, 3])}
-                rows={`repeat(${selectedCountries.length}, 1fr)`}
-                justifyContent="center"
-                gap="1px"
-                className="countries"
-            >
-                {selectedCountries.map((country) => {
-                    return (
-                        <CountryRow
-                            key={country.id}
-                            className="country-cell"
-                            country={country}
-                            selectedCountries={selectedCountries}
-                            setCountries={props.setCountries}
-                            showEnabled={props.showEnabled}
-                            selectedContinents={props.selectedContinents}
-                        />
-                    )
-                })}
-            </GridContainer>
+        <main className={style["countries-main"]}>
+            <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'stretch',
+                justifyContent: 'flex-start',
+                height: '40em',
+                width: totalWidth,
+            }}>
+                <div className={style['country-cell-header']}
+                    style={{
+                        flex: ' 0 0 auto',
+                        overflowX: 'hidden',
+                        overflowY: 'scroll',
+                        display: 'block',
+
+                    }}>
+                    <CheckboxGroup
+                        label="Select Countries"
+                        className={style["continent-list"]}
+                        labelClass={style["continent-list-label"]}
+                        boxClass={style["continent-list-box"]}
+                        listItemClass={style["continent-list-item"]}
+                        checkedValues={props.showEnabled}
+                        setCheckedValues={(e: string[]) => {
+                            props.setShowEnabled(e)
+                        }}
+                        checkboxData={enabledArgs}
+                        ref={null}
+                    />
+                    <Select className={`${style["select-continents-dropdown"]}`}
+                        value={props.selectedContinent}
+                        onChange={(e) => props.setSelectedContinent(e.target.value)}
+                        options={continentArgs}
+                        ref={null}
+                    />
+                </div>
+                <div style={{
+                    flex: ' 0 0 auto',
+                    overflowX: 'hidden',
+                    overflowY: 'scroll',
+                    display: 'block',
+                }}>
+                    <GridContainer
+                        cols={colWidths}
+                        rows={"1fr"}
+                        justifyContent='center'
+                        gap="0"
+                        flex="0 1 auto"
+                    >
+                        <div className={klassName}>
+                            ID
+                        </div>
+                        <div className={klassName}>
+                            Country
+                        </div>
+                        <div className={klassName}>
+                            eu
+                        </div>
+                        <div className={klassName}>
+                            flg
+                        </div>
+                        <div className={klassName}>
+                            edit
+                        </div>
+                    </GridContainer>
+                </div>
+
+                <div style={{
+                    flex: ' 0 1 auto',
+                    overflowY: 'scroll',
+                    overflowX: 'hidden',
+                    display: 'block',
+                }}>
+                    <GridContainer
+                        cols={colWidths}
+                        rows={`repeat(${selectedCountries.length}, 1fr)`}
+                        justifyContent='center'
+                        gap="0"
+                    >
+                        {selectedCountries.map((country) => {
+                            return (
+                                <CountryRow
+                                    key={country.id}
+                                    className="country-cell"
+                                    country={country}
+                                    selectedCountries={selectedCountries}
+                                    setCountries={props.setCountries}
+                                    showEnabled={props.showEnabled}
+                                    selectedContinent={props.selectedContinent}
+                                />
+                            )
+                        })}
+                    </GridContainer>
+                </div>
+            </div>
         </main >
     );
 }
@@ -148,55 +185,36 @@ const CountryRow = (props: {
     className: string,
     selectedCountries: Country[],
     setCountries: Function,
-    showEnabled: string,
-    selectedContinents: string[]
+    showEnabled: string[],
+    selectedContinent: string,
 }) => {
     const style = useContext(StyleContext)
-    const enabled = props.country.is_enabled ? "is-enabled" : ""
+
+    const klassName = props.country.is_enabled ?
+        style[`${props.className}`] + " " + style[`${props.className}-enabled`] :
+        style[`${props.className}`]
 
     return (
         <>
-            <GridItem
-                className={props.className}
-                selected={props.country.is_enabled}
-            >
+            <div className={klassName}>
                 {props.country.id}
-            </GridItem>
+            </div>
 
-            <GridItem
-                className={props.className}
-                selected={props.country.is_enabled}
-            >
-                {props.country.continent_name}
-            </GridItem>
-
-            <GridItem
-                className={props.className}
-                selected={props.country.is_enabled}
-            >
+            <div className={klassName}>
                 {props.country.name}
-            </GridItem>
+            </div>
 
-            <GridItem
-                className={props.className}
-                selected={props.country.is_enabled}
-            >
+            <div className={klassName}>
                 {props.country.flag}
-            </GridItem>
+            </div>
 
-            <GridItem
-                className={props.className}
-                selected={props.country.is_enabled}
-            >
+            <div className={klassName}>
                 <span className={style["is-eu"]}>
                     {props.country.is_eu ? 'EU' : ''}
                 </span>
-            </GridItem>
+            </div>
 
-            <GridItem
-                className={props.className}
-                selected={props.country.is_enabled}
-            >
+            <div className={klassName}>
                 <Link
                     href="/protected/countries/[id]"
                     as={`/protected/countries/${props.country.id}`}
@@ -204,8 +222,7 @@ const CountryRow = (props: {
                 >
                     {"Edit"}
                 </Link>
-
-            </GridItem>
+            </div>
         </>
     )
 }
@@ -229,7 +246,7 @@ export const CountryDetail = (props: {
     React.useEffect(() => {
         if (map.current) return; // initialize map only once
 
-        console.log('country', JSON.stringify(props.country, null, 4))
+        //console.log('country', JSON.stringify(props.country, null, 4))
 
         mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
         map.current = new mapboxgl.Map({

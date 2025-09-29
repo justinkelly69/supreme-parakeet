@@ -1,7 +1,7 @@
 import * as React from "react"
 import { ChangeEventHandler, Ref } from "react"
 
-type OptionArgs = {
+export type OptionArgs = {
     value: string,
     label: string,
 }

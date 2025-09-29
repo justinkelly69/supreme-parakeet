@@ -135,20 +135,20 @@ export const fetchCountry = async (
     //console.log('data', JSON.stringify(data, null, 4))
 
     setCountry({
-            id: id,
-            continent_id: data.continent_id,
-            continent_name: data.continent_name,
-            name: data.name,
-            flag: data.flag,
-            tld: data.tld,
-            prefix: data.prefix,
-            is_eu: data.is_eu,
-            is_enabled: data.is_enabled,
-            was_enabled: data.is_enabled,
-            description: data.description,
-            longitude: data.longitude,
-            latitude: data.latitude,
-            zoom: data.zoom,
+        id: id,
+        continent_id: data.continent_id,
+        continent_name: data.continent_name,
+        name: data.name,
+        flag: data.flag,
+        tld: data.tld,
+        prefix: data.prefix,
+        is_eu: data.is_eu,
+        is_enabled: data.is_enabled,
+        was_enabled: data.is_enabled,
+        description: data.description,
+        longitude: data.longitude,
+        latitude: data.latitude,
+        zoom: data.zoom,
     })
 
     setIsLoading(false)
@@ -199,25 +199,21 @@ export const getEnabledCountries = (countries: Country[]): EnabledCountry[] => {
 
 // Get selected countries and filter by enabled
 export const filterSelectedCountries = (
-    selectedContinentIDs: string[],
+    selectedContinentID: string,
     countries: Country[],
-    showEnabled: string,
+    showEnabled: string[],
 ): Country[] => {
     let selectedCountries: Country[] = []
+    const countriesByContinent = countries.filter((e => e.continent_id === selectedContinentID))
 
-    for (const continentId of selectedContinentIDs) {
-        const countriesByContinent = countries.filter((e => e.continent_id === continentId))
+    for (const co of countriesByContinent) {
 
-        for (const co of countriesByContinent) {
+        if (showEnabled.includes('ENABLED') && co.is_enabled === true) {
             selectedCountries.push(co)
         }
 
-        if (showEnabled === 'ENABLED') {
-            selectedCountries = selectedCountries.filter((e => e.is_enabled === true))
-        }
-
-        else if (showEnabled === 'DISABLED') {
-            selectedCountries = selectedCountries.filter((e => e.is_enabled === false))
+        else if (showEnabled.includes('DISABLED') && co.is_enabled === false) {
+            selectedCountries.push(co)
         }
     }
     return selectedCountries
