@@ -1,58 +1,92 @@
 DROP SCHEMA IF EXISTS world CASCADE;
 CREATE SCHEMA IF NOT EXISTS world;
 
-DROP TABLE IF EXISTS world.countries;
-CREATE TABLE IF NOT EXISTS world.selected_countries (
-    "id"           CHAR(2) NOT NULL UNIQUE,
-    "is_enabled"   BOOLEAN NOT NULL DEFAULT FALSE,
-    "description"  VARCHAR(10000) NOT NULL DEFAULT '',
-    "longitude"    INTEGER NOT NULL DEFAULT 0,
-    "latitude"     INTEGER NOT NULL DEFAULT 0,
-    "zoom"         INTEGER NOT NULL DEFAULT 10,
-     CONSTRAINT "fk_selected_countries" FOREIGN KEY ("id") REFERENCES iso.countries ("id")
+DROP TABLE IF EXISTS world.enabled_countries;
+CREATE TABLE IF NOT EXISTS world.enabled_countries (
+    "id"                    CHAR(2) NOT NULL UNIQUE,
+    "is_enabled"            BOOLEAN NOT NULL DEFAULT FALSE,
+    "description"           VARCHAR(10000) NOT NULL DEFAULT '',
+    "longitude"             INTEGER NOT NULL DEFAULT 0,
+    "latitude"              INTEGER NOT NULL DEFAULT 0,
+    "zoom"                  INTEGER NOT NULL DEFAULT 10,
+     CONSTRAINT "fk_enabled_countries" 
+        FOREIGN KEY ("id") 
+        REFERENCES iso.countries ("id")
 );
 
-INSERT INTO world.selected_countries (id)
-SELECT      "id"
-FROM        iso.countries
-ORDER BY    "name";
+INSERT INTO                 world.enabled_countries (id)
+    SELECT                  "id"
+    FROM                    iso.countries
+    ORDER BY                "name";
 
-GRANT SELECT, UPDATE ON world.selected_countries TO public;
+GRANT SELECT, UPDATE ON     world.enabled_countries TO public;
 
-DROP FUNCTION IF EXISTS update_selected_countries;
-CREATE OR REPLACE FUNCTION update_selected_countries(selected_countries JSONB)
+
+DROP TABLE IF EXISTS world.enabled_cities;
+CREATE TABLE world.enabled_cities (
+    id              VARCHAR(20)     NOT NULL,
+    enabled         BOOLEAN         NOT NULL DEFAULT FALSE,
+    latitude        FLOAT,
+    longitude       FLOAT,
+    zoom            INTEGER         NOT NULL DEFAULT 1,
+    description     VARCHAR(10000)  NOT NULL DEFAULT ''
+);
+
+INSERT INTO world.enabled_cities (
+    id,
+    latitude, 
+    longitude
+)
+    SELECT  id,
+            latitude, 
+            longitude
+    FROM    iso.cities;
+
+GRANT SELECT, UPDATE ON world.enabled_cities TO public;
+
+
+
+
+
+
+
+
+
+
+DROP FUNCTION IF EXISTS     update_enabled_countries;
+CREATE OR REPLACE FUNCTION  update_enabled_countries(enabled_countries JSONB)
 RETURNS  VOID
 LANGUAGE plpgsql
 AS $$
 DECLARE
-    selected_country JSONB;
+    enabled_country JSONB;
 BEGIN
-    FOR selected_country IN SELECT jsonb_array_elements(selected_countries)
+    FOR enabled_country IN SELECT jsonb_array_elements(enabled_countries)
     LOOP
-        UPDATE  world.selected_countries 
-        SET     is_enabled  = (selected_country->>'is_enabled')::BOOLEAN,
-                description = (selected_country->>'description')::VARCHAR(10000),
-                longitude   = (selected_country->>'longitude')::INTEGER,
-                latitude    = (selected_country->>'latitude')::INTEGER,
-                zoom        = (selected_country->>'zoom')::INTEGER
-        WHERE   id          = selected_country->>'id';
+        UPDATE  world.enabled_countries 
+        SET     is_enabled  = (enabled_country->>'is_enabled')::BOOLEAN,
+                description = (enabled_country->>'description')::VARCHAR(10000),
+                longitude   = (enabled_country->>'longitude')::INTEGER,
+                latitude    = (enabled_country->>'latitude')::INTEGER,
+                zoom        = (enabled_country->>'zoom')::INTEGER
+        WHERE   id          = enabled_country->>'id';
     END LOOP;
 END;
 $$;
 
-DROP FUNCTION IF EXISTS enable_disable_selected_countries;
-CREATE OR REPLACE FUNCTION enable_disable_selected_countries(selected_countries JSONB)
+DROP FUNCTION IF EXISTS     enable_disable_enabled_countries;
+CREATE OR REPLACE FUNCTION  enable_disable_enabled_countries(enabled_countries JSONB)
 RETURNS  VOID
 LANGUAGE plpgsql
 AS $$
 DECLARE
-    selected_country JSONB;
+    enabled_country JSONB;
 BEGIN
-    FOR selected_country IN SELECT jsonb_array_elements(selected_countries)
+    FOR enabled_country IN SELECT jsonb_array_elements(enabled_countries)
     LOOP
-        UPDATE world.selected_countries 
-        SET    is_enabled = (selected_country->>'is_enabled')::BOOLEAN 
-        WHERE  id         = selected_country->>'id';
+        UPDATE  world.enabled_countries 
+        SET     is_enabled = (enabled_country->>'is_enabled')::BOOLEAN 
+        WHERE   id         = enabled_country->>'id';
     END LOOP;
 END;
 $$;
@@ -94,7 +128,7 @@ FROM
     LEFT JOIN iso.languages lg            ON lg."id" = cl."language_id" 
     LEFT JOIN iso.country_currencies cc   ON co."id" = cc."country_id"
     LEFT JOIN iso.currencies cu           ON cu."id" = cc."currency_id" 
-    LEFT JOIN world.selected_countries wc ON wc."id" = co."id"
+    LEFT JOIN world.enabled_countries wc ON wc."id" = co."id"
 GROUP BY
     co."id",
     cn."name",
