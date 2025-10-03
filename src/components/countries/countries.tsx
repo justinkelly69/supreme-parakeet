@@ -1,16 +1,15 @@
 'use client'
 
-import React, { useState, createContext, useContext } from "react";
+import React, { useState, useContext } from "react";
 import { useRouter } from 'next/navigation';
 import {
-    Continent, Country, filterSelectedCountries, selectCountry,
-    setContinentData, updateSelectedCountries, StyleContextType
-} from "@/lib/countries";
+    Continent, Country, filterSelectedCountries, 
+    setContinentData} from "@/lib/countries";
 import { StyleContext } from "@/app/protected/countries/page";
 import { Button } from "../ui/xbutton";
 import Select, { OptionArgs } from "../ui/xselect";
-import { Checkbox, CheckBoxData, CheckboxGroup } from "../ui/xcheckboxes";
-import { GridContainer, GridItem, em, emTotal } from "../ui/xgrid";
+import { CheckBoxData, CheckboxGroup } from "../ui/xcheckboxes";
+import { GridContainer, em, emTotal } from "../ui/xgrid";
 import Link from "next/link";
 import { TextArea } from "../ui/xtexts";
 
@@ -51,7 +50,6 @@ const CountriesTable = (props: {
     selectedContinent: string,
     setSelectedContinent: Function,
 }) => {
-
     const style = useContext(StyleContext)
 
     const selectedCountries = filterSelectedCountries(
@@ -241,14 +239,10 @@ export const CountryDetail = (props: {
 
     const style = useContext(StyleContext)
 
-    const MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoianVzdGlua2VsbHk2OSIsImEiOiJjbWZ1NjRxd20wcWMwMmpxemd2NDhnaWhsIn0.lxbyz7IFID7MAHADJ1k2yg'
-
     React.useEffect(() => {
         if (map.current) return; // initialize map only once
 
-        //console.log('country', JSON.stringify(props.country, null, 4))
-
-        mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
+        mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN;
         map.current = new mapboxgl.Map({
             container: mapContainer.current,
             style: 'mapbox://styles/mapbox/streets-v11',
@@ -262,7 +256,7 @@ export const CountryDetail = (props: {
     }, []);
 
     const colWidths: string = em([50, 20])
-    const rowHeights: string = em([1.4, 4, 20, 20])
+    const rowHeights: string = em([1.4, 4, 40, 40])
 
     return (
         <main className="main">
@@ -380,7 +374,9 @@ export const CountryDetail = (props: {
                     />
                 </div>
 
-                <div className={style["country-cities"]}>
+               
+
+                {/* <div className={style["country-cities"]}>
                     <div className={style["city-heading"]}>Cities</div>
                     <ul className={style["city-list"]}>
                         <li>
@@ -399,7 +395,7 @@ export const CountryDetail = (props: {
                             <a>+</a>
                         </li>
                     </ul>
-                </div>
+                </div> */}
 
             </GridContainer>
         </main>

@@ -1,4 +1,6 @@
+import { StyleContext } from "@/app/protected/countries/page"
 import * as React from "react"
+import { useContext } from "react"
 
 export const em = (values: number[]) => valueSequence(values, "em")
 export const fr = (values: number[]) => valueSequence(values, "fr")
@@ -51,21 +53,3 @@ export const GridContainer = (props: {
     )
 }
 
-export const GridItem = (props: {
-    selected?: boolean,
-    className: string,
-    children: React.JSX.Element | React.JSX.Element[] | string | null,
-    style?:any,
-}) => {
-    const className: string = props.selected ?
-        `${props.className} ${props.className}-selected` :
-        `${props.className}`
-
-    return (
-        <div className={className}>
-            <div className={`${props.className}-data`}>
-                {props.children}
-            </div>
-        </div>
-    )
-}

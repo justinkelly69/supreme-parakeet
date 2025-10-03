@@ -47,6 +47,9 @@ export const fetchContinents = async (
         console.error('Error fetching continents:', error)
         return
     }
+    else {
+        console.log("no error", JSON.stringify(data, null, 4))
+    }
 
     setContinents((data ?? []).map((continent: Continent) => ({
         id: continent.id,

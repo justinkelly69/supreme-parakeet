@@ -6,16 +6,20 @@ CREATE TABLE IF NOT EXISTS world.enabled_countries (
     "id"                    CHAR(2) NOT NULL UNIQUE,
     "is_enabled"            BOOLEAN NOT NULL DEFAULT FALSE,
     "description"           VARCHAR(10000) NOT NULL DEFAULT '',
-    "longitude"             INTEGER NOT NULL DEFAULT 0,
-    "latitude"              INTEGER NOT NULL DEFAULT 0,
-    "zoom"                  INTEGER NOT NULL DEFAULT 10,
+    "longitude"             FLOAT,
+    "latitude"              FLOAT,
+    "zoom"                  INTEGER NOT NULL DEFAULT 1,
      CONSTRAINT "fk_enabled_countries" 
         FOREIGN KEY ("id") 
         REFERENCES iso.countries ("id")
 );
 
-INSERT INTO                 world.enabled_countries (id)
-    SELECT                  "id"
+INSERT INTO                 world.enabled_countries (
+                                id, 
+                                longitude, 
+                                latitude
+                            )
+    SELECT                  "id", "longitude", "latitude"
     FROM                    iso.countries
     ORDER BY                "name";
 
