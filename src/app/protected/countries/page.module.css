@@ -5,6 +5,10 @@
     --no-eu-color: rgb(153, 5, 5);
 }
 
+body {
+    background-color: rgb(18, 35, 35);
+}
+
 .top-strip-left {
     text-align: left;
     height: 100%;

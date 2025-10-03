@@ -96,7 +96,6 @@ END;
 $$;
 
 DROP VIEW IF EXISTS public.country_details;
-
 CREATE VIEW public.country_details AS
 SELECT
     co."id",
@@ -107,6 +106,17 @@ SELECT
     co."tld",
     co."prefix",
     co."is_eu",
+    co."iso2",
+    co."demonym",
+    co."population",
+    co."density",
+    co."area",
+    co."gdp",
+    co."median_age",
+    co."website",
+    co."driving_side",
+    co."un_member",
+    co."religion",
     wc."description",
     wc."latitude",
     wc."longitude",

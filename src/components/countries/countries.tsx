@@ -1,10 +1,11 @@
 'use client'
 
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, JSX } from "react";
 import { useRouter } from 'next/navigation';
 import {
-    Continent, Country, filterSelectedCountries, 
-    setContinentData} from "@/lib/countries";
+    Continent, Country, filterSelectedCountries,
+    setContinentData
+} from "@/lib/countries";
 import { StyleContext } from "@/app/protected/countries/page";
 import { Button } from "../ui/xbutton";
 import Select, { OptionArgs } from "../ui/xselect";
@@ -332,33 +333,23 @@ export const CountryDetail = (props: {
                 </div>
 
                 <div className={style["country-details"]}>
-                    <div className={style["country-details-table"]}>
-                        <div className={style["country-details-label"]}>Continent:</div>
-                        <div className={style["country-details-data"]}>{props.country.continent_name}</div>
-                        <div className={style["country-details-label"]}>Longitude:</div>
-                        <div className={style["country-details-data"]}>{props.country.longitude}</div>
-                        <div className={style["country-details-label"]}>Latitude:</div>
-                        <div className={style["country-details-data"]}>{props.country.latitude}</div>
-                        <div className={style["country-details-label"]}>Zoom:</div>
-                        <div className={style["country-details-data"]}>{props.country.zoom}</div>
-                        <div className={style["country-details-label"]}>Population:</div>
-                        <div className={style["country-details-data"]}></div>
-                        <div className={style["country-details-label"]}>Capital City:</div>
-                        <div className={style["country-details-data"]}></div>
-                        <div className={style["country-details-label"]}>Languages:</div>
-                        <div className={style["country-details-data"]}></div>
-                        <div className={style["country-details-label"]}>Currency:</div>
-                        <div className={style["country-details-data"]}></div>
-                        <div className={style["country-details-label"]}>EU Member:</div>
-                        <div className={style["country-details-data"]}>{props.country.is_eu ?
-                            <span className={style["is-eu"]}>YES</span> :
-                            <span className={style["no-eu"]}>NO</span>
-                        }</div>
-                        <div className={style["country-details-label"]}>Domain:</div>
-                        <div className={style["country-details-data"]}>{props.country.tld}</div>
-                        <div className={style["country-details-label"]}>Dial Prefix:</div>
-                        <div className={style["country-details-data"]}>+{props.country.prefix}</div>
-                    </div>
+                    <CountryDetailsTable rows={[
+                        ["TLD", props.country.tld],
+                        ["Prefix", props.country.prefix],
+                        ["EU Member", props.country.is_eu ? 'Yes' : 'No'],
+                        ["UN Member", props.country.un_member ? 'Yes' : 'No'],
+                        ["Demonyn", props.country.demonym],
+                        ["Population", props.country.population],
+                        ["Density", props.country.density],
+                        ["Area", props.country.area],
+                        ["GDP", props.country.gdp],
+                        ["Median Age", props.country.median_age],
+                        ["Website", props.country.website],
+                        ["Driving Side", props.country.driving_side],
+                        ["Religion", props.country.religion],
+                        ["Latitude", props.country.latitude],
+                        ["Longitude", props.country.longitude],
+                    ]} />
                 </div>
 
                 <div className={style["country-description"]}>
@@ -374,7 +365,7 @@ export const CountryDetail = (props: {
                     />
                 </div>
 
-               
+
 
                 {/* <div className={style["country-cities"]}>
                     <div className={style["city-heading"]}>Cities</div>
@@ -400,4 +391,43 @@ export const CountryDetail = (props: {
             </GridContainer>
         </main>
     );
+}
+
+type PropsCountryRowType = string | number | boolean
+
+const CountryDetailsTable = (props: {
+    rows: [string, PropsCountryRowType][]
+}) => {
+    const style = useContext(StyleContext)
+    const rows = props.rows.map((row, index) => {
+        return (
+            <CountryDetailsTableRow
+                key={index}
+                label={row[0]}
+                value={row[1]}
+            />
+        )
+    })
+    return (
+        <div className={style["country-details-table"]}>
+            {rows}
+        </div>
+    )
+}
+
+const CountryDetailsTableRow = (props: {
+    label: string,
+    value: PropsCountryRowType,
+}) => {
+    const style = useContext(StyleContext)
+    return (
+        <>
+            <div className={style["country-details-label"]}>
+                {props.label}:
+            </div>
+            <div className={style["country-details-data"]}>
+                {props.value}
+            </div>
+        </>
+    )
 }

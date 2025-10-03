@@ -18,7 +18,21 @@ export type Country = {
     latitude: number,
     longitude: number,
     zoom: number,
+    iso2: string,
+    demonym: string,
+    population: number,
+    density: number,
+    area: number,
+    gdp: number,
+    median_age: number,
+    website: string,
+    driving_side: string,
+    un_member: boolean,
+    religion: string,
 };
+
+
+
 
 export type EnabledCountry = {
     id: string,
@@ -78,13 +92,26 @@ export const fetchCountries = async (
             description, 
             longitude, 
             latitude, 
-            zoom
+            zoom,
+            iso2,
+            demonym,
+            population,
+            density,
+            area,
+            gdp,
+            median_age,
+            website,
+            driving_side,
+            un_member,
+            religion
         `)
 
     if (error) {
         console.error('Error fetching countries:', error)
         return
     }
+
+    console.log('data', JSON.stringify(data, null, 4))
 
     setCountries(
         (data ?? []).map((item: any) => ({
@@ -102,6 +129,17 @@ export const fetchCountries = async (
             longitude: item.longitude,
             latitude: item.latitude,
             zoom: item.zoom,
+            iso2: item.iso2,
+            demonym: item.demonym,
+            population: item.population,
+            density: item.density,
+            area: item.area,
+            gdp: item.gdp,
+            median_age: item.median_age,
+            website: item.website,
+            driving_side: item.driving_side,
+            un_member: item.un_member,
+            religion: item.religion
         }))
     )
 
@@ -127,7 +165,18 @@ export const fetchCountry = async (
             description, 
             longitude, 
             latitude, 
-            zoom
+            zoom,
+            iso2,
+            demonym,
+            population,
+            density,
+            area,
+            gdp,
+            median_age,
+            website,
+            driving_side,
+            un_member,
+            religion
         `).eq('id', id).single()
 
     if (error) {
@@ -152,6 +201,17 @@ export const fetchCountry = async (
         longitude: data.longitude,
         latitude: data.latitude,
         zoom: data.zoom,
+        iso2: data.iso2,
+        demonym: data.demonym,
+        population: data.population,
+        density: data.density,
+        area: data.area,
+        gdp: data.gdp,
+        median_age: data.median_age,
+        website: data.website,
+        driving_side: data.driving_side,
+        un_member: data.un_member,
+        religion: data.religion
     })
 
     setIsLoading(false)
