@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useContext, JSX } from "react";
+import React, { useState, useContext, useEffect, JSX } from "react";
 import { useRouter } from 'next/navigation';
 import {
     Continent, Country, filterSelectedCountries,
@@ -16,6 +16,8 @@ import { TextArea } from "../ui/xtexts";
 
 import mapboxgl from "mapbox-gl";
 import 'mapbox-gl/dist/mapbox-gl.css';
+import { City, CityHeader, fetchCities } from "@/lib/cities";
+
 
 export const CountriesPage = (props: {
     countries: Country[],
@@ -85,7 +87,7 @@ const CountriesTable = (props: {
                 flexDirection: 'column',
                 alignItems: 'stretch',
                 justifyContent: 'flex-start',
-                height: '40em',
+                height: '56em',
                 width: totalWidth,
             }}>
                 <div className={style['country-cell-header']}
@@ -229,7 +231,9 @@ const CountryRow = (props: {
 export const CountryDetail = (props: {
     country: Country,
     setCountry: Function,
+    cities: City[],
 }) => {
+
     const router = useRouter()
 
     const mapContainer = React.useRef<any>(null);
@@ -240,7 +244,7 @@ export const CountryDetail = (props: {
 
     const style = useContext(StyleContext)
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (map.current) return; // initialize map only once
 
         mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN;
@@ -256,8 +260,10 @@ export const CountryDetail = (props: {
         // });
     }, []);
 
+
     const colWidths: string = em([50, 20])
-    const rowHeights: string = em([1.4, 4, 40, 40])
+    //const rowHeights: string = em([1.4, 4, 40, 40])
+    const rowHeights: string = em([4, 40, 40])
 
     return (
         <main className="main">
@@ -269,53 +275,38 @@ export const CountryDetail = (props: {
                 gap="0"
                 className="country"
             >
-                <div className={style["top-strip-left"]}>
-                    <ul className={style["top-menu-list"]}>
-                        <li className={style["top-menu-item"]}><strong>TLD:</strong>{" "}{props.country.tld}</li>
-                        <li className={style["top-menu-item"]}><strong>Dial Code:</strong>{" "}{props.country.prefix}</li>
-                        <li className={style["top-menu-item"]}><strong>EU:</strong>{" "}{props.country.is_eu ?
-                            <span className={style["is-eu"]}>YES</span> :
-                            <span className={style["no-eu"]}>NO</span>
-                        }</li>
-                        <li className={style["top-menu-item"]}><strong>Long:</strong>{" "}{props.country.longitude}</li>
-                        <li className={style["top-menu-item"]}><strong>Lat:</strong>{" "}{props.country.latitude}</li>
-                        <li className={style["top-menu-item"]}><strong>Zoom:</strong>{" "}{props.country.zoom}</li>
-                    </ul>
-                </div>
-
-                <div className={style["top-strip-right"]}>
-                    <ul className={style["top-menu-list"]}>
-                        <li className={style["top-menu-item"]}>
-                            <Button
-                                onClick={e => e}
-                                className={style["country-edit-button"]}
-                                children={"Enable"}
-                                ref={null}
-                            />
-                        </li>
-                        <li className={style["top-menu-item"]}>
-                            <Button
-                                onClick={e => e}
-                                className={style["country-edit-button"]}
-                                children="Save"
-                                ref={null}
-                            />
-                        </li>
-                        <li className={style["top-menu-item"]}>
-                            <Button
-                                onClick={e => router.back()}
-                                className={style["country-edit-button"]}
-                                children="Cancel"
-                                ref={null}
-                            />
-                        </li>
-                    </ul>
-                </div>
 
                 <div className={style["country-heading"]}>
                     <div className={style["country-heading-position"]}>
                         {props.country.name}
+                        <ul className={style["top-menu-list"]}>
+                            <li className={style["top-menu-item"]}>
+                                <Button
+                                    onClick={e => e}
+                                    className={style["country-edit-button"]}
+                                    children={"Enable"}
+                                    ref={null}
+                                />
+                            </li>
+                            <li className={style["top-menu-item"]}>
+                                <Button
+                                    onClick={e => e}
+                                    className={style["country-edit-button"]}
+                                    children="Save"
+                                    ref={null}
+                                />
+                            </li>
+                            <li className={style["top-menu-item"]}>
+                                <Button
+                                    onClick={e => router.back()}
+                                    className={style["country-edit-button"]}
+                                    children="Cancel"
+                                    ref={null}
+                                />
+                            </li>
+                        </ul>
                     </div>
+
                 </div>
 
                 <div className={style["country-flag"]}>
@@ -350,6 +341,7 @@ export const CountryDetail = (props: {
                         ["Latitude", props.country.latitude],
                         ["Longitude", props.country.longitude],
                     ]} />
+                    <CityNamesTable cities={props.country.cities} />
                 </div>
 
                 <div className={style["country-description"]}>
@@ -365,32 +357,23 @@ export const CountryDetail = (props: {
                     />
                 </div>
 
-
-
-                {/* <div className={style["country-cities"]}>
-                    <div className={style["city-heading"]}>Cities</div>
-                    <ul className={style["city-list"]}>
-                        <li>
-                            <a>London</a>
-                        </li>
-                        <li>
-                            <a>Paris</a>
-                        </li>
-                        <li>
-                            <a>New York</a>
-                        </li>
-                        <li>
-                            <a>Berlin</a>
-                        </li>
-                        <li>
-                            <a>+</a>
-                        </li>
-                    </ul>
-                </div> */}
-
             </GridContainer>
         </main>
     );
+}
+
+const CityNamesTable = (props: {
+    cities: CityHeader[],
+}) => {
+    const cityList = props.cities?.map(
+        (city, index) =>
+            <li key={index}>{city.name}</li>
+    )
+    return (
+        <ul>
+            {cityList}
+        </ul>
+    )
 }
 
 type PropsCountryRowType = string | number | boolean

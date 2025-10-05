@@ -11,7 +11,7 @@ const MapboxExample = () => {
   const mapContainerRef = useRef();
   const mapRef = useRef();
 
-  console.log('accessToken', MAPBOX_ACCESS_TOKEN)
+  //console.log('accessToken', MAPBOX_ACCESS_TOKEN)
 
   useEffect(() => {
     mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;

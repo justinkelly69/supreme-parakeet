@@ -45,7 +45,10 @@ CREATE TABLE iso.cities (
     "iso3"              CHAR(3)         NOT NULL,
     "admin_name"        VARCHAR(100)     NOT NULL,
     "capital"           VARCHAR(20),
-    "population"        INTEGER
+    "population"        INTEGER,
+    CONSTRAINT  "fk_country"   
+        FOREIGN KEY("country_id")    
+        REFERENCES  iso.countries("id")
 );
 
 
@@ -1611,3 +1614,5 @@ VALUES
     ('za', 'ZAR'),
     ('zm', 'ZMW'),
     ('zw', 'ZWL');
+
+    

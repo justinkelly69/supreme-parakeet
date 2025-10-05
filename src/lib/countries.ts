@@ -3,6 +3,11 @@ import { createClient } from '@/utils/supabase/client'
 
 export type StyleContextType = { [key: string]: string; }
 
+export type Continent = {
+    id: string,
+    name: string,
+}
+
 export type Country = {
     id: string,
     continent_id: string,
@@ -29,20 +34,19 @@ export type Country = {
     driving_side: string,
     un_member: boolean,
     religion: string,
+    cities: [{
+        id: string,
+        name: string,
+        capital: string,
+    }]
 };
-
-
-
 
 export type EnabledCountry = {
     id: string,
     is_enabled: boolean,
 }
 
-export type Continent = {
-    id: string,
-    name: string,
-}
+
 
 const supabase = createClient()
 
@@ -62,7 +66,7 @@ export const fetchContinents = async (
         return
     }
     else {
-        console.log("no error", JSON.stringify(data, null, 4))
+        //console.log("no error continents", JSON.stringify(data, null, 4))
     }
 
     setContinents((data ?? []).map((continent: Continent) => ({
@@ -111,7 +115,7 @@ export const fetchCountries = async (
         return
     }
 
-    console.log('data', JSON.stringify(data, null, 4))
+    //console.log('data', JSON.stringify(data, null, 4))
 
     setCountries(
         (data ?? []).map((item: any) => ({
@@ -153,66 +157,71 @@ export const fetchCountry = async (
 ) => {
     setIsLoading(true)
 
-    const { data, error } = await supabase.from('country_details').select(`
-            continent_id, 
-            continent_name, 
-            name, 
-            flag, 
-            tld, 
-            prefix, 
-            is_eu, 
-            is_enabled, 
-            description, 
-            longitude, 
-            latitude, 
-            zoom,
-            iso2,
-            demonym,
-            population,
-            density,
-            area,
-            gdp,
-            median_age,
-            website,
-            driving_side,
-            un_member,
-            religion
-        `).eq('id', id).single()
+    // const { data, error } = await supabase.from('country_details').select(`
+    //         continent_id, 
+    //         continent_name, 
+    //         name, 
+    //         flag, 
+    //         tld, 
+    //         prefix, 
+    //         is_eu, 
+    //         is_enabled, 
+    //         description, 
+    //         longitude, 
+    //         latitude, 
+    //         zoom,
+    //         iso2,
+    //         demonym,
+    //         population,
+    //         density,
+    //         area,
+    //         gdp,
+    //         median_age,
+    //         website,
+    //         driving_side,
+    //         un_member,
+    //         religion
+    //     `).eq('id', id).single()
+
+    const { data, error } = await supabase.rpc('get_country_with_cities', { 'country_id': id })
 
     if (error) {
         console.error('Error fetching countries:', error)
         return
     }
+    else {
+        console.log("no error", JSON.stringify(data, null, 4))
+    }
 
-    //console.log('data', JSON.stringify(data, null, 4))
+    setCountry({ ...data, id })
 
-    setCountry({
-        id: id,
-        continent_id: data.continent_id,
-        continent_name: data.continent_name,
-        name: data.name,
-        flag: data.flag,
-        tld: data.tld,
-        prefix: data.prefix,
-        is_eu: data.is_eu,
-        is_enabled: data.is_enabled,
-        was_enabled: data.is_enabled,
-        description: data.description,
-        longitude: data.longitude,
-        latitude: data.latitude,
-        zoom: data.zoom,
-        iso2: data.iso2,
-        demonym: data.demonym,
-        population: data.population,
-        density: data.density,
-        area: data.area,
-        gdp: data.gdp,
-        median_age: data.median_age,
-        website: data.website,
-        driving_side: data.driving_side,
-        un_member: data.un_member,
-        religion: data.religion
-    })
+    // setCountry({
+    //     id: id,
+    //     continent_id: data.continent_id,
+    //     continent_name: data.continent_name,
+    //     name: data.name,
+    //     flag: data.flag,
+    //     tld: data.tld,
+    //     prefix: data.prefix,
+    //     is_eu: data.is_eu,
+    //     is_enabled: data.is_enabled,
+    //     was_enabled: data.is_enabled,
+    //     description: data.description,
+    //     longitude: data.longitude,
+    //     latitude: data.latitude,
+    //     zoom: data.zoom,
+    //     iso2: data.iso2,
+    //     demonym: data.demonym,
+    //     population: data.population,
+    //     density: data.density,
+    //     area: data.area,
+    //     gdp: data.gdp,
+    //     median_age: data.median_age,
+    //     website: data.website,
+    //     driving_side: data.driving_side,
+    //     un_member: data.un_member,
+    //     religion: data.religion,
+    // })
 
     setIsLoading(false)
 }
@@ -241,8 +250,6 @@ export const updateSelectedCountries = async (countries: Country[]) => {
         console.error('Failed to update countries:', err)
     }
 }
-
-
 
 // Filter out the countries that have changed
 export const getEnabledCountries = (countries: Country[]): EnabledCountry[] => {

@@ -33,14 +33,12 @@ const Page = () => {
         (
             <StyleContext.Provider value={style}>
                 <CountriesPage
-                    //styles={styles}
                     countries={countries}
                     setCountries={setCountries}
                     continents={continents}
                     setContinents={setContinents}
                 />
             </StyleContext.Provider>
-
         )
 }
 
