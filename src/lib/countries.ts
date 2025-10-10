@@ -51,12 +51,7 @@ export type EnabledCountry = {
     id: string,
     is_enabled: boolean,
 }
-
-
-
 const supabase = createClient()
-
-
 
 export const fetchCountries = async (
     setIsLoading: Function,

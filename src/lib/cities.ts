@@ -90,3 +90,69 @@ export const fetchCities = async (
 
     setIsLoading(false)
 }
+
+export const fetchCity = async (
+    setCity: Function,
+    setIsLoading: Function,
+    id: string
+) => {
+    setIsLoading(true)
+
+    const supabase = createClient()
+
+    //console.log('country_id', country_id)
+
+    const { data, error } = await supabase
+        .schema('public')
+        .from('city_details')
+        .select(`
+            id,
+            name,
+            name_ascii,
+            country,
+            country_id,
+            iso2,
+            iso3,
+            admin_name,
+            capital,
+            population,
+            is_enabled,
+            latitude,
+            longitude,
+            zoom,
+            description
+        `)
+        .eq('id', id)
+
+    if (error) {
+        console.error('Error fetching city:', error)
+        return
+    }
+    else {
+        //console.log("no error", JSON.stringify(data, null, 4))
+        setCity(data)
+    }
+
+    //setCities(data)
+    /* setCity({
+        id: data.id,
+        name: data.name,
+        name_ascii: data.name_ascii,
+        country: data.country,
+        country_id: data.country_id,
+        iso2: data.iso2,
+        iso3: data.iso3,
+        admin_name: data.admin_name,
+        capital: data.capital,
+        population: data.population,
+        is_enabled: data.is_enabled,
+        latitude: data.latitude,
+        longitude: data.longitude,
+        zoom: data.zoom,
+        description: data.description,
+    }) */
+
+    //setCities((data ?? []).map((item: any) => ({item})))
+
+    setIsLoading(false)
+}

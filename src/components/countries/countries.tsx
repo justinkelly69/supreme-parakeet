@@ -12,9 +12,11 @@ import { TextArea } from "../ui/xtexts";
 
 import mapboxgl from "mapbox-gl";
 import 'mapbox-gl/dist/mapbox-gl.css';
-import { ListTable, CountriesTemplate, DetailsTable } from "./template";
-import { CountrySelectors, HeaderButtons } from "./controls";
+import { ListTemplate, PageTemplate, DetailsTemplate } from "./template";
+import { ContinentControls, CountryControls } from "./controls";
 import Link from "next/link";
+import { CityNamesTable } from "./cities";
+import { getMap } from "./map";
 
 export const CountriesPage = (props: {
     countries: Country[],
@@ -49,25 +51,20 @@ export const CountriesPage = (props: {
     }
 
     useEffect(() => {
-        if (map.current) return; // initialize map only once
+        if (map.current) return;
 
-        mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN;
-        map.current = new mapboxgl.Map({
-            container: mapContainer.current,
-            style: 'mapbox://styles/mapbox/streets-v11',
-            center: [-74.0632, 40.7346],
-            zoom: 4
-        });
-        // map.current.addSource('property-data', {
-        //     type: 'geojson',
-        //     data: 'path/to/data.geojson'
-        // });
+        map.current = getMap(
+            mapContainer,
+            map,
+            -74.0632,
+            40.7346,
+            2,
+        ) || null
     }, []);
-
 
     return (
         <main className="main">
-            <CountriesTemplate
+            <PageTemplate
                 colWidths={colWidths}
                 rowHeights={rowHeights}
                 justifyContent="center"
@@ -86,7 +83,7 @@ export const CountriesPage = (props: {
                 }
                 controls={
                     <>
-                        <CountrySelectors
+                        <ContinentControls
                             showEnabled={showEnabled}
                             setShowEnabled={setShowEnabled}
                             selectedContinent={selectedContinent}
@@ -123,7 +120,7 @@ export const CountriesPage = (props: {
                     />
                 }
                 rightArea={
-                    <DetailsTable rows={[
+                    <DetailsTemplate rows={[
                     ]} />
                 }
             />
@@ -132,53 +129,6 @@ export const CountriesPage = (props: {
     )
 }
 
-/* export const CountryRow = (props: {
-    country: Country,
-    className: string,
-    selectedCountries: Country[],
-    setCountries: Function,
-    showEnabled: string[],
-    selectedContinent: string,
-}) => {
-    const style = useContext(StyleContext)
-
-    const klassName = props.country.is_enabled ?
-        style[`${props.className}`] + " " + style[`${props.className}-enabled`] :
-        style[`${props.className}`]
-
-    return (
-        <>
-            <div className={klassName}>
-                {props.country.id}
-            </div>
-
-            <div className={klassName}>
-                {props.country.name}
-            </div>
-
-            <div className={klassName}>
-                {props.country.flag}
-            </div>
-
-            <div className={klassName}>
-                <span className={style["is-eu"]}>
-                    {props.country.is_eu ? 'EU' : ''}
-                </span>
-            </div>
-
-            <div className={klassName}>
-                <Link
-                    href="/protected/countries/[id]"
-                    as={`/protected/countries/${props.country.id}`}
-                    className={style["country-edit-button"]}
-                >
-                    {"Edit"}
-                </Link>
-            </div>
-        </>
-    )
-}
- */
 export const CountryDetail = (props: {
     country: Country,
     setCountry: Function,
@@ -197,19 +147,15 @@ export const CountryDetail = (props: {
     const style = useContext(StyleContext)
 
     useEffect(() => {
-        if (map.current) return; // initialize map only once
+        if (map.current) return;
 
-        mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN;
-        map.current = new mapboxgl.Map({
-            container: mapContainer.current,
-            style: 'mapbox://styles/mapbox/streets-v11',
-            center: [props.country.longitude, props.country.latitude],
-            zoom: zoom
-        });
-        // map.current.addSource('property-data', {
-        //     type: 'geojson',
-        //     data: 'path/to/data.geojson'
-        // });
+        map.current = getMap(
+            mapContainer,
+            map,
+            longitude,
+            latitude,
+            2,
+        ) || null
     }, []);
 
     const colWidths: string = em([20, 50, 20])
@@ -217,7 +163,7 @@ export const CountryDetail = (props: {
 
     return (
         <main className="main">
-            <CountriesTemplate
+            <PageTemplate
                 colWidths={colWidths}
                 rowHeights={rowHeights}
                 justifyContent="center"
@@ -235,7 +181,7 @@ export const CountryDetail = (props: {
                     </div>
                 }
                 controls={
-                    <HeaderButtons
+                    <CountryControls
                         handleEdit={(e: any) => e}
                         handleSave={(e: any) => e}
                         handleCancel={router.back}
@@ -269,7 +215,7 @@ export const CountryDetail = (props: {
                     />
                 }
                 rightArea={
-                    <DetailsTable rows={[
+                    <DetailsTemplate rows={[
                         ["TLD", props.country.tld],
                         ["Prefix", props.country.prefix],
                         ["EU Member", props.country.is_eu ? 'Yes' : 'No'],
@@ -310,7 +256,7 @@ const CountryNamesTable = (props: {
             </Link>
     )
     return (
-        <ListTable
+        <ListTemplate
             columnWidths={[16]}
             rowHeight={1.6}
             totalRows={33}
@@ -324,27 +270,5 @@ const CountryNamesTable = (props: {
     )
 }
 
-const CityNamesTable = (props: {
-    title: string,
-    cities: CountryCities[],
-    headerClass: string,
-    itemClass: string,
-}) => {
-    const cityList = props.cities?.map(
-        (city, index) => <div key={index}>{city.name}</div>
-    )
-    return (
-        <ListTable
-            columnWidths={[16]}
-            rowHeight={1.6}
-            totalRows={33}
-            listHeaders={
-                <div className={props.headerClass}>
-                    {props.title}
-                </div>
-            }
-            listItems={cityList}
-            className={props.itemClass} />
-    )
-}
+
 

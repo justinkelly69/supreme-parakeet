@@ -5,7 +5,7 @@ import { CheckBoxData, CheckboxGroup } from "../ui/xcheckboxes"
 import Select, { OptionArgs } from "../ui/xselect"
 import { Continent } from "@/lib/continents"
 
-export const HeaderButtons = (props: {
+export const CityControls = (props: {
     handleEdit: Function,
     handleSave: Function,
     handleCancel: Function,
@@ -42,8 +42,44 @@ export const HeaderButtons = (props: {
     )
 }
 
-export const CountrySelectors = (props: {
-    //continentData: OptionArgs[],
+export const CountryControls = (props: {
+    handleEdit: Function,
+    handleSave: Function,
+    handleCancel: Function,
+}) => {
+    const style = useContext(StyleContext)
+
+    return (
+        <ul className={style["top-menu-list"]}>
+            <li className={style["top-menu-item"]}>
+                <Button
+                    onClick={e => props.handleEdit()}
+                    className={style["country-edit-button"]}
+                    children={"Enable"}
+                    ref={null}
+                />
+            </li>
+            <li className={style["top-menu-item"]}>
+                <Button
+                    onClick={e => props.handleSave()}
+                    className={style["country-edit-button"]}
+                    children="Save"
+                    ref={null}
+                />
+            </li>
+            <li className={style["top-menu-item"]}>
+                <Button
+                    onClick={e => props.handleCancel()}
+                    className={style["country-edit-button"]}
+                    children="Cancel"
+                    ref={null}
+                />
+            </li>
+        </ul>
+    )
+}
+
+export const ContinentControls = (props: {
     showEnabled: string[],
     setShowEnabled: Function,
     selectedContinent: string,

@@ -9,7 +9,7 @@ import { Country, filterSelectedCountries } from "@/lib/countries";
 //import { CountryRow } from "./countries";
 import { FlexBox, FlexCell } from "../ui/xflex";
 
-export const CountriesTemplate = (props: {
+export const PageTemplate = (props: {
     colWidths: string,
     rowHeights: string,
     justifyContent: string,
@@ -104,7 +104,7 @@ export const CountriesTemplate = (props: {
 
 }
 
-export const ListTable = (props: {
+export const ListTemplate = (props: {
     columnWidths: number[],
     rowHeight: number,
     totalRows: number,
@@ -163,13 +163,13 @@ export const ListTable = (props: {
 
 export type RowType = string | number | boolean
 
-export const DetailsTable = (props: {
+export const DetailsTemplate = (props: {
     rows: [string, RowType][]
 }) => {
     const style = useContext(StyleContext)
     const rows = props.rows.map((row, index) => {
         return (
-            <DetailsTableRow
+            <DetailsTemplateRow
                 key={index}
                 label={row[0]}
                 value={row[1]}
@@ -183,7 +183,7 @@ export const DetailsTable = (props: {
     )
 }
 
-export const DetailsTableRow = (props: {
+export const DetailsTemplateRow = (props: {
     label: string,
     value: RowType,
 }) => {

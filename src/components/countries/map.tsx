@@ -1,33 +1,31 @@
 import React from 'react'
 import mapboxgl from 'mapbox-gl'
 
-export default function getMap(
+export const getMap = (
     mapContainer: React.RefObject<any>,
     map: React.RefObject<mapboxgl.Map | null>,
-    setMap: Function,
-    latitude: number,
     longitude: number,
+    latitude: number,
     zoom: number,
     pathToGeoJson?: string,
-) {
-    //const mapContainer = React.useRef<any>(null);
-    //const map = React.useRef<mapboxgl.Map | null>(null);
-    // const [lng, setLng] = React.useState(-74.0632);
-    // const [lat, setLat] = React.useState(40.7346);
-    // const [zoom, setZoom] = React.useState(12);
+) => {
+    if (map.current) return;
 
-    React.useEffect(() => {
-        if (map.current) return; // initialize map only once
-        map.current = new mapboxgl.Map({
-            container: mapContainer.current,
-            style: 'mapbox://styles/mapbox/streets-v11',
-            center: [longitude, latitude],
-            zoom: zoom
-        });
-        // map.current.addSource('property-data', {
-        //     type: 'geojson',
-        //     data: 'path/to/data.geojson'
-        // });
-        setMap(map)
+    mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN
+
+    map.current = new mapboxgl.Map({
+        container: mapContainer.current,
+        style: 'mapbox://styles/mapbox/streets-v11',
+        center: [longitude, latitude],
+        zoom: zoom
     });
+
+    if (pathToGeoJson) {
+        map.current.addSource('property-data', {
+            type: 'geojson',
+            data: 'path/to/data.geojson'
+        });
+    }
+
+    return map.current
 }
