@@ -208,20 +208,14 @@ body {
 }
 
 .country-details {
-
-    grid-column-start: 2;
-    grid-column-end: 3;
-    grid-row-start: 2;
-    grid-row-end: span 4;
-    justify-self: stretch;
-
     color: white;
     background-color: black;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     height: 100%;
+    overflow: hidden;
 }
 
-.country-details-table {
+.details-table {
     margin-top: 1em;
     /* background-color: blueviolet; */
     display: grid;
@@ -229,13 +223,13 @@ body {
     grid-template-rows: repeat(15, 1.6em);
 }
 
-.country-details-label {
+.details-label {
     color: white;
     padding-left: 1em;
     font-weight: bold;
 }
 
-.country-details-data {
+.details-data {
     color: white;
     padding-left: 1em;
     font-weight: normal;

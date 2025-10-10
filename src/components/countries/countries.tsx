@@ -1,23 +1,20 @@
 'use client'
 
-import React, { useState, useContext, useEffect, JSX } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useRouter } from 'next/navigation';
-import {
-    Continent, Country, filterSelectedCountries,
-    setContinentData
-} from "@/lib/countries";
+import { Continent, ContinentCountries, setContinentData } from "@/lib/continents";
+import { Country, CountryCities, filterSelectedCountries } from "@/lib/countries";
 import { StyleContext } from "@/app/protected/countries/page";
-import { Button } from "../ui/xbutton";
 import Select, { OptionArgs } from "../ui/xselect";
 import { CheckBoxData, CheckboxGroup } from "../ui/xcheckboxes";
-import { GridContainer, em, emTotal } from "../ui/xgrid";
-import Link from "next/link";
+import { em } from "../ui/xgrid";
 import { TextArea } from "../ui/xtexts";
 
 import mapboxgl from "mapbox-gl";
 import 'mapbox-gl/dist/mapbox-gl.css';
-import { City, CityHeader, fetchCities } from "@/lib/cities";
-
+import { ListTable, CountriesTemplate, DetailsTable } from "./template";
+import { CountrySelectors, HeaderButtons } from "./controls";
+import Link from "next/link";
 
 export const CountriesPage = (props: {
     countries: Country[],
@@ -28,160 +25,114 @@ export const CountriesPage = (props: {
     const [selectedContinent, setSelectedContinent] = useState("EU")
     const [showEnabled, setShowEnabled] = useState(["ENABLED", "DISABLED"])
 
-    const style = useContext(StyleContext)
+    const mapContainer = React.useRef<any>(null);
+    const map = React.useRef<mapboxgl.Map | null>(null);
 
-    return (
-        <CountriesTable
-            countries={props.countries}
-            setCountries={props.setCountries}
-            setShowEnabled={setShowEnabled}
-            showEnabled={showEnabled}
-            continentData={setContinentData(props.continents)}
-            selectedContinent={selectedContinent}
-            setSelectedContinent={setSelectedContinent}
-            children={[]} />
-    )
-}
-
-const CountriesTable = (props: {
-    children: any[];
-    countries: Country[],
-    setCountries: Function,
-    setShowEnabled: Function,
-    showEnabled: string[],
-    continentData: CheckBoxData[],
-    selectedContinent: string,
-    setSelectedContinent: Function,
-}) => {
     const style = useContext(StyleContext)
+    const router = useRouter()
+
+    const colWidths: string = em([20, 50, 20])
+    const rowHeights: string = em([4, 1.6, 30, 20])
 
     const selectedCountries = filterSelectedCountries(
-        props.selectedContinent,
+        selectedContinent,
         props.countries,
-        props.showEnabled,
+        showEnabled,
     )
 
-    const widths = [2.6, 18, 2, 2, 3]
-    const colWidths = em(widths)
-    const totalWidth = emTotal(widths)
-
-    const klassName = style["country-cell-header"]
-
     const continentArgs: OptionArgs[] = []
-    for (let cd of props.continentData) {
+    for (let cd of setContinentData(props.continents)) {
         continentArgs.push({
             value: cd.name,
             label: cd.label,
         })
     }
 
-    const enabledArgs: CheckBoxData[] = [
-        { name: "ENABLED", label: "Enabled", checked: true },
-        { name: "DISABLED", label: "Disabled", checked: true },
-    ]
+    useEffect(() => {
+        if (map.current) return; // initialize map only once
+
+        mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN;
+        map.current = new mapboxgl.Map({
+            container: mapContainer.current,
+            style: 'mapbox://styles/mapbox/streets-v11',
+            center: [-74.0632, 40.7346],
+            zoom: 4
+        });
+        // map.current.addSource('property-data', {
+        //     type: 'geojson',
+        //     data: 'path/to/data.geojson'
+        // });
+    }, []);
+
 
     return (
-        <main className={style["countries-main"]}>
-            <div style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'stretch',
-                justifyContent: 'flex-start',
-                height: '56em',
-                width: totalWidth,
-            }}>
-                <div className={style['country-cell-header']}
-                    style={{
-                        flex: ' 0 0 auto',
-                        overflowX: 'hidden',
-                        overflowY: 'scroll',
-                        display: 'block',
-
-                    }}>
-                    <CheckboxGroup
-                        label="Select Countries"
-                        className={style["continent-list"]}
-                        labelClass={style["continent-list-label"]}
-                        boxClass={style["continent-list-box"]}
-                        listItemClass={style["continent-list-item"]}
-                        checkedValues={props.showEnabled}
-                        setCheckedValues={(e: string[]) => {
-                            props.setShowEnabled(e)
-                        }}
-                        checkboxData={enabledArgs}
+        <main className="main">
+            <CountriesTemplate
+                colWidths={colWidths}
+                rowHeights={rowHeights}
+                justifyContent="center"
+                alignItems="center"
+                gap={0}
+                className="country"
+                title={
+                    <h1 className={style['page-title']}>
+                        "Pick a Continent"
+                    </h1>
+                }
+                flag={
+                    <div className={style["country-flag-position"]}>
+                        "Flag"
+                    </div>
+                }
+                controls={
+                    <>
+                        <CountrySelectors
+                            showEnabled={showEnabled}
+                            setShowEnabled={setShowEnabled}
+                            selectedContinent={selectedContinent}
+                            setSelectedContinent={setSelectedContinent}
+                            continentArgs={continentArgs}
+                        />
+                    </>
+                }
+                leftArea={
+                    <CountryNamesTable
+                        title="Countries"
+                        countries={selectedCountries}
+                        headerClass={style["cities-header"]}
+                        itemClass={style["cities-item"]}
+                    />
+                }
+                mapArea={
+                    <div
+                        style={{ height: '100%', width: '100%' }}
+                        ref={mapContainer}
+                        className={style["map-container"]}
+                    />
+                }
+                descriptionArea={
+                    <TextArea
+                        id="country_description"
+                        name="country_description"
+                        value=""
+                        placeholder="Description"
+                        rows={10}
+                        cols={30}
+                        className={style["country-description"]}
                         ref={null}
                     />
-                    <Select className={`${style["select-continents-dropdown"]}`}
-                        value={props.selectedContinent}
-                        onChange={(e) => props.setSelectedContinent(e.target.value)}
-                        options={continentArgs}
-                        ref={null}
-                    />
-                </div>
-                <div style={{
-                    flex: ' 0 0 auto',
-                    overflowX: 'hidden',
-                    overflowY: 'scroll',
-                    display: 'block',
-                }}>
-                    <GridContainer
-                        cols={colWidths}
-                        rows={"1fr"}
-                        justifyContent='center'
-                        gap="0"
-                        flex="0 1 auto"
-                    >
-                        <div className={klassName}>
-                            ID
-                        </div>
-                        <div className={klassName}>
-                            Country
-                        </div>
-                        <div className={klassName}>
-                            eu
-                        </div>
-                        <div className={klassName}>
-                            flg
-                        </div>
-                        <div className={klassName}>
-                            edit
-                        </div>
-                    </GridContainer>
-                </div>
+                }
+                rightArea={
+                    <DetailsTable rows={[
+                    ]} />
+                }
+            />
+        </main>
 
-                <div style={{
-                    flex: ' 0 1 auto',
-                    overflowY: 'scroll',
-                    overflowX: 'hidden',
-                    display: 'block',
-                }}>
-                    <GridContainer
-                        cols={colWidths}
-                        rows={`repeat(${selectedCountries.length}, 1fr)`}
-                        justifyContent='center'
-                        gap="0"
-                    >
-                        {selectedCountries.map((country) => {
-                            return (
-                                <CountryRow
-                                    key={country.id}
-                                    className="country-cell"
-                                    country={country}
-                                    selectedCountries={selectedCountries}
-                                    setCountries={props.setCountries}
-                                    showEnabled={props.showEnabled}
-                                    selectedContinent={props.selectedContinent}
-                                />
-                            )
-                        })}
-                    </GridContainer>
-                </div>
-            </div>
-        </main >
-    );
+    )
 }
 
-const CountryRow = (props: {
+/* export const CountryRow = (props: {
     country: Country,
     className: string,
     selectedCountries: Country[],
@@ -227,17 +178,18 @@ const CountryRow = (props: {
         </>
     )
 }
-
+ */
 export const CountryDetail = (props: {
     country: Country,
     setCountry: Function,
-    cities: City[],
+    cities: CountryCities[],
 }) => {
 
     const router = useRouter()
 
     const mapContainer = React.useRef<any>(null);
     const map = React.useRef<mapboxgl.Map | null>(null);
+
     const [longitude, setLongitude] = React.useState(props.country.longitude);
     const [latitude, setLatitude] = React.useState(props.country.latitude);
     const [zoom, setZoom] = React.useState(props.country.zoom);
@@ -260,71 +212,64 @@ export const CountryDetail = (props: {
         // });
     }, []);
 
-
-    const colWidths: string = em([50, 20])
-    //const rowHeights: string = em([1.4, 4, 40, 40])
-    const rowHeights: string = em([4, 40, 40])
+    const colWidths: string = em([20, 50, 20])
+    const rowHeights: string = em([4, 1.6, 30, 20])
 
     return (
         <main className="main">
-            <GridContainer
-                cols={colWidths}
-                rows={rowHeights}
+            <CountriesTemplate
+                colWidths={colWidths}
+                rowHeights={rowHeights}
                 justifyContent="center"
                 alignItems="center"
-                gap="0"
+                gap={0}
                 className="country"
-            >
-
-                <div className={style["country-heading"]}>
-                    <div className={style["country-heading-position"]}>
+                title={
+                    <h1 className={style['page-title']}>
                         {props.country.name}
-                        <ul className={style["top-menu-list"]}>
-                            <li className={style["top-menu-item"]}>
-                                <Button
-                                    onClick={e => e}
-                                    className={style["country-edit-button"]}
-                                    children={"Enable"}
-                                    ref={null}
-                                />
-                            </li>
-                            <li className={style["top-menu-item"]}>
-                                <Button
-                                    onClick={e => e}
-                                    className={style["country-edit-button"]}
-                                    children="Save"
-                                    ref={null}
-                                />
-                            </li>
-                            <li className={style["top-menu-item"]}>
-                                <Button
-                                    onClick={e => router.back()}
-                                    className={style["country-edit-button"]}
-                                    children="Cancel"
-                                    ref={null}
-                                />
-                            </li>
-                        </ul>
-                    </div>
-
-                </div>
-
-                <div className={style["country-flag"]}>
+                    </h1>
+                }
+                flag={
                     <div className={style["country-flag-position"]}>
-                        {`${props.country.flag}`}
+                        {props.country.flag}
                     </div>
-                </div>
-
-                <div className={style["country-map"]}>
+                }
+                controls={
+                    <HeaderButtons
+                        handleEdit={(e: any) => e}
+                        handleSave={(e: any) => e}
+                        handleCancel={router.back}
+                    />
+                }
+                leftArea={
+                    <CityNamesTable
+                        cities={props.country.cities}
+                        title="Cities"
+                        headerClass={style["cities-header"]}
+                        itemClass={style["cities-item"]}
+                    />
+                }
+                mapArea={
                     <div
                         style={{ height: '100%', width: '100%' }}
                         ref={mapContainer}
                         className={style["map-container"]}
                     />
-                </div>
-
-                <div className={style["country-details"]}>
-                    <CountryDetailsTable rows={[
+                }
+                descriptionArea={
+                    <TextArea
+                        id="country_description"
+                        name="country_description"
+                        value=""
+                        placeholder="Description"
+                        rows={10}
+                        cols={30}
+                        className={style["country-description"]}
+                        ref={null}
+                    />
+                }
+                rightArea={
+                    <DetailsTable rows={[
                         ["TLD", props.country.tld],
                         ["Prefix", props.country.prefix],
                         ["EU Member", props.country.is_eu ? 'Yes' : 'No'],
@@ -341,76 +286,65 @@ export const CountryDetail = (props: {
                         ["Latitude", props.country.latitude],
                         ["Longitude", props.country.longitude],
                     ]} />
-                    <CityNamesTable cities={props.country.cities} />
-                </div>
-
-                <div className={style["country-description"]}>
-                    <TextArea
-                        id="country_description"
-                        name="country_description"
-                        value=""
-                        placeholder="Description"
-                        rows={10}
-                        cols={30}
-                        className={style["country-description"]}
-                        ref={null}
-                    />
-                </div>
-
-            </GridContainer>
+                }
+            />
         </main>
     );
 }
 
+const CountryNamesTable = (props: {
+    title: string,
+    countries: ContinentCountries[],
+    headerClass: string,
+    itemClass: string,
+}) => {
+    const style = useContext(StyleContext)
+    const countryList = props.countries?.map(
+        (country, index) =>
+            <Link key={index}
+                href={`/protected/countries/[id]`}
+                as={`/protected/countries/${country.id}`}
+                className={style[props.itemClass]}
+            >
+                {country.name}
+            </Link>
+    )
+    return (
+        <ListTable
+            columnWidths={[16]}
+            rowHeight={1.6}
+            totalRows={33}
+            listHeaders={
+                <div className={props.headerClass}>
+                    {props.title}
+                </div>
+            }
+            listItems={countryList}
+            className={props.itemClass} />
+    )
+}
+
 const CityNamesTable = (props: {
-    cities: CityHeader[],
+    title: string,
+    cities: CountryCities[],
+    headerClass: string,
+    itemClass: string,
 }) => {
     const cityList = props.cities?.map(
-        (city, index) =>
-            <li key={index}>{city.name}</li>
+        (city, index) => <div key={index}>{city.name}</div>
     )
     return (
-        <ul>
-            {cityList}
-        </ul>
+        <ListTable
+            columnWidths={[16]}
+            rowHeight={1.6}
+            totalRows={33}
+            listHeaders={
+                <div className={props.headerClass}>
+                    {props.title}
+                </div>
+            }
+            listItems={cityList}
+            className={props.itemClass} />
     )
 }
 
-type PropsCountryRowType = string | number | boolean
-
-const CountryDetailsTable = (props: {
-    rows: [string, PropsCountryRowType][]
-}) => {
-    const style = useContext(StyleContext)
-    const rows = props.rows.map((row, index) => {
-        return (
-            <CountryDetailsTableRow
-                key={index}
-                label={row[0]}
-                value={row[1]}
-            />
-        )
-    })
-    return (
-        <div className={style["country-details-table"]}>
-            {rows}
-        </div>
-    )
-}
-
-const CountryDetailsTableRow = (props: {
-    label: string,
-    value: PropsCountryRowType,
-}) => {
-    const style = useContext(StyleContext)
-    return (
-        <>
-            <div className={style["country-details-label"]}>
-                {props.label}:
-            </div>
-            <div className={style["country-details-data"]}>
-                {props.value}
-            </div>
-        </>
-    )
-}

@@ -20,8 +20,9 @@ export type City = {
 
 export type CityHeader = {
     id: string,
-    name: string,
+    name_ascii: string,
     capital: string,
+    population: string,
 }
 
 
@@ -67,7 +68,6 @@ export const fetchCities = async (
     }
 
     //setCities(data)
-
     setCities((data ?? []).map((item: any) => ({
         id: item.id,
         name: item.name,
@@ -85,6 +85,8 @@ export const fetchCities = async (
         zoom: item.zoom,
         description: item.description,
     })))
+
+    //setCities((data ?? []).map((item: any) => ({item})))
 
     setIsLoading(false)
 }

@@ -41,6 +41,12 @@ export type Country = {
     }]
 };
 
+export type CountryCities = {
+    id: string,
+    name: string,
+    capital: string,
+}
+
 export type EnabledCountry = {
     id: string,
     is_enabled: boolean,
@@ -50,32 +56,7 @@ export type EnabledCountry = {
 
 const supabase = createClient()
 
-export const fetchContinents = async (
-    setContinents: Function,
-    setIsLoading: Function
-) => {
-    setIsLoading(true)
 
-    const { data, error } = await supabase
-        .schema('iso')
-        .from('continents')
-        .select('id, name')
-
-    if (error) {
-        console.error('Error fetching continents:', error)
-        return
-    }
-    else {
-        //console.log("no error continents", JSON.stringify(data, null, 4))
-    }
-
-    setContinents((data ?? []).map((continent: Continent) => ({
-        id: continent.id,
-        name: continent.name,
-    })))
-
-    setIsLoading(false)
-}
 
 export const fetchCountries = async (
     setIsLoading: Function,
@@ -226,19 +207,6 @@ export const fetchCountry = async (
     setIsLoading(false)
 }
 
-
-export const setContinentData = (continents: Continent[]) => {
-    const out: CheckBoxData[] = []
-
-    for (const continent of continents) {
-        out.push({
-            name: continent.id,
-            label: continent.name,
-            checked: true,
-        })
-    }
-    return out
-}
 
 export const updateSelectedCountries = async (countries: Country[]) => {
     try {

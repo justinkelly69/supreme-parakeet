@@ -25,21 +25,7 @@ const MyCountry = ({
             setCountry,
             id,
         ) 
-        // fetchCities(
-        //     setIsLoading,
-        //     setCities,
-        //     id,
-        // )
-
     },[])
-
-    // useEffect(() => {
-    //     fetchCities(
-    //         setIsLoading,
-    //         setCities,
-    //         id,
-    //     )
-    // }, [])
 
     return (
         country ?
