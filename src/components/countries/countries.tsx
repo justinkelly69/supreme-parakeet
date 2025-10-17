@@ -190,6 +190,7 @@ export const CountryDetail = (props: {
                 leftArea={
                     <CityNamesTable
                         cities={props.country.cities}
+                        country_id={props.country.id}
                         title="Cities"
                         headerClass={style["cities-header"]}
                         itemClass={style["cities-item"]}
@@ -248,8 +249,8 @@ const CountryNamesTable = (props: {
     const countryList = props.countries?.map(
         (country, index) =>
             <Link key={index}
-                href={`/protected/countries/[id]`}
-                as={`/protected/countries/${country.id}`}
+                href={`/protected/geo/[country]`}
+                as={`/protected/geo/${country.id}`}
                 className={style[props.itemClass]}
             >
                 {country.name}

@@ -58,7 +58,7 @@ export const fetchCountries = async (
     setCountries: Function,
 ) => {
     setIsLoading(true)
-
+    
     const { data, error } = await supabase.from('country_details').select(`
             id, 
             continent_id, 
@@ -90,38 +90,9 @@ export const fetchCountries = async (
         console.error('Error fetching countries:', error)
         return
     }
-
-    //console.log('data', JSON.stringify(data, null, 4))
-
-    setCountries(
-        (data ?? []).map((item: any) => ({
-            id: item.id,
-            continent_id: item.continent_id,
-            continent_name: item.continent_name,
-            name: item.name,
-            flag: item.flag,
-            tld: item.tld,
-            prefix: item.prefix,
-            is_eu: item.is_eu,
-            is_enabled: item.is_enabled,
-            was_enabled: item.is_enabled,
-            description: item.description,
-            longitude: item.longitude,
-            latitude: item.latitude,
-            zoom: item.zoom,
-            iso2: item.iso2,
-            demonym: item.demonym,
-            population: item.population,
-            density: item.density,
-            area: item.area,
-            gdp: item.gdp,
-            median_age: item.median_age,
-            website: item.website,
-            driving_side: item.driving_side,
-            un_member: item.un_member,
-            religion: item.religion
-        }))
-    )
+    else {
+        setCountries((data ?? []).map((item: any) => ({...item})))
+    }
 
     setIsLoading(false)
 }
@@ -133,32 +104,6 @@ export const fetchCountry = async (
 ) => {
     setIsLoading(true)
 
-    // const { data, error } = await supabase.from('country_details').select(`
-    //         continent_id, 
-    //         continent_name, 
-    //         name, 
-    //         flag, 
-    //         tld, 
-    //         prefix, 
-    //         is_eu, 
-    //         is_enabled, 
-    //         description, 
-    //         longitude, 
-    //         latitude, 
-    //         zoom,
-    //         iso2,
-    //         demonym,
-    //         population,
-    //         density,
-    //         area,
-    //         gdp,
-    //         median_age,
-    //         website,
-    //         driving_side,
-    //         un_member,
-    //         religion
-    //     `).eq('id', id).single()
-
     const { data, error } = await supabase.rpc('get_country_with_cities', { 'country_id': id })
 
     if (error) {
@@ -166,38 +111,8 @@ export const fetchCountry = async (
         return
     }
     else {
-        console.log("no error", JSON.stringify(data, null, 4))
+        setCountry({ ...data, id })
     }
-
-    setCountry({ ...data, id })
-
-    // setCountry({
-    //     id: id,
-    //     continent_id: data.continent_id,
-    //     continent_name: data.continent_name,
-    //     name: data.name,
-    //     flag: data.flag,
-    //     tld: data.tld,
-    //     prefix: data.prefix,
-    //     is_eu: data.is_eu,
-    //     is_enabled: data.is_enabled,
-    //     was_enabled: data.is_enabled,
-    //     description: data.description,
-    //     longitude: data.longitude,
-    //     latitude: data.latitude,
-    //     zoom: data.zoom,
-    //     iso2: data.iso2,
-    //     demonym: data.demonym,
-    //     population: data.population,
-    //     density: data.density,
-    //     area: data.area,
-    //     gdp: data.gdp,
-    //     median_age: data.median_age,
-    //     website: data.website,
-    //     driving_side: data.driving_side,
-    //     un_member: data.un_member,
-    //     religion: data.religion,
-    // })
 
     setIsLoading(false)
 }

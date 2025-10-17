@@ -1,6 +1,6 @@
 import { CountryCities } from "@/lib/countries"
 import { DetailsTemplate, ListTemplate, PageTemplate } from "./template"
-import { useRouter } from "next/router"
+import { useRouter } from "next/navigation"
 import { City } from "@/lib/cities"
 import React, { useContext, useEffect } from "react"
 import { StyleContext } from "@/app/protected/cities/page"
@@ -10,13 +10,9 @@ import { CityControls } from "./controls"
 import { TextArea } from "../ui/xtexts"
 import Link from "next/link"
 
-
-
 export const CityDetail = (props: {
     city: City,
-    //setCity: Function,
 }) => {
-
     const router = useRouter()
 
     const mapContainer = React.useRef<any>(null);
@@ -109,6 +105,7 @@ export const CityDetail = (props: {
 
 export const CityNamesTable = (props: {
     title: string,
+    country_id: string,
     cities: CountryCities[],
     headerClass: string,
     itemClass: string,
@@ -118,8 +115,8 @@ export const CityNamesTable = (props: {
     const cityList = props.cities?.map(
         (city, index) =>
             <Link key={index}
-                href={`/protected/cities/[id]`}
-                as={`/protected/cities/${city.id}`}
+                href={`/protected/geo/[country]/[city]`}
+                as={`/protected/geo/${props.country_id}/${city.id}`}
                 className={style[props.itemClass]}
             >
                 {city.name}

@@ -31,13 +31,11 @@ export const fetchContinents = async (
         return
     }
     else {
-        //console.log("no error continents", JSON.stringify(data, null, 4))
+        setContinents((data ?? []).map((continent: Continent) => ({
+            id: continent.id,
+            name: continent.name,
+        })))
     }
-
-    setContinents((data ?? []).map((continent: Continent) => ({
-        id: continent.id,
-        name: continent.name,
-    })))
 
     setIsLoading(false)
 }
