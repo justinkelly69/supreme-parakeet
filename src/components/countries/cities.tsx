@@ -35,14 +35,9 @@ export const CityDetail = (props: {
         ) || null
     }, []);
 
-    const colWidths: string = em([20, 50, 20])
-    const rowHeights: string = em([4, 1.6, 30, 20])
-
     return (
         <main className="main">
             <PageTemplate
-                colWidths={colWidths}
-                rowHeights={rowHeights}
                 justifyContent="center"
                 alignItems="center"
                 gap={0}

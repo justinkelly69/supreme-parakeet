@@ -8,13 +8,13 @@ import { City } from "@/lib/types";
 const MyCity = ({
     params,
 }: {
-    params: Promise<{ country: string, city: string }>
+    params: Promise<{ continent: string, country: string, city: string }>
 }): React.JSX.Element | "Loading..." | null => {
 
     const [my_city, setCity] = useState<City>()
     const [isLoading, setIsLoading] = useState(true)
 
-    const { country, city } = use(params)
+    const { continent, country, city } = use(params)
 
     useEffect(() => {
         fetchCity(

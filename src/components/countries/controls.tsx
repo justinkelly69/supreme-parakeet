@@ -3,7 +3,6 @@ import { Button } from "../ui/xbutton"
 import { useContext } from "react"
 import { CheckBoxData, CheckboxGroup } from "../ui/xcheckboxes"
 import Select, { OptionArgs } from "../ui/xselect"
-import { Continent } from "@/lib/continents"
 
 export const CityControls = (props: {
     handleEdit: Function,

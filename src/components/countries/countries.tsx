@@ -2,7 +2,7 @@
 
 import React, { useState, useContext, useEffect } from "react";
 import { useRouter } from 'next/navigation';
-import { Continent, ContinentCountries, setContinentData } from "@/lib/continents";
+import { Continent, ContinentCountries } from "@/lib/types";
 import { filterSelectedCountries } from "@/lib/countries";
 import { StyleContext } from "@/app/protected/geo/page";
 import Select, { OptionArgs } from "../ui/xselect";
@@ -22,8 +22,7 @@ import { Country, CountryCities } from "@/lib/types";
 export const CountriesPage = (props: {
     countries: Country[],
     setCountries: Function,
-    continents: Continent[],
-    setContinents: Function,
+    continent?: Continent,
 }) => {
     const [selectedContinent, setSelectedContinent] = useState("EU")
     const [showEnabled, setShowEnabled] = useState(["ENABLED", "DISABLED"])
@@ -43,14 +42,6 @@ export const CountriesPage = (props: {
         showEnabled,
     )
 
-    const continentArgs: OptionArgs[] = []
-    for (let cd of setContinentData(props.continents)) {
-        continentArgs.push({
-            value: cd.name,
-            label: cd.label,
-        })
-    }
-
     useEffect(() => {
         if (map.current) return;
 
@@ -66,8 +57,6 @@ export const CountriesPage = (props: {
     return (
         <main className="main">
             <PageTemplate
-                colWidths={colWidths}
-                rowHeights={rowHeights}
                 justifyContent="center"
                 alignItems="center"
                 gap={0}
@@ -84,13 +73,13 @@ export const CountriesPage = (props: {
                 }
                 controls={
                     <>
-                        <ContinentControls
+{/*                         <ContinentControls
                             showEnabled={showEnabled}
                             setShowEnabled={setShowEnabled}
                             selectedContinent={selectedContinent}
                             setSelectedContinent={setSelectedContinent}
                             continentArgs={continentArgs}
-                        />
+                        /> */}
                     </>
                 }
                 leftArea={
@@ -158,14 +147,9 @@ export const CountryDetail = (props: {
         ) || null
     }, []);
 
-    const colWidths: string = em([20, 50, 20])
-    const rowHeights: string = em([4, 1.6, 30, 20])
-
     return (
         <main className="main">
             <PageTemplate
-                colWidths={colWidths}
-                rowHeights={rowHeights}
                 justifyContent="center"
                 alignItems="center"
                 gap={0}

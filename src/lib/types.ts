@@ -5,7 +5,17 @@ export type StyleContextType = {
 export type Continent = {
     id: string,
     name: string,
+    description: string,
+    longitude: number,
+    latitude: number,
+    zoom: number,
 }
+
+export type ContinentCountries = {
+    id: string,
+    name: string,
+}
+
 
 export type Country = {
     id: string,

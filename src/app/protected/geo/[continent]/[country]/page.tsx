@@ -8,7 +8,7 @@ import { CountryDetail } from "@/components/countries/countries";
 const MyCountry = ({
     params,
 }: {
-    params: Promise<{ country: string }>
+    params: Promise<{ continent: string, country: string }>
 }): React.JSX.Element | "Loading..." | null => {
 
     const [my_country, setCountry] = useState<Country>()

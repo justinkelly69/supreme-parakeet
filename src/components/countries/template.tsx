@@ -5,9 +5,11 @@ import { StyleContext } from "@/app/protected/geo/page";
 import { GridContainer, GridArea, em, emTotal } from "../ui/xgrid";
 import { FlexBox, FlexCell } from "../ui/xflex";
 
+
+
 export const PageTemplate = (props: {
-    colWidths: string,
-    rowHeights: string,
+    //colWidths: string,
+    //rowHeights: string,
     justifyContent: string,
     alignItems: string,
     gap: number,
@@ -22,11 +24,13 @@ export const PageTemplate = (props: {
 }) => {
 
     const style = useContext(StyleContext)
+    const colWidths = em([20, 50, 20])
+    const rowHeights = em([4, 1.6, 30, 20])
 
     return (
         <GridContainer
-            cols={props.colWidths}
-            rows={props.rowHeights}
+            cols={colWidths}
+            rows={rowHeights}
             justifyContent="center"
             alignItems="center"
             gap="0"

@@ -1,48 +1,21 @@
-import { Continent, Country } from "@/lib/types";
+import { Continent } from "@/lib/types";
 import { useRouter } from "next/navigation";
-import { useContext, useEffect, useRef, useState } from "react";
-import { em } from "../ui/xgrid";
+import { useContext, useEffect, useRef } from "react";
 import { StyleContext } from "@/app/protected/geo/page";
-import { filterSelectedCountries } from "@/lib/countries";
-import { OptionArgs } from "../ui/xselect";
-import { ContinentCountries, setContinentData } from "@/lib/continents";
 import { getMap } from "./map";
 import { DetailsTemplate, ListTemplate, PageTemplate } from "./template";
-import { ContinentControls } from "./controls";
 import { TextArea } from "../ui/xtexts";
 import Link from "next/link";
 
-export const CountriesPage = (props: {
-    countries: Country[],
-    setCountries: Function,
+export const ContinentsPage = (props: {
     continents: Continent[],
     setContinents: Function,
 }) => {
-    const [selectedContinent, setSelectedContinent] = useState("EU")
-    const [showEnabled, setShowEnabled] = useState(["ENABLED", "DISABLED"])
-
     const mapContainer = useRef<any>(null);
     const map = useRef<mapboxgl.Map | null>(null);
 
     const style = useContext(StyleContext)
     const router = useRouter()
-
-    const colWidths: string = em([20, 50, 20])
-    const rowHeights: string = em([4, 1.6, 30, 20])
-
-    const selectedCountries = filterSelectedCountries(
-        selectedContinent,
-        props.countries,
-        showEnabled,
-    )
-
-    const continentArgs: OptionArgs[] = []
-    for (let cd of setContinentData(props.continents)) {
-        continentArgs.push({
-            value: cd.name,
-            label: cd.label,
-        })
-    }
 
     useEffect(() => {
         if (map.current) return;
@@ -59,8 +32,6 @@ export const CountriesPage = (props: {
     return (
         <main className="main">
             <PageTemplate
-                colWidths={colWidths}
-                rowHeights={rowHeights}
                 justifyContent="center"
                 alignItems="center"
                 gap={0}
@@ -77,19 +48,12 @@ export const CountriesPage = (props: {
                 }
                 controls={
                     <>
-                        <ContinentControls
-                            showEnabled={showEnabled}
-                            setShowEnabled={setShowEnabled}
-                            selectedContinent={selectedContinent}
-                            setSelectedContinent={setSelectedContinent}
-                            continentArgs={continentArgs}
-                        />
                     </>
                 }
                 leftArea={
                     <ContinentNamesTable
-                        title="Countries"
-                        countries={selectedCountries}
+                        title="Continents"
+                        continents={props.continents}
                         headerClass={style["cities-header"]}
                         itemClass={style["cities-item"]}
                     />
@@ -124,19 +88,19 @@ export const CountriesPage = (props: {
 
 const ContinentNamesTable = (props: {
     title: string,
-    countries: ContinentCountries[],
+    continents: Continent[],
     headerClass: string,
     itemClass: string,
 }) => {
     const style = useContext(StyleContext)
-    const countryList = props.countries?.map(
-        (country, index) =>
+    const continentList = props.continents?.map(
+        (continent, index) =>
             <Link key={index}
-                href={`/protected/geo/[country]`}
-                as={`/protected/geo/${country.id}`}
+                href={`/protected/geo/[continent]`}
+                as={`/protected/geo/${continent.id}`}
                 className={style[props.itemClass]}
             >
-                {country.name}
+                {continent.name}
             </Link>
     )
     return (
@@ -149,7 +113,7 @@ const ContinentNamesTable = (props: {
                     {props.title}
                 </div>
             }
-            listItems={countryList}
+            listItems={continentList}
             className={props.itemClass} />
     )
 }

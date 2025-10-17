@@ -6,6 +6,7 @@ const supabase = createClient()
 export const fetchCountries = async (
     setIsLoading: Function,
     setCountries: Function,
+    continent_id: string,
 ) => {
     setIsLoading(true)
     
@@ -16,6 +17,9 @@ export const fetchCountries = async (
             population, density,        area,           gdp,        median_age,
             website,    driving_side,   un_member,      religion
     `)
+    .eq('continent_id', continent_id)
+    .order('name', { ascending: true })
+    
     if (error) {
         console.error('Error fetching countries:', error)
         setIsLoading(false)

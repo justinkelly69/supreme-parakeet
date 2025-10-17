@@ -1,3 +1,19 @@
+DROP VIEW IF EXISTS public.continent_details;
+CREATE VIEW public.continent_details AS
+SELECT
+    cn."id",
+    cn."name",
+    co."latitude",
+    co."longitude",
+    co."zoom",
+    co."description"
+FROM
+    iso."continents" cn
+    LEFT JOIN world."enabled_continents" co ON co."id" = cn."id"
+ORDER BY
+    cn."name";
+
+
 DROP VIEW IF EXISTS public.country_details;
 CREATE VIEW public.country_details AS
 SELECT

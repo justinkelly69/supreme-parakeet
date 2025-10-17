@@ -4,7 +4,6 @@ CREATE SCHEMA IF NOT EXISTS world;
 DROP TABLE IF EXISTS world.enabled_continents;
 CREATE TABLE IF NOT EXISTS world.enabled_continents (
     "id"                    CHAR(2) NOT NULL UNIQUE,
-    "is_enabled"            BOOLEAN NOT NULL DEFAULT FALSE,
     "description"           VARCHAR(10000) NOT NULL DEFAULT '',
     "longitude"             FLOAT NOT NULL DEFAULT 0,
     "latitude"              FLOAT NOT NULL DEFAULT 0,

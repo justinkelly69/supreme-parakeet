@@ -1,56 +1,55 @@
 import { CheckBoxData } from '@/components/ui/xcheckboxes';
 import { createClient } from '@/utils/supabase/client'
+import { Continent } from './types';
 
 const supabase = createClient()
 
-export type StyleContextType = { [key: string]: string; }
-
-export type Continent = {
-    id: string,
-    name: string,
-}
-
-export type ContinentCountries = {
-    id: string,
-    name: string,
-}
-
 export const fetchContinents = async (
+    setIsLoading: Function,
     setContinents: Function,
-    setIsLoading: Function
 ) => {
     setIsLoading(true)
 
     const { data, error } = await supabase
-        .schema('iso')
-        .from('continents')
-        .select('id, name')
+        .schema('public')
+        .from('continent_details')
+        .select('id, name, description, longitude, latitude, zoom')
+        .order('name', { ascending: true })
 
     if (error) {
         console.error('Error fetching continents:', error)
         return
     }
     else {
-        setContinents((data ?? []).map((continent: Continent) => ({
-            id: continent.id,
-            name: continent.name,
-        })))
+        setContinents((data ?? []).map((continent: Continent) => ({ ...continent })))
     }
 
     setIsLoading(false)
 }
 
-export const setContinentData = (continents: Continent[]) => {
-    const out: CheckBoxData[] = []
+export const fetchContinent = async (
+    setIsLoading: Function,
+    setContinent: Function,
+    continent: string,
+) => {
+    setIsLoading(true)
 
-    for (const continent of continents) {
-        out.push({
-            name: continent.id,
-            label: continent.name,
-            checked: true,
-        })
+    const { data, error } = await supabase
+        .schema('public')
+        .from('continent_details')
+        .select('id, name, description, longitude, latitude, zoom')
+        .eq('id', continent)
+
+    if (error) {
+        console.error('Error fetching continents:', error)
+        setIsLoading(false)
+        return
     }
-    return out
+    else {
+        setContinent({ ...data[0] })
+    }
+
+    setIsLoading(false)
 }
 
 
