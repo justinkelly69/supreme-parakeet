@@ -3,6 +3,7 @@
 import React, { use, useEffect, useState } from "react";
 import { City, fetchCity } from "@/lib/cities";
 import { CityDetail } from "@/components/countries/cities";
+import { StyleContext } from "@/app/protected/geo/page";
 
 const MyCity = ({
     params,

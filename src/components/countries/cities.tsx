@@ -3,7 +3,7 @@ import { DetailsTemplate, ListTemplate, PageTemplate } from "./template"
 import { useRouter } from "next/navigation"
 import { City } from "@/lib/cities"
 import React, { useContext, useEffect } from "react"
-import { StyleContext } from "@/app/protected/cities/page"
+import { StyleContext } from "@/app/protected/geo/page";
 import { getMap } from "./map"
 import { em } from "../ui/xgrid"
 import { CityControls } from "./controls"

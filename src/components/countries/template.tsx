@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useContext, ReactElement } from "react";
-import { StyleContext } from "@/app/protected/countries/page";
+import { StyleContext } from "@/app/protected/geo/page";
 import { GridContainer, GridArea, em, emTotal } from "../ui/xgrid";
 import Select, { OptionArgs } from "../ui/xselect";
 import { CheckBoxData, CheckboxGroup } from "../ui/xcheckboxes";

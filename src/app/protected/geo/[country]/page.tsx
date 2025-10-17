@@ -4,6 +4,7 @@ import React, { use, useEffect, useState } from "react";
 import { Country, fetchCountry } from "@/lib/countries";
 import { City } from "@/lib/cities";
 import { CountryDetail } from "@/components/countries/countries";
+import { StyleContext } from "@/app/protected/geo/page";
 
 const MyCountry = ({
     params,

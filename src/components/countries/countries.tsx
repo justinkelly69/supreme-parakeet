@@ -4,7 +4,7 @@ import React, { useState, useContext, useEffect } from "react";
 import { useRouter } from 'next/navigation';
 import { Continent, ContinentCountries, setContinentData } from "@/lib/continents";
 import { Country, CountryCities, filterSelectedCountries } from "@/lib/countries";
-import { StyleContext } from "@/app/protected/countries/page";
+import { StyleContext } from "@/app/protected/geo/page";
 import Select, { OptionArgs } from "../ui/xselect";
 import { CheckBoxData, CheckboxGroup } from "../ui/xcheckboxes";
 import { em } from "../ui/xgrid";

@@ -1,9 +1,16 @@
+"use client";
+
 import { redirect } from "next/navigation";
 
 import { createClient } from "@/utils/supabase/client";
 import { InfoIcon } from "lucide-react";
 import Link from "next/link";
 import { LogoutButton } from "@/components/auth/logout-button";
+import { createContext } from "react";
+import { StyleContextType } from "@/lib/countries";
+import styles from './page.module.css'
+
+
 
 export default async function ProtectedPage() {
 	const supabase = await createClient();

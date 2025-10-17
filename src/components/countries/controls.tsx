@@ -1,4 +1,4 @@
-import { StyleContext } from "@/app/protected/countries/page"
+import { StyleContext } from "@/app/protected/geo/page";
 import { Button } from "../ui/xbutton"
 import { useContext } from "react"
 import { CheckBoxData, CheckboxGroup } from "../ui/xcheckboxes"
