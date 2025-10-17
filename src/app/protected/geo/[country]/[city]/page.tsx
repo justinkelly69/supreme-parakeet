@@ -1,9 +1,9 @@
 "use client"
 
 import React, { use, useEffect, useState } from "react";
-import { City, fetchCity } from "@/lib/cities";
+import { fetchCity } from "@/lib/cities";
 import { CityDetail } from "@/components/countries/cities";
-import { StyleContext } from "@/app/protected/geo/page";
+import { City } from "@/lib/types";
 
 const MyCity = ({
     params,

@@ -3,8 +3,9 @@
 import { createContext, useEffect, useState, JSX } from 'react'
 import { CountriesPage } from '@/components/countries/countries'
 import { Continent, fetchContinents } from '@/lib/continents'
-import { Country, fetchCountries, StyleContextType } from '@/lib/countries'
+import { Country, StyleContextType } from '@/lib/types'
 import styles from './page.module.css'
+import { fetchCountries } from '@/lib/countries'
 
 export const StyleContext = createContext<StyleContextType>(styles)
 

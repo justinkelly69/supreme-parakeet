@@ -3,10 +3,6 @@
 import React, { useContext, ReactElement } from "react";
 import { StyleContext } from "@/app/protected/geo/page";
 import { GridContainer, GridArea, em, emTotal } from "../ui/xgrid";
-import Select, { OptionArgs } from "../ui/xselect";
-import { CheckBoxData, CheckboxGroup } from "../ui/xcheckboxes";
-import { Country, filterSelectedCountries } from "@/lib/countries";
-//import { CountryRow } from "./countries";
 import { FlexBox, FlexCell } from "../ui/xflex";
 
 export const PageTemplate = (props: {
@@ -118,7 +114,6 @@ export const ListTemplate = (props: {
     const rowheight = `${props.rowHeight}em`
     const totalHeight = `${props.totalRows * props.rowHeight}em`
     const totalWidth = emTotal(props.columnWidths)
-    //console.log('totalWidth:', totalWidth)
 
     return (
         <FlexBox

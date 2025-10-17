@@ -1,30 +1,5 @@
 import { createClient } from '@/utils/supabase/client'
 
-export type City = {
-    id: string,
-    name: string,
-    name_ascii: string,
-    country: string,
-    country_id: string,
-    iso2: string,
-    iso3: string,
-    admin_name: string,
-    capital: string,
-    population: number,
-    is_enabled: boolean,
-    latitude: number,
-    longitude: number,
-    zoom: number,
-    description: string,
-}
-
-export type CityHeader = {
-    id: string,
-    name_ascii: string,
-    capital: string,
-    population: string,
-}
-
 export const fetchCities = async (
     setIsLoading: Function,
     setCities: Function,
@@ -38,21 +13,9 @@ export const fetchCities = async (
         .schema('public')
         .from('city_details')
         .select(`
-            id,
-            name,
-            name_ascii,
-            country,
-            country_id,
-            iso2,
-            iso3,
-            admin_name,
-            capital,
-            population,
-            is_enabled,
-            latitude,
-            longitude,
-            zoom,
-            description
+            id,         name,       name_ascii, country,    country_id,
+            iso2,       iso3,       admin_name, capital,    population,
+            is_enabled, latitude,   longitude,  zoom,       description
         `)
         .eq('country_id', country_id)
 
@@ -80,21 +43,9 @@ export const fetchCity = async (
         .schema('public')
         .from('city_details')
         .select(`
-            id,
-            name,
-            name_ascii,
-            country,
-            country_id,
-            iso2,
-            iso3,
-            admin_name,
-            capital,
-            population,
-            is_enabled,
-            latitude,
-            longitude,
-            zoom,
-            description
+            id,         name,       name_ascii,     country,    country_id,
+            iso2,       iso3,       admin_name,     capital,    population,
+            is_enabled, latitude,   longitude,      zoom,       description
         `)
         .eq('id', id)
 

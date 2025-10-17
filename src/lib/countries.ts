@@ -1,56 +1,6 @@
-import { CheckBoxData } from '@/components/ui/xcheckboxes';
 import { createClient } from '@/utils/supabase/client'
+import { Country, EnabledCountry } from './types';
 
-export type StyleContextType = { [key: string]: string; }
-
-export type Continent = {
-    id: string,
-    name: string,
-}
-
-export type Country = {
-    id: string,
-    continent_id: string,
-    continent_name: string,
-    name: string,
-    flag: string,
-    tld: string,
-    prefix: string,
-    is_eu: boolean,
-    is_enabled: boolean,
-    was_enabled: boolean,
-    description: string,
-    latitude: number,
-    longitude: number,
-    zoom: number,
-    iso2: string,
-    demonym: string,
-    population: number,
-    density: number,
-    area: number,
-    gdp: number,
-    median_age: number,
-    website: string,
-    driving_side: string,
-    un_member: boolean,
-    religion: string,
-    cities: [{
-        id: string,
-        name: string,
-        capital: string,
-    }]
-};
-
-export type CountryCities = {
-    id: string,
-    name: string,
-    capital: string,
-}
-
-export type EnabledCountry = {
-    id: string,
-    is_enabled: boolean,
-}
 const supabase = createClient()
 
 export const fetchCountries = async (
@@ -60,34 +10,15 @@ export const fetchCountries = async (
     setIsLoading(true)
     
     const { data, error } = await supabase.from('country_details').select(`
-            id, 
-            continent_id, 
-            continent_name, 
-            name, 
-            flag, 
-            tld, 
-            prefix, 
-            is_eu, 
-            is_enabled, 
-            description, 
-            longitude, 
-            latitude, 
-            zoom,
-            iso2,
-            demonym,
-            population,
-            density,
-            area,
-            gdp,
-            median_age,
-            website,
-            driving_side,
-            un_member,
-            religion
-        `)
-
+            id,         continent_id,   continent_name, name,       flag, 
+            tld,        prefix,         is_eu,          is_enabled, description, 
+            longitude,  latitude,       zoom,           iso2,       demonym,
+            population, density,        area,           gdp,        median_age,
+            website,    driving_side,   un_member,      religion
+    `)
     if (error) {
         console.error('Error fetching countries:', error)
+        setIsLoading(false)
         return
     }
     else {
@@ -105,9 +36,9 @@ export const fetchCountry = async (
     setIsLoading(true)
 
     const { data, error } = await supabase.rpc('get_country_with_cities', { 'country_id': id })
-
     if (error) {
         console.error('Error fetching countries:', error)
+        setIsLoading(false)
         return
     }
     else {
@@ -155,11 +86,9 @@ export const filterSelectedCountries = (
     const countriesByContinent = countries.filter((e => e.continent_id === selectedContinentID))
 
     for (const co of countriesByContinent) {
-
         if (showEnabled.includes('ENABLED') && co.is_enabled === true) {
             selectedCountries.push(co)
         }
-
         else if (showEnabled.includes('DISABLED') && co.is_enabled === false) {
             selectedCountries.push(co)
         }

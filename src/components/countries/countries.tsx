@@ -3,7 +3,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useRouter } from 'next/navigation';
 import { Continent, ContinentCountries, setContinentData } from "@/lib/continents";
-import { Country, CountryCities, filterSelectedCountries } from "@/lib/countries";
+import { filterSelectedCountries } from "@/lib/countries";
 import { StyleContext } from "@/app/protected/geo/page";
 import Select, { OptionArgs } from "../ui/xselect";
 import { CheckBoxData, CheckboxGroup } from "../ui/xcheckboxes";
@@ -17,6 +17,7 @@ import { ContinentControls, CountryControls } from "./controls";
 import Link from "next/link";
 import { CityNamesTable } from "./cities";
 import { getMap } from "./map";
+import { Country, CountryCities } from "@/lib/types";
 
 export const CountriesPage = (props: {
     countries: Country[],
@@ -78,7 +79,7 @@ export const CountriesPage = (props: {
                 }
                 flag={
                     <div className={style["country-flag-position"]}>
-                        "Flag"
+                        🇺🇳
                     </div>
                 }
                 controls={
@@ -125,7 +126,6 @@ export const CountriesPage = (props: {
                 }
             />
         </main>
-
     )
 }
 
@@ -207,7 +207,7 @@ export const CountryDetail = (props: {
                     <TextArea
                         id="country_description"
                         name="country_description"
-                        value=""
+                        value={props.country.description}
                         placeholder="Description"
                         rows={10}
                         cols={30}

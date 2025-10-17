@@ -1,7 +1,6 @@
-import { CountryCities } from "@/lib/countries"
 import { DetailsTemplate, ListTemplate, PageTemplate } from "./template"
 import { useRouter } from "next/navigation"
-import { City } from "@/lib/cities"
+import { CountryCities, City } from "@/lib/types"
 import React, { useContext, useEffect } from "react"
 import { StyleContext } from "@/app/protected/geo/page";
 import { getMap } from "./map"
@@ -111,7 +110,7 @@ export const CityNamesTable = (props: {
     itemClass: string,
 }) => {
     const style = useContext(StyleContext)
-    
+
     const cityList = props.cities?.map(
         (city, index) =>
             <Link key={index}
