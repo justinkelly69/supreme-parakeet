@@ -109,6 +109,7 @@ export const getCheckedValues = (checkBoxData: CheckBoxData[]) => {
         if (value.checked) {
             values.push(value.name)
         }
+        console.log('value:', JSON.stringify(value, null, 4))
     }
     return values
 }

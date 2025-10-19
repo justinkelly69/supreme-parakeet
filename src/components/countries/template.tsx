@@ -10,11 +10,6 @@ import styles from '@/app/protected/geo/page.module.css'
 export const StyleContext = React.createContext<StyleContextType>(styles);
 
 export const PageTemplate = (props: {
-    //colWidths: string,
-    //rowHeights: string,
-    justifyContent: string,
-    alignItems: string,
-    gap: number,
     className: string,
     title: ReactElement,
     flag: ReactElement,

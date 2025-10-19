@@ -9,16 +9,13 @@ export default async function Page({
 	params: { continent: string }
 }): Promise<React.JSX.Element> {
 	const { continent } = await params
-	const continentWithCountries = await fetchContinent(continent)
+	const my_continent = await fetchContinent(continent)
 
 	return (
 		<Suspense fallback={<div>Loading world data...</div>}>
-			{continentWithCountries ?
-				<ContinentDetail
-					continentWithCountries={continentWithCountries}
-				/> :
-				<div>No continent data found.</div>
-			}
+			<ContinentDetail
+				continent={my_continent}
+			/>
 		</Suspense>
 	)
 }

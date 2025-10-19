@@ -1,17 +1,17 @@
 "use client";
 
-import { Continent, ContinentCountry, ContinentWithCountries, Country } from "@/lib/types";
+import { ContinentCountry, ContinentWithCountries } from "@/lib/types";
 import { useRouter } from "next/navigation";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState, ChangeEventHandler } from "react";
 import { getMap } from "./map";
 import { DetailsTemplate, ListTemplate, PageTemplate } from "./template";
 import { TextArea } from "../ui/xtexts";
 import Link from "next/link";
 import { StyleContext } from "@/components/countries/template";
-import { ContinentControls, CountryControls } from "./controls";
+import { ContinentControls } from "./controls";
 
 export const ContinentDetail = (props: {
-    continentWithCountries: ContinentWithCountries,
+    continent: ContinentWithCountries,
 }) => {
     const mapContainer = useRef<any>(null);
     const map = useRef<mapboxgl.Map | null>(null);
@@ -19,31 +19,30 @@ export const ContinentDetail = (props: {
     const style = useContext(StyleContext)
     const router = useRouter()
 
-    const [showEnabled,setShowEnabled] = useState(["ENABLED", "DISABLED"])
+    const [showEnabled, setShowEnabled] = useState<string[]>(["ENABLED", "DISABLED"])
+    const [substring, setSubstring] = useState("")
+    const [sortBy, setSortBy] = useState<"name" | "population">("name")
+    const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc")
 
-    console.log("continentWithCountries:", JSON.stringify(props.continentWithCountries, null, 4));
     useEffect(() => {
         if (map.current) return;
 
         map.current = getMap(
             mapContainer,
             map,
-            props.continentWithCountries.longitude,
-            props.continentWithCountries.latitude,
-            props.continentWithCountries.zoom,
+            props.continent.longitude,
+            props.continent.latitude,
+            props.continent.zoom,
         ) || null
     }, []);
 
     return (
         <main className="main">
             <PageTemplate
-                justifyContent="center"
-                alignItems="center"
-                gap={0}
                 className="country"
                 title={
                     <h1 className={style['page-title']}>
-                        {props.continentWithCountries.name}
+                        {props.continent.name}
                     </h1>
                 }
                 flag={
@@ -52,21 +51,27 @@ export const ContinentDetail = (props: {
                     </div>
                 }
                 controls={
-                    <>
-                    <CountryControls
-                        handleEdit={(e: any) => e}
+                    <ContinentControls
+                        sortBy={sortBy}
+                        setSortBy={e => setSortBy(e.target.value as "name" | "population")}
+                        sortOrder={sortOrder}
+                        setSortOrder={e => setSortOrder(e.target.value as "asc" | "desc")}
+                        showEnabled={showEnabled}
+                        setShowEnabled={setShowEnabled as unknown as ChangeEventHandler<HTMLInputElement>}
+                        substring={substring}
+                        setSubstring={e => setSubstring(e.target.value)}
                         handleSave={(e: any) => e}
                         handleCancel={router.back}
                     />
-                    </>
                 }
                 leftArea={
                     <CountryMenu
                         title="Continents"
-                        continent_id={props.continentWithCountries.id}
-                        countries={props.continentWithCountries.countries}
+                        continent_id={props.continent.id}
+                        countries={props.continent.countries}
                         headerClass={style["cities-header"]}
                         itemClass={style["cities-item"]}
+                        substring={substring}
                     />
                 }
                 mapArea={
@@ -103,18 +108,22 @@ const CountryMenu = (props: {
     countries: ContinentCountry[],
     headerClass: string,
     itemClass: string,
+    substring: string,
 }) => {
     const style = useContext(StyleContext)
-    const countryList = props.countries?.map(
-        (country, index) =>
-            <Link key={index}
-                href={`/protected/geo/[continent]/[country]`}
-                as={`/protected/geo/${props.continent_id}/${country.id}`}
-                className={style[props.itemClass]}
-            >
-                {country.name}
-            </Link>
-    )
+    const countryList = props.countries?.filter(
+        e => e.name.toLowerCase()
+            .includes(props.substring.toLowerCase()))
+        .map(
+            (country, index) =>
+                <Link key={index}
+                    href={`/protected/geo/[continent]/[country]`}
+                    as={`/protected/geo/${props.continent_id}/${country.id}`}
+                    className={style[props.itemClass]}
+                >
+                    {country.name}
+                </Link>
+        )
     return (
         <ListTemplate
             columnWidths={[16]}

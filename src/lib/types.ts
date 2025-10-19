@@ -2,6 +2,8 @@ export type StyleContextType = {
     [key: string]: string;
 }
 
+export type EnabledDisabled = "ENABLED" | "DISABLED"
+
 export type Continent = {
     id: string,
     name: string,
@@ -30,10 +32,10 @@ export type ContinentWithCountries = {
 export type ContinentCountry = {
     id: string,
     name: string,
+    population: number,
     flag: string,
     is_enabled: boolean,
 }
-
 
 export type Country = {
     id: string,
@@ -61,16 +63,15 @@ export type Country = {
     driving_side: string,
     un_member: boolean,
     religion: string,
-    cities: [{
-        id: string,
-        name: string,
-        capital: string,
-    }]
+    cities: CountryCities[],
 };
 
 export type CountryCities = {
     id: string,
     name: string,
+    name_ascii: string,
+    population: number,
+    is_enabled: boolean,
     capital: string,
 }
 

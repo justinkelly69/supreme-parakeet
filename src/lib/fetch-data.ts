@@ -20,6 +20,7 @@ export const fetchWorld = async () => {
 export const fetchContinent = async (
     continent: string,
 ) => {
+    console.log('Fetching continent:', continent)
     const { data, error } = await supabase.rpc(
         'get_continent_with_countries', { 'continent_id': continent }
     )
@@ -58,7 +59,7 @@ export const fetchCity = async (
         `)
         .eq('id', id)
 
-    if (error) {
+    if (error || data.length === 0) {
         console.error('Error fetching city:', error)
         return
     }

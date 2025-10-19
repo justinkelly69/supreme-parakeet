@@ -38,9 +38,6 @@ export const CityDetail = (props: {
     return (
         <main className="main">
             <PageTemplate
-                justifyContent="center"
-                alignItems="center"
-                gap={0}
                 className="country"
                 title={
                     <h1 className={style['page-title']}>

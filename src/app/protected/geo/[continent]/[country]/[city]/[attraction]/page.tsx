@@ -1,7 +1,7 @@
 "use client"
 
 import React, { use } from "react";
-import { StyleContext } from "@/app/protected/geo/page";
+//import { StyleContext } from "@/app/protected/geo/page";
 
 const Page = ({
     params,

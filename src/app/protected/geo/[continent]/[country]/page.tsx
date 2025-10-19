@@ -13,10 +13,7 @@ export default async function Page({
 
     return (
         <Suspense fallback={<div>Loading country data...</div>}>
-            {my_country ?
-                <CountryDetail country={my_country} /> :
-                <div>No country data found.</div>
-            }
+            <CountryDetail country={my_country} />
         </Suspense>
     )
 }
