@@ -3,22 +3,22 @@
 import React, { use } from "react";
 import { StyleContext } from "@/app/protected/geo/page";
 
-const MyCountry = ({
+const Page = ({
     params,
 }: {
-    params: Promise<{ country_id: string, city_id: string, attraction_id: string }>
+    params: Promise<{ country: string, city: string, attraction: string }>
 }): React.JSX.Element | "Loading..." | null => {
 
 
-    const { country_id, city_id, attraction_id } = use(params)
+    const { country: country, city: city, attraction: attraction } = use(params)
 
 
 
     return (
 
-        <h1>Welcome to {attraction_id} in {city_id} in {country_id}</h1>
+        <h1>Welcome to {attraction} in {city} in {country}</h1>
 
     )
 }
 
-export default MyCountry
+export default Page

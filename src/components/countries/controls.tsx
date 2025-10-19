@@ -1,4 +1,5 @@
-import { StyleContext } from "@/app/protected/geo/page";
+import { StyleContext } from "@/components/countries/template";
+
 import { Button } from "../ui/xbutton"
 import { useContext } from "react"
 import { CheckBoxData, CheckboxGroup } from "../ui/xcheckboxes"
@@ -81,9 +82,6 @@ export const CountryControls = (props: {
 export const ContinentControls = (props: {
     showEnabled: string[],
     setShowEnabled: Function,
-    selectedContinent: string,
-    setSelectedContinent: Function,
-    continentArgs: OptionArgs[]
 }) => {
     const style = useContext(StyleContext)
 
@@ -105,12 +103,6 @@ export const ContinentControls = (props: {
                     props.setShowEnabled(e)
                 }}
                 checkboxData={enabledArgs}
-                ref={null}
-            />
-            <Select className={`${style["select-continents-dropdown"]}`}
-                value={props.selectedContinent}
-                onChange={(e) => props.setSelectedContinent(e.target.value)}
-                options={props.continentArgs}
                 ref={null}
             />
         </>

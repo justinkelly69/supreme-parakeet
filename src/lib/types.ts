@@ -12,8 +12,26 @@ export type Continent = {
 }
 
 export type ContinentCountries = {
+    continent_id: any;
     id: string,
     name: string,
+}
+
+export type ContinentWithCountries = {
+    id: string,
+    name: string,
+    description: string,
+    longitude: number,
+    latitude: number,
+    zoom: number,
+    countries: ContinentCountry[],
+}
+
+export type ContinentCountry = {
+    id: string,
+    name: string,
+    flag: string,
+    is_enabled: boolean,
 }
 
 

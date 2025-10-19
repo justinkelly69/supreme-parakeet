@@ -38,6 +38,40 @@ BEGIN
 END;
 $$;
 
+CREATE OR REPLACE FUNCTION get_continent_with_countries(continent_id CHAR(2))  
+RETURNS JSONB
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    result JSONB;
+BEGIN
+    SELECT jsonb_build_object(
+        'id'            , cd."id",
+        'name'          , cd."name",
+        'longitude'     , cd."longitude",
+        'latitude'      , cd."latitude",
+        'zoom'          , cd."zoom",
+        'description'   , cd."description",
+        'countries', (
+            SELECT jsonb_agg(
+                jsonb_build_object(
+                    'id'        , c."id",
+                    'name'      , c."name",
+                    'flag'      , c."flag",
+                    'is_enabled', ec."is_enabled"
+                )
+            )
+            FROM  country_details c
+            JOIN  world.enabled_countries ec ON ec.id = c.id
+            WHERE c.continent_id = cd.id
+        )
+    )
+    INTO result
+    FROM continent_details cd
+    WHERE cd.id = continent_id;  
+    RETURN result;
+END;
+$$;
 
 CREATE OR REPLACE FUNCTION get_country_with_cities(country_id CHAR(2))
 RETURNS JSONB

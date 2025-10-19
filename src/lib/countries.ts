@@ -3,54 +3,6 @@ import { Country, EnabledCountry } from './types';
 
 const supabase = createClient()
 
-export const fetchCountries = async (
-    setIsLoading: Function,
-    setCountries: Function,
-    continent_id: string,
-) => {
-    setIsLoading(true)
-    
-    const { data, error } = await supabase.from('country_details').select(`
-            id,         continent_id,   continent_name, name,       flag, 
-            tld,        prefix,         is_eu,          is_enabled, description, 
-            longitude,  latitude,       zoom,           iso2,       demonym,
-            population, density,        area,           gdp,        median_age,
-            website,    driving_side,   un_member,      religion
-    `)
-    .eq('continent_id', continent_id)
-    .order('name', { ascending: true })
-    
-    if (error) {
-        console.error('Error fetching countries:', error)
-        setIsLoading(false)
-        return
-    }
-    else {
-        setCountries((data ?? []).map((item: any) => ({...item})))
-    }
-
-    setIsLoading(false)
-}
-
-export const fetchCountry = async (
-    setIsLoading: Function,
-    setCountry: Function,
-    id: string,
-) => {
-    setIsLoading(true)
-
-    const { data, error } = await supabase.rpc('get_country_with_cities', { 'country_id': id })
-    if (error) {
-        console.error('Error fetching countries:', error)
-        setIsLoading(false)
-        return
-    }
-    else {
-        setCountry({ ...data, id })
-    }
-
-    setIsLoading(false)
-}
 
 
 export const updateSelectedCountries = async (countries: Country[]) => {

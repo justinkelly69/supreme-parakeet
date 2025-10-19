@@ -1,13 +1,13 @@
-import { DetailsTemplate, ListTemplate, PageTemplate } from "./template"
+"use client"
+
+import { DetailsTemplate, PageTemplate } from "./template"
 import { useRouter } from "next/navigation"
-import { CountryCities, City } from "@/lib/types"
+import { City } from "@/lib/types"
 import React, { useContext, useEffect } from "react"
-import { StyleContext } from "@/app/protected/geo/page";
+import { StyleContext } from "@/components/countries/template";
 import { getMap } from "./map"
-import { em } from "../ui/xgrid"
 import { CityControls } from "./controls"
 import { TextArea } from "../ui/xtexts"
-import Link from "next/link"
 
 export const CityDetail = (props: {
     city: City,
@@ -31,7 +31,7 @@ export const CityDetail = (props: {
             map,
             longitude,
             latitude,
-            2,
+            10,
         ) || null
     }, []);
 
@@ -97,37 +97,3 @@ export const CityDetail = (props: {
     );
 }
 
-export const CityNamesTable = (props: {
-    title: string,
-    country_id: string,
-    cities: CountryCities[],
-    headerClass: string,
-    itemClass: string,
-}) => {
-    const style = useContext(StyleContext)
-
-    const cityList = props.cities?.map(
-        (city, index) =>
-            <Link key={index}
-                href={`/protected/geo/[country]/[city]`}
-                as={`/protected/geo/${props.country_id}/${city.id}`}
-                className={style[props.itemClass]}
-            >
-                {city.name}
-            </Link>
-    )
-    return (
-        <ListTemplate
-            columnWidths={[16]}
-            rowHeight={1.6}
-            totalRows={33}
-            listHeaders={
-                <div className={props.headerClass}>
-                    {props.title}
-                </div>
-
-            }
-            listItems={cityList}
-            className={props.itemClass} />
-    )
-}

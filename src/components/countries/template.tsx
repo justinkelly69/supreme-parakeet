@@ -1,11 +1,13 @@
 'use client'
 
 import React, { useContext, ReactElement } from "react";
-import { StyleContext } from "@/app/protected/geo/page";
+//import { StyleContext } from "@/app/protected/geo/page";
 import { GridContainer, GridArea, em, emTotal } from "../ui/xgrid";
 import { FlexBox, FlexCell } from "../ui/xflex";
+import { StyleContextType } from "@/lib/types";
+import styles from '@/app/protected/geo/page.module.css'
 
-
+export const StyleContext = React.createContext<StyleContextType>(styles);
 
 export const PageTemplate = (props: {
     //colWidths: string,

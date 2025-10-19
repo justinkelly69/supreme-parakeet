@@ -1,15 +1,17 @@
-import { Continent } from "@/lib/types";
+"use client";
+
+import { Continent, ContinentCountry, ContinentWithCountries, Country } from "@/lib/types";
 import { useRouter } from "next/navigation";
-import { useContext, useEffect, useRef } from "react";
-import { StyleContext } from "@/app/protected/geo/page";
+import { useContext, useEffect, useRef, useState } from "react";
 import { getMap } from "./map";
 import { DetailsTemplate, ListTemplate, PageTemplate } from "./template";
 import { TextArea } from "../ui/xtexts";
 import Link from "next/link";
+import { StyleContext } from "@/components/countries/template";
+import { ContinentControls, CountryControls } from "./controls";
 
-export const ContinentsPage = (props: {
-    continents: Continent[],
-    setContinents: Function,
+export const ContinentDetail = (props: {
+    continentWithCountries: ContinentWithCountries,
 }) => {
     const mapContainer = useRef<any>(null);
     const map = useRef<mapboxgl.Map | null>(null);
@@ -17,15 +19,18 @@ export const ContinentsPage = (props: {
     const style = useContext(StyleContext)
     const router = useRouter()
 
+    const [showEnabled,setShowEnabled] = useState(["ENABLED", "DISABLED"])
+
+    console.log("continentWithCountries:", JSON.stringify(props.continentWithCountries, null, 4));
     useEffect(() => {
         if (map.current) return;
 
         map.current = getMap(
             mapContainer,
             map,
-            -74.0632,
-            40.7346,
-            2,
+            props.continentWithCountries.longitude,
+            props.continentWithCountries.latitude,
+            props.continentWithCountries.zoom,
         ) || null
     }, []);
 
@@ -38,7 +43,7 @@ export const ContinentsPage = (props: {
                 className="country"
                 title={
                     <h1 className={style['page-title']}>
-                        "Pick a Continent"
+                        {props.continentWithCountries.name}
                     </h1>
                 }
                 flag={
@@ -48,12 +53,18 @@ export const ContinentsPage = (props: {
                 }
                 controls={
                     <>
+                    <CountryControls
+                        handleEdit={(e: any) => e}
+                        handleSave={(e: any) => e}
+                        handleCancel={router.back}
+                    />
                     </>
                 }
                 leftArea={
-                    <ContinentNamesTable
+                    <CountryMenu
                         title="Continents"
-                        continents={props.continents}
+                        continent_id={props.continentWithCountries.id}
+                        countries={props.continentWithCountries.countries}
                         headerClass={style["cities-header"]}
                         itemClass={style["cities-item"]}
                     />
@@ -86,21 +97,22 @@ export const ContinentsPage = (props: {
     )
 }
 
-const ContinentNamesTable = (props: {
+const CountryMenu = (props: {
     title: string,
-    continents: Continent[],
+    continent_id: string,
+    countries: ContinentCountry[],
     headerClass: string,
     itemClass: string,
 }) => {
     const style = useContext(StyleContext)
-    const continentList = props.continents?.map(
-        (continent, index) =>
+    const countryList = props.countries?.map(
+        (country, index) =>
             <Link key={index}
-                href={`/protected/geo/[continent]`}
-                as={`/protected/geo/${continent.id}`}
+                href={`/protected/geo/[continent]/[country]`}
+                as={`/protected/geo/${props.continent_id}/${country.id}`}
                 className={style[props.itemClass]}
             >
-                {continent.name}
+                {country.name}
             </Link>
     )
     return (
@@ -113,7 +125,7 @@ const ContinentNamesTable = (props: {
                     {props.title}
                 </div>
             }
-            listItems={continentList}
+            listItems={countryList}
             className={props.itemClass} />
     )
 }

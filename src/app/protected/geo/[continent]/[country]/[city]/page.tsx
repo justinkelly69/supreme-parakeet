@@ -1,37 +1,22 @@
-"use client"
 
-import React, { use, useEffect, useState } from "react";
-import { fetchCity } from "@/lib/cities";
-import { CityDetail } from "@/components/countries/cities";
-import { City } from "@/lib/types";
+import { fetchCity } from "@/lib/fetch-data";
+import { CityDetail } from "@/components/countries/city";
+import { Suspense } from "react";
 
-const MyCity = ({
+export default async function Page({
     params,
 }: {
-    params: Promise<{ continent: string, country: string, city: string }>
-}): React.JSX.Element | "Loading..." | null => {
-
-    const [my_city, setCity] = useState<City>()
-    const [isLoading, setIsLoading] = useState(true)
-
-    const { continent, country, city } = use(params)
-
-    useEffect(() => {
-        fetchCity(
-            setIsLoading,
-            setCity,
-            city,
-        )
-    }, [])
+    params: { continent: string, country: string, city: string }
+}): Promise<React.JSX.Element> {
+    const { continent, country, city } = await params
+    const my_city = await fetchCity(city)
 
     return (
-        my_city ?
-            isLoading ? 'Loading...' :
-                <CityDetail
-                    city={my_city}
-                />
-            : null
+        <Suspense fallback={<div>Loading city data...</div>}>
+            {my_city ?
+                <CityDetail city={my_city} /> :
+                <div>No city data found.</div>
+            }
+        </Suspense>
     )
 }
-
-export default MyCity

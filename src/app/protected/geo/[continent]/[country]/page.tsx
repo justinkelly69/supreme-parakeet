@@ -1,40 +1,22 @@
-"use client"
 
-import React, { use, useEffect, useState } from "react";
-import { fetchCountry } from "@/lib/countries";
-import { Country, City } from "@/lib/types";
-import { CountryDetail } from "@/components/countries/countries";
+import { fetchCountry } from "@/lib/fetch-data";
+import { CountryDetail } from "@/components/countries/country";
+import { Suspense } from "react";
 
-const MyCountry = ({
+export default async function Page({
     params,
 }: {
-    params: Promise<{ continent: string, country: string }>
-}): React.JSX.Element | "Loading..." | null => {
-
-    const [my_country, setCountry] = useState<Country>()
-    const [cities, setCities] = useState<City[]>([])
-    const [isLoading, setIsLoading] = useState(true)
-
-    const { country } = use(params)
-
-    useEffect(() => {
-        fetchCountry(
-            setIsLoading,
-            setCountry,
-            country,
-        ) 
-    },[])
+    params: { continent: string, country: string }
+}): Promise<React.JSX.Element> {
+    const { continent, country } = await params
+    const my_country = await fetchCountry(country)
 
     return (
-        my_country ?
-            isLoading ? 'Loading...' :
-                <CountryDetail
-                    country={my_country}
-                    setCountry={setCountry}
-                    cities={cities}
-                />
-            : null
+        <Suspense fallback={<div>Loading country data...</div>}>
+            {my_country ?
+                <CountryDetail country={my_country} /> :
+                <div>No country data found.</div>
+            }
+        </Suspense>
     )
 }
-
-export default MyCountry

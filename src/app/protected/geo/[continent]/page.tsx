@@ -1,56 +1,24 @@
-'use client'
 
-import { use, useEffect, useState } from 'react'
-import { fetchContinent } from '@/lib/continents'
-import { Continent, Country, StyleContextType } from '@/lib/types'
-import styles from '../page.module.css'
-import { CountriesPage } from '@/components/countries/countries'
-import { fetchCountries } from '@/lib/countries'
-import { StyleContext } from '../page'
+import { ContinentDetail } from '@/components/countries/continent'
+import { fetchContinent } from '@/lib/fetch-data'
+import { Suspense } from 'react'
 
-//export const StyleContext = createContext<StyleContextType>(styles)
-
-const Page = ({
+export default async function Page({
 	params,
 }: {
-	params: Promise<{ continent: string }>
-}): React.JSX.Element | "Loading..." | null => {
+	params: { continent: string }
+}): Promise<React.JSX.Element> {
+	const { continent } = await params
+	const continentWithCountries = await fetchContinent(continent)
 
-	const [my_continent, setContinent] = useState<Continent>()
-	const [countries, setCountries] = useState<Country[]>([])
-	const [isLoading, setIsLoading] = useState(true)
-
-	const [style, setStyle] = useState<StyleContextType>(styles);
-
-	const { continent } = use(params)
-
-	useEffect(() => {
-		fetchContinent(
-			setIsLoading,
-			setContinent,
-			continent
-		)
-	}, [])
-
-	useEffect(() => {
-		fetchCountries(
-			setIsLoading,
-			setCountries,
-			continent
-		)
-	}, [])
-
-	return isLoading ?
-		<p>Loading</p> :
-		(
-			<StyleContext.Provider value={style}>
-				<CountriesPage
-					continent={my_continent}
-					countries={countries}
-					setCountries={setCountries}
-				/>
-			</StyleContext.Provider>
-		)
+	return (
+		<Suspense fallback={<div>Loading world data...</div>}>
+			{continentWithCountries ?
+				<ContinentDetail
+					continentWithCountries={continentWithCountries}
+				/> :
+				<div>No continent data found.</div>
+			}
+		</Suspense>
+	)
 }
-
-export default Page
