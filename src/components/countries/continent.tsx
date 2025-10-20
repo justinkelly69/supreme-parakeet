@@ -10,6 +10,7 @@ import Link from "next/link";
 import { StyleContext } from "@/components/countries/template";
 import { ContinentControls } from "./controls";
 import { sortNamePopulation } from "@/lib/utils";
+import { Checkbox } from "../ui/xcheckboxes";
 
 export const ContinentDetail = (props: {
     continent: ContinentWithCountries,
@@ -20,7 +21,7 @@ export const ContinentDetail = (props: {
     const style = useContext(StyleContext)
     const router = useRouter()
 
-    const [showEnabled, setShowEnabled] = useState<string[]>([])
+    const [showEnabled, setShowEnabled] = useState<string[]>(["ENABLED", "DISABLED"])
     const [substring, setSubstring] = useState("")
     const [sortBy, setSortBy] = useState<"name" | "population">("name")
     const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc")
@@ -43,7 +44,7 @@ export const ContinentDetail = (props: {
                 className="country"
                 title={
                     <h1 className={style['page-title']}>
-                        {showEnabled}
+                        {props.continent.name}
                     </h1>
                 }
                 flag={
@@ -68,8 +69,9 @@ export const ContinentDetail = (props: {
                 leftArea={
                     <CountryMenu
                         title="Continents"
+                        showCheckboxes={showEnabled.includes("ENABLED") && showEnabled.includes("DISABLED")}
                         continent_id={props.continent.id}
-                        countries={props.continent.countries.sort(sortNamePopulation({sortBy, sortOrder})).filter((country) => {
+                        countries={props.continent.countries.sort(sortNamePopulation({ sortBy, sortOrder })).filter((country) => {
                             return showEnabled.includes("ENABLED") && country.is_enabled === true ||
                                 showEnabled.includes("DISABLED") && country.is_enabled === false
                         })}
@@ -107,6 +109,7 @@ export const ContinentDetail = (props: {
 }
 
 const CountryMenu = (props: {
+    showCheckboxes: boolean,
     title: string,
     continent_id: string,
     countries: ContinentCountry[],
@@ -120,13 +123,27 @@ const CountryMenu = (props: {
             .includes(props.substring.toLowerCase()))
         .map(
             (country, index) =>
-                <Link key={index}
-                    href={`/protected/geo/[continent]/[country]`}
-                    as={`/protected/geo/${props.continent_id}/${country.id}`}
-                    className={style[props.itemClass]}
-                >
-                    {country.name}
-                </Link>
+                <div key={index}>
+                    <span>{country.flag}</span>
+                    <Checkbox
+                        label={""}
+                        name={country.id}
+                        checked={country.is_enabled}
+                        boxClass=""
+                        labelClass=""
+                        showCheckbox={props.showCheckboxes}
+                        onChange={() => { }}
+                        ref={null}
+                    />
+                    <Link key={index}
+                        href={`/protected/geo/[continent]/[country]`}
+                        as={`/protected/geo/${props.continent_id}/${country.id}`}
+                        className={style[props.itemClass]}
+                    >
+                        {`${country.name} (${country.population || 'N/A'})`}
+                    </Link>
+
+                </div>
         )
     return (
         <ListTemplate

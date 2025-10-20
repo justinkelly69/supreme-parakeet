@@ -92,6 +92,7 @@ export const ContinentControls = (props: {
                     listItemClass={style["continent-list-item"]}
                     checkedValues={props.showEnabled}
                     setCheckedValues={props.setShowEnabled}
+                    showCheckboxes={true} 
                     checkboxData={[
                         { name: "ENABLED", label: "Enabled", checked: true },
                         { name: "DISABLED", label: "Disabled", checked: true },
@@ -181,6 +182,7 @@ export const CountryControls = (props: {
                     listItemClass={style["continent-list-item"]}
                     checkedValues={props.showEnabled}
                     setCheckedValues={props.setShowEnabled}
+                    showCheckboxes={true} 
                     checkboxData={[
                         { name: "ENABLED", label: "Enabled" },
                         { name: "DISABLED", label: "Disabled" },

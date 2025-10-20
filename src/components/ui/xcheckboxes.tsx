@@ -13,18 +13,21 @@ export const Checkbox = (props: {
     checked: boolean,
     boxClass?: string,
     labelClass?: string,
+    showCheckbox: boolean,
     onChange: ChangeEventHandler<HTMLInputElement>
     ref: Ref<HTMLInputElement>
 }) => {
     return (
         <label className={props.labelClass}>
-            <input type="checkbox"
-                name={props.name}
-                className={props.boxClass}
-                defaultChecked={props.checked}
-                onChange={props.onChange}
-                ref={props.ref}
-            />
+            {props.showCheckbox === true ?
+                <input type="checkbox"
+                    name={props.name}
+                    className={props.boxClass}
+                    defaultChecked={props.checked}
+                    onChange={props.onChange}
+                    ref={props.ref}
+                /> : null
+            }
             {props.label}
         </label>
     )
@@ -39,6 +42,7 @@ export const CheckboxGroup = (props: {
     checkboxData: CheckBoxData[],
     checkedValues: string[],
     setCheckedValues: Function,
+    showCheckboxes: boolean,
     ref: Ref<HTMLInputElement>
 }) => {
 
@@ -53,6 +57,7 @@ export const CheckboxGroup = (props: {
                     name={option.name}
                     boxClass={props.boxClass}
                     labelClass={props.labelClass}
+                    showCheckbox={props.showCheckboxes}
                     onChange={e => {
                         if (e.target.checked === true) {
                             props.setCheckedValues([...props.checkedValues, option.name])

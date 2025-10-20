@@ -9,6 +9,7 @@ import { CountryControls } from "./controls";
 import { TextArea } from "../ui/xtexts";
 import Link from "next/link";
 import { sortNamePopulation } from "@/lib/utils";
+import { Checkbox } from "../ui/xcheckboxes";
 
 export const CountryDetail = (props: {
     country: Country,
@@ -73,11 +74,13 @@ export const CountryDetail = (props: {
                 }
                 leftArea={
                     <CityNamesTable
+                        showCheckboxes={showEnabled.includes("ENABLED") && showEnabled.includes("DISABLED")}
                         cities={props.country.cities.sort(sortNamePopulation({ sortBy, sortOrder })).filter((city) => {
                             return showEnabled.includes("ENABLED") && city.is_enabled === true ||
                                 showEnabled.includes("DISABLED") && city.is_enabled === false
                         })}
                         country_id={props.country.id}
+                        country_flag={props.country.flag}
                         continent_id={props.country.continent_id}
                         title="Cities"
                         headerClass={style["cities-header"]}
@@ -129,9 +132,11 @@ export const CountryDetail = (props: {
 }
 
 const CityNamesTable = (props: {
+    showCheckboxes: boolean,
     title: string,
     continent_id: string,
     country_id: string,
+    country_flag: string,
     cities: CountryCities[],
     headerClass: string,
     itemClass: string,
@@ -144,13 +149,27 @@ const CityNamesTable = (props: {
             .includes(props.substring.toLowerCase()))
         .map(
             (city, index) =>
-                <Link key={index}
-                    href={`/protected/geo/[continent]/[country]/[city]`}
-                    as={`/protected/geo/${props.continent_id}/${props.country_id}/${city.id}`}
-                    className={style[props.itemClass]}
-                >
-                    {city.name}
-                </Link>
+                <div key={index}>
+                    <span>{props.country_flag}</span>
+                    <Checkbox
+                        label={""}
+                        name={city.id}
+                        checked={city.is_enabled}
+                        boxClass=""
+                        labelClass=""
+                        showCheckbox={props.showCheckboxes}
+                        onChange={() => { }}
+                        ref={null}
+                    />
+                    <Link key={index}
+                        href={`/protected/geo/[continent]/[country]/[city]`}
+                        as={`/protected/geo/${props.continent_id}/${props.country_id}/${city.id}`}
+                        className={style[props.itemClass]}
+                    >
+                        {city.name}
+                    </Link>
+
+                </div>
         )
     return (
         <ListTemplate
