@@ -2,7 +2,7 @@ import * as React from "react"
 import { ChangeEventHandler, Ref } from "react"
 
 export type CheckBoxData = {
-    checked: boolean,
+    checked?: boolean,
     name: string,
     label: string,
 }
@@ -10,7 +10,7 @@ export type CheckBoxData = {
 export const Checkbox = (props: {
     label: string,
     name: string,
-    checked?: boolean,
+    checked: boolean,
     boxClass?: string,
     labelClass?: string,
     onChange: ChangeEventHandler<HTMLInputElement>
@@ -42,52 +42,24 @@ export const CheckboxGroup = (props: {
     ref: Ref<HTMLInputElement>
 }) => {
 
-    const checkedValueSet = (values: string[], checkboxes: CheckBoxData[]) => {
-        const checkedValues = new Set<string>()
-
-        const checkedNames: string[] = []
-        for (const checkbox of checkboxes) {
-            checkedNames.push(checkbox.name)
-        }
-
-        for (const value of values) {
-            if (checkedNames.includes(value)) {
-                checkedValues.add(value)
-            }
-        }
-        return checkedValues
-    }
-
-    const checkedValueArray = (valuesSet: Set<string>) => {
-        const values = []
-        for (let value of valuesSet) {
-            values.push(value)
-        }
-        values.sort()
-        return values
-    }
-
-    const checkedValues = checkedValueSet(props.checkedValues, props.checkboxData)
-
     const checkboxes = props.checkboxData.map((option, index) => {
         return (
             <li key={index}
                 className={props.listItemClass}
             >
                 <Checkbox
-                    checked={checkedValues.has(option.name)}
+                    checked={props.checkedValues.includes(option.name)}
                     label={option.label}
                     name={option.name}
                     boxClass={props.boxClass}
                     labelClass={props.labelClass}
                     onChange={e => {
                         if (e.target.checked === true) {
-                            checkedValues.add(option.name)
+                            props.setCheckedValues([...props.checkedValues, option.name])
                         }
                         else {
-                            checkedValues.delete(option.name)
+                            props.setCheckedValues(props.checkedValues.filter(e => e !== option.name))
                         }
-                        props.setCheckedValues(checkedValueArray(checkedValues))
                     }}
                     ref={props.ref}
                 />
@@ -102,27 +74,4 @@ export const CheckboxGroup = (props: {
     )
 }
 
-export const getCheckedValues = (checkBoxData: CheckBoxData[]) => {
-    const values: string[] = []
 
-    for (const value of checkBoxData) {
-        if (value.checked) {
-            values.push(value.name)
-        }
-        console.log('value:', JSON.stringify(value, null, 4))
-    }
-    return values
-}
-
-export const setCheckedValues = (checkBoxData: CheckBoxData[], values: string[]) => {
-    const dataOut: CheckBoxData[] = []
-
-    for (const dataItem of checkBoxData) {
-        dataOut.push({
-            name: dataItem.name,
-            label: dataItem.label,
-            checked: values.includes(dataItem.name),
-        })
-    }
-    return dataOut
-}

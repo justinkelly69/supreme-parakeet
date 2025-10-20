@@ -90,7 +90,7 @@ export const ContinentControls = (props: {
                     labelClass={style["continent-list-label"]}
                     boxClass={style["continent-list-box"]}
                     listItemClass={style["continent-list-item"]}
-                    checkedValues={["ENABLED", "DISABLED"]}
+                    checkedValues={props.showEnabled}
                     setCheckedValues={props.setShowEnabled}
                     checkboxData={[
                         { name: "ENABLED", label: "Enabled", checked: true },
@@ -144,6 +144,8 @@ export const CountryControls = (props: {
 }) => {
     const style = useContext(StyleContext)
 
+    console.log('showEnabled:', props.showEnabled)
+
     return (
         <ul className={style["top-menu-list"]}>
             <li className={style["top-menu-item"]}>
@@ -177,11 +179,11 @@ export const CountryControls = (props: {
                     labelClass={style["continent-list-label"]}
                     boxClass={style["continent-list-box"]}
                     listItemClass={style["continent-list-item"]}
-                    checkedValues={["ENABLED", "DISABLED"]}
+                    checkedValues={props.showEnabled}
                     setCheckedValues={props.setShowEnabled}
                     checkboxData={[
-                        { name: "ENABLED", label: "Enabled", checked: true },
-                        { name: "DISABLED", label: "Disabled", checked: true },
+                        { name: "ENABLED", label: "Enabled" },
+                        { name: "DISABLED", label: "Disabled" },
                     ]}
                     ref={null}
                 />
@@ -224,33 +226,4 @@ export const CountryControls = (props: {
     )
 }
 
-// export const EnableDisable = (props: {
-//     showEnabled: string[],
-//     setShowEnabled: Function,
-// }) => {
-//     const style = useContext(StyleContext)
-
-//     const enabledArgs: CheckBoxData[] = [
-//         { name: "ENABLED", label: "Enabled", checked: true },
-//         { name: "DISABLED", label: "Disabled", checked: true },
-//     ]
-
-//     return (
-//         <>
-//             <CheckboxGroup
-//                 label="Select Countries"
-//                 className={style["continent-list"]}
-//                 labelClass={style["continent-list-label"]}
-//                 boxClass={style["continent-list-box"]}
-//                 listItemClass={style["continent-list-item"]}
-//                 checkedValues={props.showEnabled}
-//                 setCheckedValues={(e: string[]) => {
-//                     props.setShowEnabled(e)
-//                 }}
-//                 checkboxData={enabledArgs}
-//                 ref={null}
-//             />
-//         </>
-//     )
-// }
 

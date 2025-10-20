@@ -19,7 +19,7 @@ export const ContinentDetail = (props: {
     const style = useContext(StyleContext)
     const router = useRouter()
 
-    const [showEnabled, setShowEnabled] = useState<string[]>(["ENABLED", "DISABLED"])
+    const [showEnabled, setShowEnabled] = useState<string[]>([])
     const [substring, setSubstring] = useState("")
     const [sortBy, setSortBy] = useState<"name" | "population">("name")
     const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc")
@@ -57,7 +57,7 @@ export const ContinentDetail = (props: {
                         sortOrder={sortOrder}
                         setSortOrder={e => setSortOrder(e.target.value as "asc" | "desc")}
                         showEnabled={showEnabled}
-                        setShowEnabled={setShowEnabled as unknown as ChangeEventHandler<HTMLInputElement>}
+                        setShowEnabled={setShowEnabled}
                         substring={substring}
                         setSubstring={e => setSubstring(e.target.value)}
                         handleSave={(e: any) => e}
