@@ -9,6 +9,7 @@ import { TextArea } from "../ui/xtexts";
 import Link from "next/link";
 import { StyleContext } from "@/components/countries/template";
 import { ContinentControls } from "./controls";
+import { sortNamePopulation } from "@/lib/utils";
 
 export const ContinentDetail = (props: {
     continent: ContinentWithCountries,
@@ -42,7 +43,7 @@ export const ContinentDetail = (props: {
                 className="country"
                 title={
                     <h1 className={style['page-title']}>
-                        {props.continent.name}
+                        {showEnabled}
                     </h1>
                 }
                 flag={
@@ -68,7 +69,10 @@ export const ContinentDetail = (props: {
                     <CountryMenu
                         title="Continents"
                         continent_id={props.continent.id}
-                        countries={props.continent.countries}
+                        countries={props.continent.countries.sort(sortNamePopulation({sortBy, sortOrder})).filter((country) => {
+                            return showEnabled.includes("ENABLED") && country.is_enabled === true ||
+                                showEnabled.includes("DISABLED") && country.is_enabled === false
+                        })}
                         headerClass={style["cities-header"]}
                         itemClass={style["cities-item"]}
                         substring={substring}
@@ -135,7 +139,8 @@ const CountryMenu = (props: {
                 </div>
             }
             listItems={countryList}
-            className={props.itemClass} />
+            className={props.itemClass}
+        />
     )
 }
 

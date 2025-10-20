@@ -57,6 +57,7 @@ BEGIN
                 jsonb_build_object(
                     'id'        , c."id",
                     'name'      , c."name",
+                    'flag'      , c."flag",
                     'population', c."population",
                     'is_enabled', ec."is_enabled"
                 )

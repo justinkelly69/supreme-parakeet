@@ -8,6 +8,7 @@ import { getMap } from "./map";
 import { CountryControls } from "./controls";
 import { TextArea } from "../ui/xtexts";
 import Link from "next/link";
+import { sortNamePopulation } from "@/lib/utils";
 
 export const CountryDetail = (props: {
     country: Country,
@@ -72,7 +73,10 @@ export const CountryDetail = (props: {
                 }
                 leftArea={
                     <CityNamesTable
-                        cities={props.country.cities}
+                        cities={props.country.cities.sort(sortNamePopulation({ sortBy, sortOrder })).filter((city) => {
+                            return showEnabled.includes("ENABLED") && city.is_enabled === true ||
+                                showEnabled.includes("DISABLED") && city.is_enabled === false
+                        })}
                         country_id={props.country.id}
                         continent_id={props.country.continent_id}
                         title="Cities"

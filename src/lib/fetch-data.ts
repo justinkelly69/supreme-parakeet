@@ -1,4 +1,3 @@
-import { CheckBoxData } from '@/components/ui/xcheckboxes';
 import { createClient } from '@/utils/supabase/client'
 import { Continent } from './types';
 
