@@ -2,7 +2,7 @@ import { StyleContext } from "@/components/countries/template";
 
 import { Button } from "@/components/ui/xbutton"
 import { ChangeEventHandler, useContext } from "react"
-import { CheckboxGroup } from "@/components/ui/xcheckboxes"
+import { Checkbox } from "@/components/ui/xcheckboxes"
 import Select from "@/components/ui/xselect"
 import { Input } from "@/components/ui/xtexts";
 
@@ -84,21 +84,24 @@ export const ContinentControls = (props: {
                 />
             </li>
             <li className={style["top-menu-item"]}>
-                <CheckboxGroup
-                    label="Select Countries"
-                    className={style["continent-list"]}
-                    labelClass={style["continent-list-label"]}
-                    boxClass={style["continent-list-box"]}
-                    listItemClass={style["continent-list-item"]}
+                <Checkbox
+                    name="ENABLED"
                     checkedValues={props.showEnabled}
                     setCheckedValues={props.setShowEnabled}
-                    showCheckboxes={true} 
-                    checkboxData={[
-                        { name: "ENABLED", label: "Enabled", checked: true },
-                        { name: "DISABLED", label: "Disabled", checked: true },
-                    ]}
+                    showCheckbox={true}
+                    className={style["continent-list"]}
                     ref={null}
                 />
+                <label htmlFor="ENABLED" className={style["continent-list-label"]}>Enabled</label>
+                <Checkbox
+                    name="DISABLED"
+                    checkedValues={props.showEnabled}
+                    setCheckedValues={props.setShowEnabled}
+                    showCheckbox={true}
+                    className={style["continent-list"]}
+                    ref={null}
+                />
+                <label htmlFor="DISABLED" className={style["continent-list-label"]}>Disabled</label>
             </li>
             <li className={style["top-menu-item"]}>
                 <Input
@@ -174,21 +177,24 @@ export const CountryControls = (props: {
                 />
             </li>
             <li className={style["top-menu-item"]}>
-                <CheckboxGroup
-                    label="Select Countries"
-                    className={style["continent-list"]}
-                    labelClass={style["continent-list-label"]}
-                    boxClass={style["continent-list-box"]}
-                    listItemClass={style["continent-list-item"]}
+                <Checkbox
+                    name="ENABLED"
                     checkedValues={props.showEnabled}
                     setCheckedValues={props.setShowEnabled}
-                    showCheckboxes={true} 
-                    checkboxData={[
-                        { name: "ENABLED", label: "Enabled" },
-                        { name: "DISABLED", label: "Disabled" },
-                    ]}
+                    showCheckbox={true}
+                    className={style["continent-list"]}
                     ref={null}
                 />
+                <label htmlFor="ENABLED" className={style["continent-list-label"]}>Enabled</label>
+                <Checkbox
+                    name="DISABLED"
+                    checkedValues={props.showEnabled}
+                    setCheckedValues={props.setShowEnabled}
+                    showCheckbox={true}
+                    className={style["continent-list"]}
+                    ref={null}
+                />
+                <label htmlFor="DISABLED" className={style["continent-list-label"]}>Disabled</label>
             </li>
             <li className={style["top-menu-item"]}>
                 <Input

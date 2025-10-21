@@ -1,5 +1,5 @@
 import { createClient } from '@/utils/supabase/client'
-import { Country, EnabledCountry } from './types';
+import { Country, EnabledItem } from './types';
 
 const supabase = createClient()
 
@@ -17,8 +17,8 @@ export const updateSelectedCountries = async (countries: Country[]) => {
 }
 
 // Filter out the countries that have changed
-export const getEnabledCountries = (countries: Country[]): EnabledCountry[] => {
-    const out: EnabledCountry[] = []
+export const getEnabledCountries = (countries: Country[]): EnabledItem[] => {
+    const out: EnabledItem[] = []
 
     for (let i = 0; i < countries.length; i++) {
         const c = countries[i]

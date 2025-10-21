@@ -1,16 +1,14 @@
 "use client";
 
-import { ContinentCountry, ContinentWithCountries } from "@/lib/types";
+import { ContinentWithCountries } from "@/lib/types";
 import { useRouter } from "next/navigation";
-import { useContext, useEffect, useRef, useState, ChangeEventHandler } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { getMap } from "./map";
-import { DetailsTemplate, ListTemplate, PageTemplate } from "./template";
+import { DetailsTemplate, PageTemplate, SideMenu } from "./template";
 import { TextArea } from "../ui/xtexts";
-import Link from "next/link";
 import { StyleContext } from "@/components/countries/template";
 import { ContinentControls } from "./controls";
-import { sortNamePopulation } from "@/lib/utils";
-import { Checkbox } from "../ui/xcheckboxes";
+import { getSelectedItems, sortNamePopulation } from "@/lib/utils";
 
 export const ContinentDetail = (props: {
     continent: ContinentWithCountries,
@@ -25,6 +23,9 @@ export const ContinentDetail = (props: {
     const [substring, setSubstring] = useState("")
     const [sortBy, setSortBy] = useState<"name" | "population">("name")
     const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc")
+    const [selectedCountries, setSelectedCountries] = useState<string[]>(
+        getSelectedItems(props.continent.countries)
+    )
 
     useEffect(() => {
         if (map.current) return;
@@ -67,17 +68,18 @@ export const ContinentDetail = (props: {
                     />
                 }
                 leftArea={
-                    <CountryMenu
-                        title="Continents"
+                    <SideMenu
                         showCheckboxes={showEnabled.includes("ENABLED") && showEnabled.includes("DISABLED")}
-                        continent_id={props.continent.id}
-                        countries={props.continent.countries.sort(sortNamePopulation({ sortBy, sortOrder })).filter((country) => {
+                        child_id={props.continent.id}
+                        items={props.continent.countries.sort(sortNamePopulation({ sortBy, sortOrder })).filter((country) => {
                             return showEnabled.includes("ENABLED") && country.is_enabled === true ||
                                 showEnabled.includes("DISABLED") && country.is_enabled === false
                         })}
-                        headerClass={style["cities-header"]}
-                        itemClass={style["cities-item"]}
+                        selectedItems={selectedCountries}
+                        setSelectedItems={setSelectedCountries}
                         substring={substring}
+                        selectionURL='[continent]/[country]'
+                        selectionPath={[props.continent.id]}
                     />
                 }
                 mapArea={
@@ -107,59 +109,3 @@ export const ContinentDetail = (props: {
         </main>
     )
 }
-
-const CountryMenu = (props: {
-    showCheckboxes: boolean,
-    title: string,
-    continent_id: string,
-    countries: ContinentCountry[],
-    headerClass: string,
-    itemClass: string,
-    substring: string,
-}) => {
-    const style = useContext(StyleContext)
-    const countryList = props.countries?.filter(
-        e => e.name.toLowerCase()
-            .includes(props.substring.toLowerCase()))
-        .map(
-            (country, index) =>
-                <div key={index}>
-                    <span>{country.flag}</span>
-                    <Checkbox
-                        label={""}
-                        name={country.id}
-                        checked={country.is_enabled}
-                        boxClass=""
-                        labelClass=""
-                        showCheckbox={props.showCheckboxes}
-                        onChange={() => { }}
-                        ref={null}
-                    />
-                    <Link key={index}
-                        href={`/protected/geo/[continent]/[country]`}
-                        as={`/protected/geo/${props.continent_id}/${country.id}`}
-                        className={style[props.itemClass]}
-                    >
-                        {`${country.name} (${country.population || 'N/A'})`}
-                    </Link>
-
-                </div>
-        )
-    return (
-        <ListTemplate
-            columnWidths={[16]}
-            rowHeight={1.6}
-            totalRows={33}
-            listHeaders={
-                <div className={props.headerClass}>
-                    {props.title}
-                </div>
-            }
-            listItems={countryList}
-            className={props.itemClass}
-        />
-    )
-}
-
-
-

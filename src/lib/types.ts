@@ -29,6 +29,16 @@ export type ContinentWithCountries = {
     countries: ContinentCountry[],
 }
 
+export type ContinentCountryCity = {
+    id: string,
+    name: string,
+    name_ascii?: string,
+    population?: number,
+    flag?: string,
+    is_enabled?: boolean,
+    capital?: string,
+}
+
 export type ContinentCountry = {
     id: string,
     name: string,
@@ -75,7 +85,7 @@ export type CountryCities = {
     capital: string,
 }
 
-export type EnabledCountry = {
+export type EnabledItem = {
     id: string,
     is_enabled: boolean,
 }

@@ -4,8 +4,10 @@ import React, { useContext, ReactElement } from "react";
 //import { StyleContext } from "@/app/protected/geo/page";
 import { GridContainer, GridArea, em, emTotal } from "../ui/xgrid";
 import { FlexBox, FlexCell } from "../ui/xflex";
-import { StyleContextType } from "@/lib/types";
+import { ContinentCountryCity, StyleContextType } from "@/lib/types";
 import styles from '@/app/protected/geo/page.module.css'
+import { Checkbox } from "../ui/xcheckboxes";
+import Link from "next/link";
 
 export const StyleContext = React.createContext<StyleContextType>(styles);
 
@@ -105,9 +107,8 @@ export const ListTemplate = (props: {
     columnWidths: number[],
     rowHeight: number,
     totalRows: number,
-    listHeaders: ReactElement,
     listItems: ReactElement[],
-    className: string,
+    listItemClass: string,
 }) => {
     const style = useContext(StyleContext)
 
@@ -123,22 +124,6 @@ export const ListTemplate = (props: {
             justifyContent='flex-start'
             height={totalHeight}
         >
-            <FlexCell
-                flex=' 0 0 auto'
-                overflowX='hidden'
-                overflowY='scroll'
-            >
-                <GridContainer
-                    cols={colWidths}
-                    rows={rowheight}
-                    justifyContent='center'
-                    gap="0"
-                    flex="0 1 auto"
-                >
-                    {props.listHeaders}
-                </GridContainer>
-            </FlexCell>
-
             <FlexCell
                 flex=' 0 1 auto'
                 overflowX='hidden'
@@ -193,5 +178,61 @@ export const DetailsTemplateRow = (props: {
                 {props.value}
             </div>
         </>
+    )
+}
+
+const getSelectionValues = (item_ids: string[], item_id:string):string => {
+    return `${item_ids.join('/')}/${item_id}`
+}
+
+export const SideMenu = (props: {
+    showCheckboxes: boolean,
+    child_id: string,
+    flag?: string,
+    items: ContinentCountryCity[],
+    selectedItems: string[],
+    setSelectedItems: Function,
+    substring: string,
+    selectionURL: string,
+    selectionPath: string[],
+}) => {
+    const style = useContext(StyleContext)
+    const columnWidths = [16]
+    const rowHeight = 1.6
+    const totalRows = 33
+
+    const cityList = props.items?.filter(
+        e => e.name.toLowerCase()
+            .includes(props.substring.toLowerCase()))
+        .map(
+            (item, index) =>
+                <div key={index}>
+                    <span>{props.flag ? props.flag : item.flag}</span>
+                    <Checkbox
+                        name={item.id}
+                        checkedValues={props.selectedItems}
+                        setCheckedValues={props.setSelectedItems}
+                        showCheckbox={props.showCheckboxes}
+                        className={'continent-list'}
+                        ref={null}
+                    />
+                    <Link key={index}
+                        href={`/protected/geo/${props.selectionURL}`}
+                        as={`/protected/geo/${getSelectionValues(props.selectionPath, item.id)}`}
+                        className={'list-item'}
+                    >
+                        {item.name}
+                    </Link>
+
+                </div>
+        )
+    return (
+        <ListTemplate
+            columnWidths={columnWidths}
+            rowHeight={rowHeight}
+            totalRows={totalRows}
+            listItems={cityList}
+            listItemClass={style['props.listItemClass']}
+        />
     )
 }

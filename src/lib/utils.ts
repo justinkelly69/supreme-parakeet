@@ -1,8 +1,20 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { EnabledItem } from "./types";
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
+}
+
+export const getSelectedItems = (items: EnabledItem[]): string[] => {
+	const out: string[] = []
+
+	for (const item of items) {
+		if (item.is_enabled) {
+			out.push(item.id)
+		}
+	}
+	return out
 }
 
 export const sortNamePopulation = ({

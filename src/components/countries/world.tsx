@@ -3,12 +3,10 @@
 import { Continent } from "@/lib/types";
 import { useRouter } from "next/navigation";
 import { useContext, useEffect, useRef } from "react";
-import { StyleContext } from "@/components/countries/template";
-
+import { SideMenu, StyleContext } from "@/components/countries/template";
 import { getMap } from "./map";
-import { DetailsTemplate, ListTemplate, PageTemplate } from "./template";
+import { DetailsTemplate, PageTemplate } from "./template";
 import { TextArea } from "../ui/xtexts";
-import Link from "next/link";
 
 export const WorldDetail = (props: {
     continents: Continent[],
@@ -50,11 +48,15 @@ export const WorldDetail = (props: {
                     </>
                 }
                 leftArea={
-                    <ContinentsMenu
-                        title="Continents"
-                        continents={props.continents}
-                        headerClass={style["cities-header"]}
-                        itemClass={style["cities-item"]}
+                    <SideMenu
+                        showCheckboxes={false}
+                        child_id={''}
+                        items={props.continents}
+                        selectedItems={[]}
+                        setSelectedItems={(f: any) => f}
+                        substring={''}
+                        selectionURL='[continent]'
+                        selectionPath={[]}
                     />
                 }
                 mapArea={
@@ -84,38 +86,4 @@ export const WorldDetail = (props: {
         </main>
     )
 }
-
-const ContinentsMenu = (props: {
-    title: string,
-    continents: Continent[],
-    headerClass: string,
-    itemClass: string,
-}) => {
-    const style = useContext(StyleContext)
-    const continentList = props.continents?.map(
-        (continent, index) =>
-            <Link key={index}
-                href={`/protected/geo/[continent]`}
-                as={`/protected/geo/${continent.id}`}
-                className={style[props.itemClass]}
-            >
-                {continent.name}
-            </Link>
-    )
-    return (
-        <ListTemplate
-            columnWidths={[16]}
-            rowHeight={1.6}
-            totalRows={33}
-            listHeaders={
-                <div className={props.headerClass}>
-                    {props.title}
-                </div>
-            }
-            listItems={continentList}
-            className={props.itemClass} />
-    )
-}
-
-
 
