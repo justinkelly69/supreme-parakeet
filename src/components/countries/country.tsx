@@ -1,15 +1,16 @@
 "use client";
 
-import { Country, CountryCities } from "@/lib/types";
+import { Country, CountryCities, SortBy, SortOrder } from "@/lib/types";
 import { useRouter } from "next/navigation";
-import { ChangeEvent, ChangeEventHandler, useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { DetailsTemplate, ListTemplate, PageTemplate, SideMenu, StyleContext } from "./template";
 import { getMap } from "./map";
-import { CountryControls } from "./controls";
 import { TextArea } from "../ui/xtexts";
 import Link from "next/link";
-import { getSelectedItems, sortNamePopulation } from "@/lib/utils";
+import { getSelectedItems, sortCountries } from "@/lib/utils";
 import { Checkbox } from "../ui/xcheckboxes";
+import { setEnabledCities } from "@/lib/countries";
+import { TopBarControls } from "./controls";
 
 export const CountryDetail = (props: {
     country: Country,
@@ -61,29 +62,31 @@ export const CountryDetail = (props: {
                     </div>
                 }
                 controls={
-                    <CountryControls
+                    <TopBarControls
+                        sortBy={sortBy}
+                        sortOrder={sortOrder}
+                        showEnabled={showEnabled}
                         substring={substring}
+                        selectedItems={selectedCities}
+                        setSortBy={e => setSortBy(e.target.value as SortBy)}
+                        setSortOrder={e => setSortOrder(e.target.value as SortOrder)}
+                        setShowEnabled={setShowEnabled}
                         setSubstring={e => setSubstring(e.target.value)}
-                        handleEdit={(e: any) => e}
+                        setSelectedItems={setEnabledCities}
                         handleSave={(e: any) => e}
                         handleCancel={router.back}
-                        sortBy={sortBy}
-                        setSortBy={e => setSortBy(e.target.value as "name" | "population")}
-                        sortOrder={sortOrder}
-                        setSortOrder={e => setSortOrder(e.target.value as "asc" | "desc")}
-                        showEnabled={showEnabled}
-                        setShowEnabled={setShowEnabled as unknown as ChangeEventHandler<HTMLInputElement>}
                     />
                 }
                 leftArea={
                     <SideMenu
                         showCheckboxes={showEnabled.includes("ENABLED") && showEnabled.includes("DISABLED")}
-                        //parent_id={props.country.continent_id}
                         child_id={props.country.id}
                         flag={props.country.flag}
-                        items={props.country.cities.sort(sortNamePopulation({ sortBy, sortOrder })).filter((city) => {
-                            return showEnabled.includes("ENABLED") && city.is_enabled === true ||
-                                showEnabled.includes("DISABLED") && city.is_enabled === false
+                        items={sortCountries({
+                            items: props.country.cities,
+                            sortBy: sortBy,
+                            sortOrder: sortOrder,
+                            showEnabled: showEnabled
                         })}
                         selectedItems={selectedCities}
                         setSelectedItems={setSelectedCities}

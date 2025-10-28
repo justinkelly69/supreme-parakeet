@@ -209,6 +209,7 @@ export const SideMenu = (props: {
                 <div key={index}>
                     <span>{props.flag ? props.flag : item.flag}</span>
                     <Checkbox
+                        key={item.id}
                         name={item.id}
                         checkedValues={props.selectedItems}
                         setCheckedValues={props.setSelectedItems}

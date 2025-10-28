@@ -21,6 +21,52 @@ END;
 $$;
 
 -- Enable or disable a country
+DROP FUNCTION IF EXISTS     set_enabled_countries;
+CREATE OR REPLACE FUNCTION  set_enabled_countries(enabled_countries CHAR(2) ARRAY)
+RETURNS  VOID
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    enabled_country CHAR(2);
+BEGIN
+        UPDATE  world.enabled_countries 
+        SET     is_enabled = FALSE
+        WHERE   TRUE;
+
+    FOR enabled_country IN SELECT unnest(enabled_countries)
+    LOOP
+        UPDATE  world.enabled_countries 
+        SET     is_enabled = TRUE
+        WHERE   id         =  enabled_country;
+    END LOOP;
+
+END;
+$$;
+
+-- Enable or disable a city
+DROP FUNCTION IF EXISTS     set_enabled_cities;
+CREATE OR REPLACE FUNCTION  set_enabled_cities(enabled_cities VARCHAR(20) ARRAY)
+RETURNS  VOID
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    enabled_city VARCHAR(20);
+BEGIN
+        UPDATE  world.enabled_cities 
+        SET     is_enabled = FALSE
+        WHERE   TRUE;
+
+    FOR enabled_city IN SELECT unnest(enabled_cities)
+    LOOP
+        UPDATE  world.enabled_cities 
+        SET     is_enabled = TRUE
+        WHERE   id         =  enabled_city;
+    END LOOP;
+
+END;
+$$;
+
+-- Enable or disable a country
 DROP FUNCTION IF EXISTS     enable_disable_enabled_countries;
 CREATE OR REPLACE FUNCTION  enable_disable_enabled_countries(enabled_countries JSONB)
 RETURNS  VOID

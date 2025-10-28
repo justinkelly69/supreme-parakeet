@@ -1,11 +1,11 @@
 import * as React from "react"
 import { ChangeEventHandler, Ref } from "react"
 
-export type CheckBoxData = {
-    checked?: boolean,
-    name: string,
-    label: string,
-}
+// export type CheckBoxData = {
+//     checked?: boolean,
+//     name: string,
+//     label: string,
+// }
 
 export const Checkbox = (props: {
     name: string,
@@ -27,6 +27,7 @@ export const Checkbox = (props: {
                 else {
                     props.setCheckedValues(props.checkedValues.filter(e => e !== props.name))
                 }
+                console.log(props.checkedValues)
             }}
             ref={props.ref}
         /> : null

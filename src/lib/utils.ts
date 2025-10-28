@@ -1,6 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { EnabledItem } from "./types";
+import { City, ContinentCountry, ContinentWithCountries, Country, CountryCities, EnabledDisabled, EnabledItem, SortBy, SortOrder } from "./types";
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
@@ -14,30 +14,45 @@ export const getSelectedItems = (items: EnabledItem[]): string[] => {
 			out.push(item.id)
 		}
 	}
+	console.log(JSON.stringify(items, null, 4))
 	return out
 }
 
-export const sortNamePopulation = ({
-	sortBy, sortOrder: ascDesc
+export const sortCountries = ({
+	items, sortBy, sortOrder, showEnabled
 }: {
-	sortBy: "name" | "population",
-	sortOrder: "asc" | "desc"
+	items: ContinentCountry[] | CountryCities[],
+	sortBy: SortBy,
+	sortOrder: SortOrder,
+	showEnabled: string[]
+}) => {
+	return items.sort(sortNamePopulation({ sortBy, sortOrder })).filter((c) => {
+		return showEnabled.includes("ENABLED") && c.is_enabled === true ||
+			showEnabled.includes("DISABLED") && c.is_enabled === false
+	})
+}
+
+export const sortNamePopulation = ({
+	sortBy, sortOrder
+}: {
+	sortBy: SortBy,
+	sortOrder: SortOrder,
 }): ((a: { name: string }, b: { name: string }) => number) |
 	((a: { population: number }, b: { population: number }) => number) => {
 
 	if (sortBy === "name") {
 		return (a: { name: string }, b: { name: string }) => {
-			if (ascDesc === "asc") {
+			if (sortOrder === "asc") {
 				return a.name.localeCompare(b.name);
 			} else {
 				return b.name.localeCompare(a.name);
 			}
 		}
-	} 
-	
+	}
+
 	else {
 		return (a: { population: number }, b: { population: number }) => {
-			if (ascDesc === "asc") {
+			if (sortOrder === "asc") {
 				return a.population - b.population;
 			} else {
 				return b.population - a.population;

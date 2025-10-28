@@ -3,16 +3,25 @@ import { Country, EnabledItem } from './types';
 
 const supabase = createClient()
 
-
-
-export const updateSelectedCountries = async (countries: Country[]) => {
+export const setEnabledCountries = async (countryIds: string[]) => {
     try {
-        await supabase.rpc('update_selected_countries', {
-            selected_countries: getEnabledCountries(countries)
+        await supabase.rpc('set_enabled_countries', {
+            enabled_countries: countryIds
         })
     }
     catch (err) {
-        console.error('Failed to update countries:', err)
+        console.error('Failed to set enabled countries:', err)
+    }
+}
+
+export const setEnabledCities = async (cityIds: string[]) => {
+    try {
+        await supabase.rpc('set_enabled_cities', {
+            enabled_cities: cityIds
+        })
+    }
+    catch (err) {
+        console.error('Failed to set enabled cities:', err)
     }
 }
 

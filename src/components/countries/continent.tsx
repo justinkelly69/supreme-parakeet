@@ -1,14 +1,16 @@
 "use client";
 
-import { ContinentWithCountries } from "@/lib/types";
+import { ContinentWithCountries, SortBy, SortOrder } from "@/lib/types";
 import { useRouter } from "next/navigation";
 import { useContext, useEffect, useRef, useState } from "react";
 import { getMap } from "./map";
 import { DetailsTemplate, PageTemplate, SideMenu } from "./template";
 import { TextArea } from "../ui/xtexts";
 import { StyleContext } from "@/components/countries/template";
-import { ContinentControls } from "./controls";
-import { getSelectedItems, sortNamePopulation } from "@/lib/utils";
+import { getSelectedItems, sortCountries } from "@/lib/utils";
+import { setEnabledCountries } from "@/lib/countries";
+import { TopBarControls } from "./controls";
+
 
 export const ContinentDetail = (props: {
     continent: ContinentWithCountries,
@@ -54,15 +56,17 @@ export const ContinentDetail = (props: {
                     </div>
                 }
                 controls={
-                    <ContinentControls
+                    <TopBarControls
                         sortBy={sortBy}
-                        setSortBy={e => setSortBy(e.target.value as "name" | "population")}
                         sortOrder={sortOrder}
-                        setSortOrder={e => setSortOrder(e.target.value as "asc" | "desc")}
                         showEnabled={showEnabled}
-                        setShowEnabled={setShowEnabled}
                         substring={substring}
+                        selectedItems={selectedCountries}
+                        setSortBy={e => setSortBy(e.target.value as SortBy)}
+                        setSortOrder={e => setSortOrder(e.target.value as SortOrder)}
+                        setShowEnabled={setShowEnabled}
                         setSubstring={e => setSubstring(e.target.value)}
+                        setSelectedItems={setEnabledCountries}
                         handleSave={(e: any) => e}
                         handleCancel={router.back}
                     />
@@ -71,9 +75,11 @@ export const ContinentDetail = (props: {
                     <SideMenu
                         showCheckboxes={showEnabled.includes("ENABLED") && showEnabled.includes("DISABLED")}
                         child_id={props.continent.id}
-                        items={props.continent.countries.sort(sortNamePopulation({ sortBy, sortOrder })).filter((country) => {
-                            return showEnabled.includes("ENABLED") && country.is_enabled === true ||
-                                showEnabled.includes("DISABLED") && country.is_enabled === false
+                        items={sortCountries({
+                            items: props.continent.countries,
+                            sortBy: sortBy,
+                            sortOrder: sortOrder,
+                            showEnabled: showEnabled
                         })}
                         selectedItems={selectedCountries}
                         setSelectedItems={setSelectedCountries}
@@ -109,3 +115,4 @@ export const ContinentDetail = (props: {
         </main>
     )
 }
+
