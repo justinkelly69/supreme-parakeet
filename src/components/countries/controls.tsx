@@ -2,7 +2,7 @@
 
 import { StyleContext } from "@/components/countries/template";
 import { Button } from "@/components/ui/xbutton"
-import { ChangeEventHandler, useContext } from "react"
+import { ChangeEventHandler, Dispatch, SetStateAction, useContext } from "react"
 import { Checkbox } from "@/components/ui/xcheckboxes"
 import Select from "@/components/ui/xselect"
 import { Input } from "@/components/ui/xtexts";
@@ -54,7 +54,7 @@ export const TopBarControls = (props: {
     selectedItems: string[],
     setSortBy: ChangeEventHandler<HTMLSelectElement>,
     setSortOrder: ChangeEventHandler<HTMLSelectElement>,
-    setShowEnabled: ChangeEventHandler<HTMLInputElement>,
+    setShowEnabled: Dispatch<SetStateAction<string[]>>,
     setSubstring: ChangeEventHandler<HTMLInputElement>,
     setSelectedItems:Function,
     handleSave: Function,
