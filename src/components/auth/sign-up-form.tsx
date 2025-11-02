@@ -7,6 +7,8 @@ import { Label } from "@/components/ui/xlabel"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
+import styles from '@/app/auth/page.module.css'
+
 
 export function SignUpForm({
 	className,

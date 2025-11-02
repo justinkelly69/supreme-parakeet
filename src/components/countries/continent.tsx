@@ -1,6 +1,6 @@
 "use client";
 
-import { ContinentWithCountries, SortBy, SortOrder } from "@/lib/types";
+import { ContinentCountry, ContinentWithCountries, Country, SortBy, SortOrder } from "@/lib/types";
 import { useRouter } from "next/navigation";
 import { useContext, useEffect, useRef, useState } from "react";
 import { getMap } from "./map";
@@ -10,6 +10,36 @@ import { StyleContext } from "@/components/countries/template";
 import { getSelectedItems, sortCountries } from "@/lib/utils";
 import { setEnabledCountries } from "@/lib/countries";
 import { TopBarControls } from "./controls";
+
+type CountryStub = {
+    iso: string,
+    continent: string,
+    id: string,
+    name: string,
+}
+const getCountries = ({
+    continentId,
+    continentName,
+    prefixList,
+    countryList
+}: {
+    continentId: string,
+    continentName: string,
+    prefixList: string[],
+    countryList: ContinentCountry[]
+}): CountryStub[] => {
+    const countries = countryList.filter(e => prefixList.includes(e.id))
+    const out: CountryStub[] = []
+    for (const country of countries) {
+        out.push({
+            iso: continentId,
+            continent: continentName,
+            id: country.id,
+            name: country.name,
+        })
+    }
+    return out
+}
 
 
 export const ContinentDetail = (props: {
@@ -108,8 +138,18 @@ export const ContinentDetail = (props: {
                     />
                 }
                 rightArea={
-                    <DetailsTemplate rows={[
-                    ]} />
+                    <>
+                        <button onClick={e => console.log(JSON.stringify(getCountries({
+                            continentId: props.continent.id,
+                            continentName: props.continent.name,
+                            prefixList: selectedCountries,
+                            countryList: props.continent.countries
+                        }), null, 4))}>
+                            Get Countries
+                        </button>
+                        <DetailsTemplate rows={[
+                        ]} />
+                    </>
                 }
             />
         </main>

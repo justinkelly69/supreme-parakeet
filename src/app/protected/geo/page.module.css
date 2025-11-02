@@ -118,12 +118,23 @@ body {
     list-style-type: none;
 }
 
-.continent-list-item {
+.list-item {
     display: block;
     float: left;
     width: 8em;
     height: 2em;
     padding-top: .4em;
+
+}
+
+.list-item-name {
+    font-size: .8rem;
+    padding-left: .2em;
+}
+
+.list-item-population {
+    font-size: .6rem;
+    float: right;
 }
 
 .countries-main {

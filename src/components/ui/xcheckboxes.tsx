@@ -27,7 +27,6 @@ export const Checkbox = (props: {
                 else {
                     props.setCheckedValues(props.checkedValues.filter(e => e !== props.name))
                 }
-                console.log(props.checkedValues)
             }}
             ref={props.ref}
         /> : null

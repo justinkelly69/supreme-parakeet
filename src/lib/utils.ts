@@ -14,7 +14,6 @@ export const getSelectedItems = (items: EnabledItem[]): string[] => {
 			out.push(item.id)
 		}
 	}
-	console.log(JSON.stringify(items, null, 4))
 	return out
 }
 

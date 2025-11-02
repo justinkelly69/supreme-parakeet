@@ -4,11 +4,14 @@ import { Continent } from './types';
 const supabase = createClient()
 
 export const fetchWorld = async () => {
-    const { data, error } = await supabase
-        .schema('public')
-        .from('continent_details')
-        .select('id, name, description, longitude, latitude, zoom')
-        .order('name', { ascending: true })
+    // const { data, error } = await supabase
+    //     .schema('public')
+    //     .from('continent_details')
+    //     .select('id, name, description, longitude, latitude, zoom')
+    //     .order('name', { ascending: true })
+
+    const { data, error } = await supabase.rpc('get_world_continents')
+    
     if (error) {
         console.error('Error fetching continents:', error)
         return
@@ -19,7 +22,6 @@ export const fetchWorld = async () => {
 export const fetchContinent = async (
     continent: string,
 ) => {
-    console.log('Fetching continent:', continent)
     const { data, error } = await supabase.rpc(
         'get_continent_with_countries', { 'continent_id': continent }
     )

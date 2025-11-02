@@ -6,6 +6,8 @@ import { Input } from "@/components/ui/xtexts"
 import { Label } from "@/components/ui/xlabel"
 import Link from "next/link"
 import { useState } from "react"
+import styles from '@/app/auth/page.module.css'
+
 
 export function ForgotPasswordForm({
 	className,

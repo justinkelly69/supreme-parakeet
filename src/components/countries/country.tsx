@@ -12,6 +12,37 @@ import { Checkbox } from "../ui/xcheckboxes";
 import { setEnabledCities } from "@/lib/countries";
 import { TopBarControls } from "./controls";
 
+type CityStub = {
+    iso: string,
+    country: string,
+    id: string,
+    name: string,
+}
+
+const getCities = ({
+    countryId,
+    countryName,
+    prefixList,
+    cityList
+}: {
+    countryId: string,
+    countryName: string,
+    prefixList: string[],
+    cityList: CountryCities[]
+}): CityStub[] => {
+    const cities = cityList.filter(e => prefixList.includes(e.id))
+    const out = []
+    for (const city of cities) {
+        out.push({
+            iso: countryId,
+            country: countryName,
+            id: city.id,
+            name: city.name,
+        })
+    }
+    return out
+}
+
 export const CountryDetail = (props: {
     country: Country,
 }) => {
@@ -115,23 +146,33 @@ export const CountryDetail = (props: {
                     />
                 }
                 rightArea={
-                    <DetailsTemplate rows={[
-                        ["TLD", props.country.tld],
-                        ["Prefix", props.country.prefix],
-                        ["EU Member", props.country.is_eu ? 'Yes' : 'No'],
-                        ["UN Member", props.country.un_member ? 'Yes' : 'No'],
-                        ["Demonyn", props.country.demonym],
-                        ["Population", props.country.population],
-                        ["Density", props.country.density],
-                        ["Area", props.country.area],
-                        ["GDP", props.country.gdp],
-                        ["Median Age", props.country.median_age],
-                        ["Website", props.country.website],
-                        ["Driving Side", props.country.driving_side],
-                        ["Religion", props.country.religion],
-                        ["Latitude", props.country.latitude],
-                        ["Longitude", props.country.longitude],
-                    ]} />
+                    <>
+                        <button onClick={e => console.log(JSON.stringify(getCities({
+                            countryId: props.country.id,
+                            countryName: props.country.name,
+                            prefixList: selectedCities,
+                            cityList: props.country.cities
+                        }), null, 4))}>
+                            Get Countries
+                        </button>
+                        <DetailsTemplate rows={[
+                            ["TLD", props.country.tld],
+                            ["Prefix", props.country.prefix],
+                            ["EU Member", props.country.is_eu ? 'Yes' : 'No'],
+                            ["UN Member", props.country.un_member ? 'Yes' : 'No'],
+                            ["Demonyn", props.country.demonym],
+                            ["Population", props.country.population],
+                            ["Density", props.country.density],
+                            ["Area", props.country.area],
+                            ["GDP", props.country.gdp],
+                            ["Median Age", props.country.median_age],
+                            ["Website", props.country.website],
+                            ["Driving Side", props.country.driving_side],
+                            ["Religion", props.country.religion],
+                            ["Latitude", props.country.latitude],
+                            ["Longitude", props.country.longitude],
+                        ]} />
+                    </>
                 }
             />
         </main>

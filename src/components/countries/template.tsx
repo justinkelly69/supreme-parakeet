@@ -181,7 +181,7 @@ export const DetailsTemplateRow = (props: {
     )
 }
 
-const getSelectionValues = (item_ids: string[], item_id:string):string => {
+const getSelectionValues = (item_ids: string[], item_id: string): string => {
     return `${item_ids.join('/')}/${item_id}`
 }
 
@@ -222,7 +222,16 @@ export const SideMenu = (props: {
                         as={`/protected/geo/${getSelectionValues(props.selectionPath, item.id)}`}
                         className={'list-item'}
                     >
-                        {item.name}
+                        <span className={style['list-item-name']}>
+                            {item.name}
+                        </span>
+                        {item.population ?
+                            <span className={style['list-item-population']}>
+                                {`(${item.population})`}
+                            </span> :
+                            null
+                        }
+
                     </Link>
 
                 </div>

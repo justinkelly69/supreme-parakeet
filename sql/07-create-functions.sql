@@ -1,4 +1,7 @@
+-------------------------------------------------------------------------------
+-- CREATE FUNCTION update_enabled_countries
 -- Update the enabled_countries table with description, lat/long and zoom
+-------------------------------------------------------------------------------
 DROP FUNCTION IF EXISTS     update_enabled_countries;
 CREATE OR REPLACE FUNCTION  update_enabled_countries(enabled_countries JSONB)
 RETURNS     VOID
@@ -20,7 +23,11 @@ BEGIN
 END;
 $$;
 
+
+-------------------------------------------------------------------------------
+-- CREATE FUNCTION set_enabled_countries
 -- Enable or disable a country
+-------------------------------------------------------------------------------
 DROP FUNCTION IF EXISTS     set_enabled_countries;
 CREATE OR REPLACE FUNCTION  set_enabled_countries(enabled_countries CHAR(2) ARRAY)
 RETURNS     VOID
@@ -43,7 +50,10 @@ BEGIN
 END;
 $$;
 
+-------------------------------------------------------------------------------
+-- CREATE FUNCTION set_enabled_cities
 -- Enable or disable a city
+-------------------------------------------------------------------------------
 DROP FUNCTION IF EXISTS     set_enabled_cities;
 CREATE OR REPLACE FUNCTION  set_enabled_cities(enabled_cities VARCHAR(20) ARRAY)
 RETURNS     VOID
@@ -66,6 +76,65 @@ BEGIN
 END;
 $$;
 
+-------------------------------------------------------------------------------
+-- CREATE FUNCTION get_world_continents
+-------------------------------------------------------------------------------
+-- DROP FUNCTION IF EXISTS get_world_continentsy;
+-- CREATE OR REPLACE FUNCTION  get_world_continentsy(
+--     OUT "p_id"            CHAR(2),
+--     OUT "p_description"   VARCHAR(10000),
+--     OUT "p_longitude"     FLOAT,
+--     OUT "p_latitude"      FLOAT,
+--     OUT "p_zoom"          INTEGER
+-- )
+-- RETURNS     SETOF RECORD AS
+-- $$
+-- DECLARE
+--     DECLARE
+--     continent_cursor    CURSOR FOR
+--     SELECT
+--         "id",
+--         "name",
+--         "longitude",
+--         "latitude",
+--         "zoom",
+--         "description"
+--     FROM        "continent_details"
+--     -- WHERE       TRUE
+--     ORDER BY    "name"  ASC;
+--     continent_record    RECORD;
+-- BEGIN
+--     -- Open cursor
+--     OPEN continent_cursor;
+--     -- Fetch rows and return
+--     LOOP
+--         FETCH NEXT FROM continent_cursor INTO continent_record;
+--         EXIT WHEN NOT FOUND;
+--             "p_id"          = continent_record."id";
+--             "p_description" = continent_record."description";
+--             "p_longitude"   = continent_record."longitude";
+--             "p_latitude"    = continent_record."latitude";
+--             "p_zoom"        = continent_record."zoom";
+--         RETURN NEXT;
+--     END LOOP;
+--     -- Close cursor
+--     CLOSE continent_cursor;
+-- END;
+-- $$
+-- LANGUAGE    plpgsql;
+
+DROP FUNCTION IF EXISTS get_world_continents;
+CREATE OR REPLACE FUNCTION  get_world_continents()
+RETURNS setof continent_details 
+AS 
+$$
+    SELECT * FROM continent_details WHERE true;
+$$
+LANGUAGE sql;
+
+-------------------------------------------------------------------------------
+-- CREATE FUNCTION get_continent_with_countries
+-------------------------------------------------------------------------------
 DROP FUNCTION IF EXISTS     get_continent_with_countries;
 CREATE OR REPLACE FUNCTION  get_continent_with_countries(continent_id CHAR(2))  
 RETURNS     JSONB
@@ -103,6 +172,9 @@ BEGIN
 END;
 $$;
 
+-------------------------------------------------------------------------------
+-- CREATE FUNCTION get_country_with_cities
+-------------------------------------------------------------------------------
 DROP FUNCTION IF EXISTS     get_country_with_cities;
 CREATE OR REPLACE FUNCTION  get_country_with_cities(country_id CHAR(2))
 RETURNS     JSONB

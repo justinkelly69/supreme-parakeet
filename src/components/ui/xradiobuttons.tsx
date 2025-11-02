@@ -55,7 +55,6 @@ export const RadioButtons = (props: {
                     onChange={e => {
                         if (e.target.checked === true) {
                             props.setCheckedValue(option.value)
-                            //console.log(props.name, option.value)
                         }
                     }}
                     ref={props.ref}

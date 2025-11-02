@@ -6,6 +6,8 @@ import { Input } from "@/components/ui/xtexts"
 import { Label } from "@/components/ui/xlabel"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
+import styles from '@/app/auth/page.module.css'
+
 
 export function UpdatePasswordForm({
 	className,

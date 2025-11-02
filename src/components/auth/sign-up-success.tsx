@@ -1,3 +1,4 @@
+import styles from '@/app/auth/page.module.css'
 
 
 export const SignUpSuccess = () => {
@@ -10,7 +11,7 @@ export const SignUpSuccess = () => {
                 <div className="card-description">Check your email to confirm</div>
             </header>
             <section>
-                <p className="text-sm text-muted-foreground">
+                <p className="login-message">
                     You&apos;ve successfully signed up. Please check your email to
                     confirm your account before signing in.
                 </p>
