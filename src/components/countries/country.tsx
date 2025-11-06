@@ -17,6 +17,7 @@ type CityStub = {
     country: string,
     id: string,
     name: string,
+    description: string,
 }
 
 const getCities = ({
@@ -38,6 +39,7 @@ const getCities = ({
             country: countryName,
             id: city.id,
             name: city.name,
+            description: "",
         })
     }
     return out

@@ -16,6 +16,7 @@ type CountryStub = {
     continent: string,
     id: string,
     name: string,
+    description: string,
 }
 const getCountries = ({
     continentId,
@@ -36,6 +37,7 @@ const getCountries = ({
             continent: continentName,
             id: country.id,
             name: country.name,
+            description: ""
         })
     }
     return out

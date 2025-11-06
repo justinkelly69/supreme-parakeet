@@ -156,3 +156,56 @@ CREATE POLICY       "Users can enable/disable enabled_cities"
     WITH CHECK (
                     (SELECT true)
     );
+
+-------------------------------------------------------------------------------
+-- CREATE TABLE "world"."attractions"
+-------------------------------------------------------------------------------
+DROP TABLE IF EXISTS "world"."attractions";
+CREATE TABLE "world"."attractions" (
+    "id"                    SERIAL              PRIMARY KEY,
+    "city_id"               VARCHAR(20)         NOT NULL,
+    "title"                 VARCHAR(100)        NOT NULL,
+    "subtitle"              VARCHAR(200)        NOT NULL DEFAULT '',
+    "description"           VARCHAR(4000)       NOT NULL DEFAULT '',
+    "price"                 FLOAT               NOT NULL DEFAULT 0,
+    "category"              VARCHAR(100)        NOT NULL,
+    "address"               VARCHAR(200)        NOT NULL DEFAULT '',
+    "neighborhood"          VARCHAR(60)         NOT NULL DEFAULT '',
+    "street"                VARCHAR(60)         NOT NULL DEFAULT '',
+    "postcode"              VARCHAR(20)         NOT NULL DEFAULT '',
+    "state"                 VARCHAR(20)         NOT NULL DEFAULT '',
+    "city"                  VARCHAR(60)         NOT NULL DEFAULT '',
+    "country"               VARCHAR(50)         NOT NULL DEFAULT '',
+    "website"               VARCHAR(200)        NOT NULL DEFAULT '',
+    "phone"                 VARCHAR(20)         NOT NULL DEFAULT '',
+    "phoneUnformatted"      VARCHAR(20)         NOT NULL DEFAULT '',
+    "claimThisBusiness"     BOOLEAN             NOT NULL DEFAULT FALSE,
+    "latitude"              FLOAT               NOT NULL DEFAULT 0,
+    "longitude"             FLOAT               NOT NULL DEFAULT 0,
+    "located_in"            VARCHAR(200)        NOT NULL DEFAULT '',
+    "total_score"           FLOAT               NOT NULL DEFAULT 0,
+    "permanently_closed"    BOOLEAN             NOT NULL DEFAULT FALSE,
+    "temporarily_closed"    BOOLEAN             NOT NULL DEFAULT FALSE,
+    "place_id"              VARCHAR(100)        NOT NULL,
+    "categories"            JSONB               NOT NULL DEFAULT '{}',
+    "scrapedAt"             TIMESTAMPTZ         NOT NULL,
+    "openingHours"          JSONB               NOT NULL DEFAULT '{}',
+    "additional_info"       JSONB               NOT NULL DEFAULT '{}',
+    "imageUrl"              VARCHAR(1000)       NOT NULL DEFAULT ''
+);
+
+GRANT SELECT 
+    ON              "world"."attractions" 
+    TO              "public";
+
+ALTER TABLE         "world"."attractions" 
+    ENABLE          ROW LEVEL SECURITY;
+
+CREATE POLICY       "Users can read attractions"
+    ON              "world"."attractions"
+    AS              PERMISSIVE
+    FOR             SELECT
+    TO              "public"
+    USING (
+                    (select TRUE)   
+    );

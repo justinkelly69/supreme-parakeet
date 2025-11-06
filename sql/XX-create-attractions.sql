@@ -1,0 +1,172 @@
+DROP TABLE IF EXISTS world.attractions;
+CREATE TABLE world.attractions (
+    "id"                    SERIAL              PRIMARY KEY,
+    "city_id"               VARCHAR(20)         NOT NULL,
+    "title"                 VARCHAR(100)        NOT NULL,
+    "subtitle"              VARCHAR(200)        NOT NULL DEFAULT '',
+    "description"           VARCHAR(4000)       NOT NULL DEFAULT '',
+    "price"                 FLOAT               NOT NULL DEFAULT 0,
+    "category"              VARCHAR(100)        NOT NULL,
+    "address"               VARCHAR(200)        NOT NULL DEFAULT '',
+    "neighborhood"          VARCHAR(60)         NOT NULL DEFAULT '',
+    "street"                VARCHAR(60)         NOT NULL DEFAULT '',
+    "postcode"              VARCHAR(20)         NOT NULL DEFAULT '',
+    "state"                 VARCHAR(20)         NOT NULL DEFAULT '',
+    "city"                  VARCHAR(60)         NOT NULL DEFAULT '',
+    "country"               VARCHAR(50)         NOT NULL DEFAULT '',
+    "website"               VARCHAR(200)        NOT NULL DEFAULT '',
+    "phone"                 VARCHAR(20)         NOT NULL DEFAULT '',
+    "phoneUnformatted"      VARCHAR(20)         NOT NULL DEFAULT '',
+    "claimThisBusiness"     BOOLEAN             NOT NULL DEFAULT FALSE,
+    "latitude"              FLOAT               NOT NULL DEFAULT 0,
+    "longitude"             FLOAT               NOT NULL DEFAULT 0,
+    "located_in"            VARCHAR(200)        NOT NULL DEFAULT '',
+    "total_score"           FLOAT               NOT NULL DEFAULT 0,
+    "permanently_closed"    BOOLEAN             NOT NULL DEFAULT FALSE,
+    "temporarily_closed"    BOOLEAN             NOT NULL DEFAULT FALSE,
+    "place_id"              VARCHAR(100)        NOT NULL,
+    "categories"            JSONB               NOT NULL DEFAULT '{}',
+    "scrapedAt"             TIMESTAMPTZ         NOT NULL,
+    "openingHours"          JSONB               NOT NULL DEFAULT '{}',
+    "additional_info"       JSONB               NOT NULL DEFAULT '{}',
+    "imageUrl"              VARCHAR(1000)       NOT NULL DEFAULT ''
+);
+
+        -- "title": "Wawel Royal Castle-State Art Collection",
+        -- "subTitle": "Zamek Królewski na Wawelu – Państwowe Zbiory Sztuki",
+        -- "description": "Fortified hilltop castle, initiated in the 14th century & prettified in a variety of later styles.",
+        -- "price": null,
+        -- "categoryName": "Museum",
+        -- "address": "Wawel 5, 31-001 Kraków, Poland",
+        -- "neighborhood": "Stare Miasto",
+        -- "street": "Wawel 5",
+        -- "city": "Kraków",
+        -- "postalCode": "31-001",
+        -- "state": null,
+        -- "countryCode": "PL",
+        -- "website": "https://wawel.krakow.pl/",
+        -- "phone": "+48 12 422 51 55",
+        -- "phoneUnformatted": "+48124225155",
+        -- "claimThisBusiness": false,
+        -- "location": {
+        --     "lat": 50.0541115,
+        --     "lng": 19.935423
+        -- },
+        -- "locatedIn": "Wawel Royal Castle. Exhibition Center - Conference",
+        -- "totalScore": 4.7,
+        -- "permanentlyClosed": false,
+        -- "temporarilyClosed": false,
+        -- "placeId": "ChIJ9Rk2BW1bFkcRmKV_1sTfuaw",
+        -- "categories": [
+        --     "Museum",
+        --     "Castle",
+        --     "Tourist attraction"
+        -- ],
+        -- "fid": "0x47165b6d053619f5:0xacb9dfc4d67fa598",
+        -- "cid": "12446225081720350104",
+        -- "reviewsCount": 159921,
+        -- "imagesCount": 763429,
+        -- "imageCategories": [],
+        -- "scrapedAt": "2025-11-05T21:37:53.298Z",
+        -- "googleFoodUrl": null,
+        -- "hotelAds": [],
+        -- "openingHours": [
+        --     {
+        --         "day": "Monday",
+        --         "hours": "10 AM to 4 PM"
+        --     },
+        --     {
+        --         "day": "Tuesday",
+        --         "hours": "9 AM to 5 PM"
+        --     },
+        --     {
+        --         "day": "Wednesday",
+        --         "hours": "9 AM to 5 PM"
+        --     },
+        --     {
+        --         "day": "Thursday",
+        --         "hours": "9 AM to 5 PM"
+        --     },
+        --     {
+        --         "day": "Friday",
+        --         "hours": "9 AM to 5 PM"
+        --     },
+        --     {
+        --         "day": "Saturday",
+        --         "hours": "9 AM to 5 PM"
+        --     },
+        --     {
+        --         "day": "Sunday",
+        --         "hours": "9 AM to 5 PM"
+        --     }
+        -- ],
+        -- "peopleAlsoSearch": [],
+        -- "placesTags": [],
+        -- "reviewsTags": [],
+        -- "additionalInfo": {
+        --     "Service options": [
+        --         {
+        --             "Onsite services": true
+        --         }
+        --     ],
+        --     "Highlights": [
+        --         {
+        --             "Live performances": true
+        --         }
+        --     ],
+        --     "Accessibility": [
+        --         {
+        --             "Wheelchair accessible entrance": true
+        --         },
+        --         {
+        --             "Wheelchair accessible parking lot": true
+        --         },
+        --         {
+        --             "Wheelchair accessible restroom": true
+        --         },
+        --         {
+        --             "Wheelchair accessible seating": true
+        --         }
+        --     ],
+        --     "Amenities": [
+        --         {
+        --             "Restaurant": true
+        --         },
+        --         {
+        --             "Restroom": true
+        --         },
+        --         {
+        --             "Wi-Fi": true
+        --         },
+        --         {
+        --             "Free Wi-Fi": true
+        --         }
+        --     ],
+        --     "Crowd": [
+        --         {
+        --             "Family-friendly": true
+        --         }
+        --     ],
+        --     "Planning": [
+        --         {
+        --             "Getting tickets in advance recommended": true
+        --         }
+        --     ],
+        --     "Children": [
+        --         {
+        --             "Good for kids": true
+        --         },
+        --         {
+        --             "Has changing table(s)": true
+        --         }
+        --     ]
+        -- },
+        -- "gasPrices": [],
+        -- "url": "https://www.google.com/maps/search/?api=1&query=Wawel%20Royal%20Castle-State%20Art%20Collection&query_place_id=ChIJ9Rk2BW1bFkcRmKV_1sTfuaw",
+        -- "searchPageUrl": "https://www.google.com/maps/search/restaurant,%20castle,%20museum,%20statue/@50.0909433716009,19.79924561136801,13z?hl=en",
+        -- "searchString": "restaurant, castle, museum, statue",
+        -- "language": "en",
+        -- "rank": 1,
+        -- "isAdvertisement": false,
+        -- "imageUrl": "https://lh3.googleusercontent.com/gps-cs-s/AG0ilSwlx_SVDhCpMETYQYk2dXCp5lwEvvAyey-u-A71vdlv-w_HjY29Ic5wcn_Kb01-FdscTeQEjy18Gg5n75bz4fwF4aWrhV89PgWwWctMUGpbOOUq5C7KLhTlkjBj2Hd8Jhzljfk8Mcdfbd4-=w408-h612-k-no",
+        -- "kgmid": "/m/0cp08lw"
