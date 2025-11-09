@@ -178,8 +178,7 @@ CREATE TABLE "world"."attractions" (
     "country"               VARCHAR(50)         NOT NULL DEFAULT '',
     "website"               VARCHAR(200)        NOT NULL DEFAULT '',
     "phone"                 VARCHAR(20)         NOT NULL DEFAULT '',
-    "phoneUnformatted"      VARCHAR(20)         NOT NULL DEFAULT '',
-    "claimThisBusiness"     BOOLEAN             NOT NULL DEFAULT FALSE,
+    "phone_unformatted"     VARCHAR(20)         NOT NULL DEFAULT '',
     "latitude"              FLOAT               NOT NULL DEFAULT 0,
     "longitude"             FLOAT               NOT NULL DEFAULT 0,
     "located_in"            VARCHAR(200)        NOT NULL DEFAULT '',
@@ -188,10 +187,10 @@ CREATE TABLE "world"."attractions" (
     "temporarily_closed"    BOOLEAN             NOT NULL DEFAULT FALSE,
     "place_id"              VARCHAR(100)        NOT NULL,
     "categories"            JSONB               NOT NULL DEFAULT '{}',
-    "scrapedAt"             TIMESTAMPTZ         NOT NULL,
-    "openingHours"          JSONB               NOT NULL DEFAULT '{}',
+    "scraped_at"            TIMESTAMPTZ         NOT NULL,
+    "opening_hours"         JSONB               NOT NULL DEFAULT '{}',
     "additional_info"       JSONB               NOT NULL DEFAULT '{}',
-    "imageUrl"              VARCHAR(1000)       NOT NULL DEFAULT ''
+    "image_url"             VARCHAR(1000)       NOT NULL DEFAULT ''
 );
 
 GRANT SELECT 

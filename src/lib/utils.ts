@@ -17,7 +17,7 @@ export const getSelectedItems = (items: EnabledItem[]): string[] => {
 	return out
 }
 
-export const sortCountries = ({
+export const sortEnabledDisabled = ({
 	items, sortBy, sortOrder, showEnabled
 }: {
 	items: ContinentCountry[] | CountryCities[],

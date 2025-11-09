@@ -1,24 +1,26 @@
 "use client"
 
-import React, { use } from "react";
-//import { StyleContext } from "@/app/protected/geo/page";
+//import { fetchAttractions } from "@/lib/fetch-data";
+//import { CityDetail } from "@/components/countries/city";
+import { Suspense, use } from "react";
 
-const Page = ({
+export default async function Page({
     params,
 }: {
-    params: Promise<{ country: string, city: string, attraction: string }>
-}): React.JSX.Element | "Loading..." | null => {
+    params: { continent: string, country: string, city: string }
+}): Promise<React.JSX.Element> {
+    const { continent, country, city } = params
+    //const my_city = await fetchCity(city)
 
-
-    const { country: country, city: city, attraction: attraction } = use(params)
-
-
+    // if (!my_city) {
+    //     return (
+    //         <div>City not found</div>
+    //     )
+    // }
 
     return (
-
-        <h1>Welcome to {attraction} in {city} in {country}</h1>
-
+        <Suspense fallback={<div>Loading city data...</div>}>
+     {/*        <CityDetail city={my_city} /> */}
+        </Suspense>
     )
 }
-
-export default Page

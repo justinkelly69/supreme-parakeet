@@ -7,8 +7,8 @@ import { getMap } from "./map";
 import { DetailsTemplate, PageTemplate, SideMenu } from "./template";
 import { TextArea } from "../ui/xtexts";
 import { StyleContext } from "@/components/countries/template";
-import { getSelectedItems, sortCountries } from "@/lib/utils";
-import { setEnabledCountries } from "@/lib/countries";
+import { getSelectedItems, sortEnabledDisabled } from "@/lib/utils";
+import { setEnabledCountries } from "@/lib/fetch-data";
 import { TopBarControls } from "./controls";
 
 type CountryStub = {
@@ -18,6 +18,7 @@ type CountryStub = {
     name: string,
     description: string,
 }
+
 const getCountries = ({
     continentId,
     continentName,
@@ -29,6 +30,7 @@ const getCountries = ({
     prefixList: string[],
     countryList: ContinentCountry[]
 }): CountryStub[] => {
+
     const countries = countryList.filter(e => prefixList.includes(e.id))
     const out: CountryStub[] = []
     for (const country of countries) {
@@ -107,7 +109,7 @@ export const ContinentDetail = (props: {
                     <SideMenu
                         showCheckboxes={showEnabled.includes("ENABLED") && showEnabled.includes("DISABLED")}
                         child_id={props.continent.id}
-                        items={sortCountries({
+                        items={sortEnabledDisabled({
                             items: props.continent.countries,
                             sortBy: sortBy,
                             sortOrder: sortOrder,

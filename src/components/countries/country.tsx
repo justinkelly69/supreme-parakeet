@@ -7,9 +7,9 @@ import { DetailsTemplate, ListTemplate, PageTemplate, SideMenu, StyleContext } f
 import { getMap } from "./map";
 import { TextArea } from "../ui/xtexts";
 import Link from "next/link";
-import { getSelectedItems, sortCountries } from "@/lib/utils";
+import { getSelectedItems, sortEnabledDisabled } from "@/lib/utils";
 import { Checkbox } from "../ui/xcheckboxes";
-import { setEnabledCities } from "@/lib/countries";
+import { setEnabledCities } from "@/lib/fetch-data";
 import { TopBarControls } from "./controls";
 
 type CityStub = {
@@ -31,6 +31,7 @@ const getCities = ({
     prefixList: string[],
     cityList: CountryCities[]
 }): CityStub[] => {
+
     const cities = cityList.filter(e => prefixList.includes(e.id))
     const out = []
     for (const city of cities) {
@@ -115,7 +116,7 @@ export const CountryDetail = (props: {
                         showCheckboxes={showEnabled.includes("ENABLED") && showEnabled.includes("DISABLED")}
                         child_id={props.country.id}
                         flag={props.country.flag}
-                        items={sortCountries({
+                        items={sortEnabledDisabled({
                             items: props.country.cities,
                             sortBy: sortBy,
                             sortOrder: sortOrder,
@@ -179,52 +180,4 @@ export const CountryDetail = (props: {
             />
         </main>
     );
-}
-
-const CityNamesTable = (props: {
-    showCheckboxes: boolean,
-    continent_id: string,
-    country_id: string,
-    country_flag: string,
-    cities: CountryCities[],
-    selectedCities: string[],
-    setSelectedCities: Function,
-    substring: string,
-}) => {
-    const style = useContext(StyleContext)
-
-    const cityList = props.cities?.filter(
-        e => e.name.toLowerCase()
-            .includes(props.substring.toLowerCase()))
-        .map(
-            (city, index) =>
-                <div key={index}>
-                    <span>{props.country_flag}</span>
-                    <Checkbox
-                        name={city.id}
-                        checkedValues={props.selectedCities}
-                        setCheckedValues={props.setSelectedCities}
-                        showCheckbox={props.showCheckboxes}
-                        className={'continent-list'}
-                        ref={null}
-                    />
-                    <Link key={index}
-                        href={`/protected/geo/[continent]/[country]/[city]`}
-                        as={`/protected/geo/${props.continent_id}/${props.country_id}/${city.id}`}
-                        className={'list-item'}
-                    >
-                        {city.name}
-                    </Link>
-
-                </div>
-        )
-    return (
-        <ListTemplate
-            columnWidths={[16]}
-            rowHeight={1.6}
-            totalRows={33}
-            listItems={cityList}
-            listItemClass={style['props.listItemClass']}
-        />
-    )
 }

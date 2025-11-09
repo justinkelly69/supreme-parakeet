@@ -116,3 +116,47 @@ export type CityHeader = {
     capital: string,
     population: string,
 }
+
+export type CityAttraction = {
+    id: number,
+    cityId: string,
+    title: string,
+    subtitle: string,
+    latitude: number,
+    longitude: number,
+    imageUrl: string,
+}
+
+export type Attraction = {
+    id: number,
+    cityId: string,
+    title: string,
+    subtitle: string,
+    description: string,
+    price: number,
+    category: string,
+    address: string,
+    neighborhood: string,
+    street: string,
+    postcode: string,
+    state: string,
+    city: string,
+    country: string,
+    website: string,
+    phone: string,
+    phoneUnformatted: string,
+    claimThisBusiness: boolean,
+    latitude: number,
+    longitude: number,
+    locatedIn: string,
+    totalScore: number,
+    permanentlyClosed: boolean,
+    temporarilyClosed: boolean,
+    placeId: string,
+    categories: any,
+    scrapedAt: string,
+    openingHours: any,
+    additionalInfo: any,
+    imageUrl: string,
+}
+

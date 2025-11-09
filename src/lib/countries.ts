@@ -3,63 +3,43 @@ import { Country, EnabledItem } from './types';
 
 const supabase = createClient()
 
-export const setEnabledCountries = async (countryIds: string[]) => {
-    try {
-        await supabase.rpc('set_enabled_countries', {
-            enabled_countries: countryIds
-        })
-    }
-    catch (err) {
-        console.error('Failed to set enabled countries:', err)
-    }
-}
 
-export const setEnabledCities = async (cityIds: string[]) => {
-    try {
-        await supabase.rpc('set_enabled_cities', {
-            enabled_cities: cityIds
-        })
-    }
-    catch (err) {
-        console.error('Failed to set enabled cities:', err)
-    }
-}
 
-// Filter out the countries that have changed
-export const getEnabledCountries = (countries: Country[]): EnabledItem[] => {
-    const out: EnabledItem[] = []
+// // Filter out the countries that have changed
+// export const getEnabledCountries = (countries: Country[]): EnabledItem[] => {
+//     const out: EnabledItem[] = []
 
-    for (let i = 0; i < countries.length; i++) {
-        const c = countries[i]
-        if (c.is_enabled !== c.was_enabled) {
-            out.push({
-                id: c.id,
-                is_enabled: c.was_enabled
-            })
-        }
-    }
-    return out
-}
+//     for (let i = 0; i < countries.length; i++) {
+//         const c = countries[i]
+//         if (c.is_enabled !== c.was_enabled) {
+//             out.push({
+//                 id: c.id,
+//                 is_enabled: c.was_enabled
+//             })
+//         }
+//     }
+//     return out
+// }
 
 // Get selected countries and filter by enabled
-export const filterSelectedCountries = (
-    selectedContinentID: string,
-    countries: Country[],
-    showEnabled: string[],
-): Country[] => {
-    let selectedCountries: Country[] = []
-    const countriesByContinent = countries.filter((e => e.continent_id === selectedContinentID))
+// export const filterSelectedCountries = (
+//     selectedContinentID: string,
+//     countries: Country[],
+//     showEnabled: string[],
+// ): Country[] => {
+//     let selectedCountries: Country[] = []
+//     const countriesByContinent = countries.filter((e => e.continent_id === selectedContinentID))
 
-    for (const co of countriesByContinent) {
-        if (showEnabled.includes('ENABLED') && co.is_enabled === true) {
-            selectedCountries.push(co)
-        }
-        else if (showEnabled.includes('DISABLED') && co.is_enabled === false) {
-            selectedCountries.push(co)
-        }
-    }
-    return selectedCountries
-}
+//     for (const co of countriesByContinent) {
+//         if (showEnabled.includes('ENABLED') && co.is_enabled === true) {
+//             selectedCountries.push(co)
+//         }
+//         else if (showEnabled.includes('DISABLED') && co.is_enabled === false) {
+//             selectedCountries.push(co)
+//         }
+//     }
+//     return selectedCountries
+// }
 
 // update selected country 
 export const selectCountry = (
