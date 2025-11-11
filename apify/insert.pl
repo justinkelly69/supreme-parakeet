@@ -13,10 +13,8 @@ my @values;
 open(my $fh, "<", "$jsonFile") or die "Can't open < $jsonFile: $!";
     my $json = read_json($jsonFile);
 
-    #say Dumper($json);
     for my $place (@$json) {
         push(@values, insertPlace($place, 'IE-dublin'));
-        #say Dumper($place);
     }
 close($fh);
 
@@ -64,16 +62,13 @@ sub escape_quot {
 sub array_quot {
     my ($arr) = @_;
     my @out;
-#say("IN:", encode_json($arr));
     foreach $a (@{$arr}) {
-        #say("a=$a");
         push(@out, escape_quot($a))
     }
-    #say("OUT:", encode_json(\@out));
     return \@out;
 }
 
-sub info {
+sub processAdditional {
     my ($arr1) = @_;
     my %out;
 
@@ -81,19 +76,14 @@ sub info {
         my $k1 = escape_quot($key1);
         $out{$k1} = [];
         my $arr2 = $arr1->{$key1};
-        #say "OUT 1: $k1";
 
         for (my $i = 0; $i < @$arr2; $i++) {
-            #say "OUT 2: @$arr2";
             foreach my $key3 (keys %{$$arr2[$i]}) {
                 my $k3 = escape_quot($key3);
                 push(@{$out{$k1}}, $k3);
-                #say "OUT 3: $k1 -> $k3";
             }
         }
     }
-    #say 'out:' . Dumper(\%out);
-    #$Data::Dumper::Purity = 1;
 
     return \%out;
 }
@@ -138,7 +128,7 @@ sub insertPlace {
         'categories'            =>  encode_json(array_quot($place->{'categories'})),
         'scraped_at'            =>  $place->{'scrapedAt'},
         'opening_hours'         =>  encode_json($place->{'openingHours'}),
-        'additional_info'       =>  encode_json(info($place->{'additionalInfo'})),
+        'additional_info'       =>  encode_json(processAdditional($place->{'additionalInfo'})),
         'image_url'             =>  $place->{'imageUrl'}
     };
 

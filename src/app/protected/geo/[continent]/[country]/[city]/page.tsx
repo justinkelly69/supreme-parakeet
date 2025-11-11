@@ -8,7 +8,7 @@ export default async function Page({
 }: {
     params: { continent: string, country: string, city: string }
 }): Promise<React.JSX.Element> {
-    const { continent, country, city } = params
+    const { continent, country, city } = await params
     const my_city = await fetchCity(city)
 
     if (!my_city) {

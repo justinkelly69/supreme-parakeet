@@ -164,24 +164,24 @@ DROP TABLE IF EXISTS "world"."attractions";
 CREATE TABLE "world"."attractions" (
     "id"                    SERIAL              PRIMARY KEY,
     "city_id"               VARCHAR(20)         NOT NULL,
-    "title"                 VARCHAR(100)        NOT NULL,
-    "subtitle"              VARCHAR(1000)       NOT NULL DEFAULT '',
-    "description"           VARCHAR(4000)       NOT NULL DEFAULT '',
+    "title"                 TEXT                NOT NULL,
+    "subtitle"              TEXT                NOT NULL DEFAULT '',
+    "description"           TEXT                NOT NULL DEFAULT '',
     "price"                 FLOAT               NOT NULL DEFAULT 0,
-    "category_name"         VARCHAR(100)        NOT NULL,
-    "address"               VARCHAR(1000)       NOT NULL DEFAULT '',
-    "neighborhood"          VARCHAR(60)         NOT NULL DEFAULT '',
+    "category_name"         TEXT                NOT NULL,
+    "address"               TEXT                NOT NULL DEFAULT '',
+    "neighborhood"          TEXT                NOT NULL DEFAULT '',
     "street"                VARCHAR(60)         NOT NULL DEFAULT '',
     "postal_code"           VARCHAR(20)         NOT NULL DEFAULT '',
     "state"                 VARCHAR(20)         NOT NULL DEFAULT '',
     "city"                  VARCHAR(60)         NOT NULL DEFAULT '',
     "country"               VARCHAR(50)         NOT NULL DEFAULT '',
-    "website"               VARCHAR(1000)       NOT NULL DEFAULT '',
+    "website"               TEXT                NOT NULL DEFAULT '',
     "phone"                 VARCHAR(20)         NOT NULL DEFAULT '',
     "phone_unformatted"     VARCHAR(20)         NOT NULL DEFAULT '',
     "latitude"              FLOAT               NOT NULL DEFAULT 0,
     "longitude"             FLOAT               NOT NULL DEFAULT 0,
-    "located_in"            VARCHAR(1000)       NOT NULL DEFAULT '',
+    "located_in"            TEXT                NOT NULL DEFAULT '',
     "total_score"           FLOAT               NOT NULL DEFAULT 0,
     "permanently_closed"    BOOLEAN             NOT NULL DEFAULT FALSE,
     "temporarily_closed"    BOOLEAN             NOT NULL DEFAULT FALSE,
@@ -190,7 +190,7 @@ CREATE TABLE "world"."attractions" (
     "scraped_at"            TIMESTAMPTZ         NOT NULL,
     "opening_hours"         JSONB               NOT NULL DEFAULT '{}',
     "additional_info"       JSONB               NOT NULL DEFAULT '{}',
-    "image_url"             VARCHAR(1000)       NOT NULL DEFAULT ''
+    "image_url"             TEXT                NOT NULL DEFAULT ''
 );
 
 GRANT SELECT 

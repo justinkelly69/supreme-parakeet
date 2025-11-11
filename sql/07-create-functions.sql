@@ -79,50 +79,6 @@ $$;
 -------------------------------------------------------------------------------
 -- CREATE FUNCTION get_world_continents
 -------------------------------------------------------------------------------
--- DROP FUNCTION IF EXISTS get_world_continentsy;
--- CREATE OR REPLACE FUNCTION  get_world_continentsy(
---     OUT "p_id"            CHAR(2),
---     OUT "p_description"   VARCHAR(10000),
---     OUT "p_longitude"     FLOAT,
---     OUT "p_latitude"      FLOAT,
---     OUT "p_zoom"          INTEGER
--- )
--- RETURNS     SETOF RECORD AS
--- $$
--- DECLARE
---     DECLARE
---     continent_cursor    CURSOR FOR
---     SELECT
---         "id",
---         "name",
---         "longitude",
---         "latitude",
---         "zoom",
---         "description"
---     FROM        "continent_details"
---     -- WHERE       TRUE
---     ORDER BY    "name"  ASC;
---     continent_record    RECORD;
--- BEGIN
---     -- Open cursor
---     OPEN continent_cursor;
---     -- Fetch rows and return
---     LOOP
---         FETCH NEXT FROM continent_cursor INTO continent_record;
---         EXIT WHEN NOT FOUND;
---             "p_id"          = continent_record."id";
---             "p_description" = continent_record."description";
---             "p_longitude"   = continent_record."longitude";
---             "p_latitude"    = continent_record."latitude";
---             "p_zoom"        = continent_record."zoom";
---         RETURN NEXT;
---     END LOOP;
---     -- Close cursor
---     CLOSE continent_cursor;
--- END;
--- $$
--- LANGUAGE    plpgsql;
-
 DROP FUNCTION IF EXISTS get_world_continents;
 CREATE OR REPLACE FUNCTION  get_world_continents()
 RETURNS setof continent_details 
@@ -226,6 +182,76 @@ BEGIN
     INTO    result
     FROM    country_details cd
     WHERE   cd.id = country_id;
+    
+    RETURN  result;
+END;
+$$;
+
+-------------------------------------------------------------------------------
+-- CREATE FUNCTION get_city_with_attractions
+-------------------------------------------------------------------------------
+DROP FUNCTION IF EXISTS     get_city_with_attractions;
+CREATE OR REPLACE FUNCTION  get_city_with_attractions(city_id VARCHAR(20))
+RETURNS     JSONB
+LANGUAGE    plpgsql
+AS $$
+DECLARE
+    result  JSONB;
+BEGIN
+    SELECT jsonb_build_object(
+        'id'            , ci."id",
+        'name'          , ci."name",
+        'name_ascii'    , ci."name_ascii",
+        'latitude'      , ci."latitude",
+        'longitude'     , ci."longitude",
+        'country'       , ci."country",
+        'country_id'    , ci."country_id",
+        'iso2'          , ci."iso2",
+        'iso3'          , ci."iso3",
+        'admin_name'    , ci."admin_name",
+        'capital'       , ci."capital",
+        'population'    , ci."population",
+        'attractions'   , (
+            SELECT jsonb_agg(
+                jsonb_build_object(
+                    'id'                    , ca."id",
+                    'city_id'              ,  ca."city_id",
+                    'title'                 , ca."title",
+                    'subtitle'              , ca."subtitle",
+                    'description'           , ca."description",
+                    'price'                 , ca."price",
+                    'category_name'         , ca."category_name",
+                    'address'               , ca."address",
+                    'neighborhood'          , ca."neighborhood",
+                    'street'                , ca."street",
+                    'postal_code'           , ca."postal_code",
+                    'state'                 , ca."state",
+                    'city'                  , ca."city",
+                    'country'               , ca."country",
+                    'website'               , ca."website",
+                    'phone'                 , ca."phone",
+                    'phone_unformatted'     , ca."phone_unformatted",
+                    'latitude'              , ca."latitude",
+                    'longitude'             , ca."longitude",
+                    'located_in'            , ca."located_in",
+                    'total_score'           , ca."total_score",
+                    'permanently_closed'    , ca."permanently_closed",
+                    'temporarily_closed'    , ca."temporarily_closed",
+                    'place_id'              , ca."place_id",
+                    'categories'            , ca."categories",
+                    'scraped_at'            , ca."scraped_at",
+                    'opening_hours'         , ca."opening_hours",
+                    'additional_info'       , ca."additional_info",
+                    'image_url'             , ca."image_url"
+                )
+            )
+            FROM    world.attractions ca
+            WHERE   ca.city_id = ci.id
+        )
+    )
+    INTO    result
+    FROM    city_details ci
+    WHERE   ci.id = city_id;
     
     RETURN  result;
 END;

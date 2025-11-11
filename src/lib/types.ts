@@ -108,6 +108,7 @@ export type City = {
     longitude: number,
     zoom: number,
     description: string,
+    attractions: Attraction[]
 }
 
 export type CityHeader = {
