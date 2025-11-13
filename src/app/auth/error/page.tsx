@@ -1,4 +1,3 @@
-import styles from '@/app/auth/page.module.css'
 
 export default async function Page({
 	searchParams,

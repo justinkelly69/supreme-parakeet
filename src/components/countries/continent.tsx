@@ -1,6 +1,6 @@
 "use client";
 
-import { ContinentCountry, ContinentWithCountries, Country, SortBy, SortOrder } from "@/lib/types";
+import { ContinentCountry, ContinentWithCountries, SortBy, SortOrder } from "@/lib/types";
 import { useRouter } from "next/navigation";
 import { useContext, useEffect, useRef, useState } from "react";
 import { getMap } from "./map";
@@ -49,7 +49,7 @@ const getCountries = ({
 export const ContinentDetail = (props: {
     continent: ContinentWithCountries,
 }) => {
-    const mapContainer = useRef<any>(null);
+    const mapContainer = useRef(null);
     const map = useRef<mapboxgl.Map | null>(null);
 
     const style = useContext(StyleContext)
@@ -101,7 +101,7 @@ export const ContinentDetail = (props: {
                         setShowEnabled={setShowEnabled}
                         setSubstring={e => setSubstring(e.target.value)}
                         setSelectedItems={setEnabledCountries}
-                        handleSave={(e: any) => e}
+                        handleSave={() => null}
                         handleCancel={router.back}
                     />
                 }

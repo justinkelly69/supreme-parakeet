@@ -10,9 +10,9 @@ import { SortBy, SortOrder } from "@/lib/types";
 import { useRouter } from "next/navigation";
 
 export const CityControls = (props: {
-    selectCity: Function,
-    scrapeData: Function,
-    handleCancel: Function,
+    selectCity: () => null,
+    scrapeData: () => null,
+    handleCancel: () => null,
 }) => {
     const style = useContext(StyleContext)
 
@@ -20,7 +20,7 @@ export const CityControls = (props: {
         <ul className={style["top-menu-list"]}>
             <li className={style["top-menu-item"]}>
                 <Button
-                    onClick={e => props.selectCity()}
+                    onClick={_e => props.selectCity()}
                     className={style["country-edit-button"]}
                     children={"Enable"}
                     ref={null}
@@ -28,7 +28,7 @@ export const CityControls = (props: {
             </li>
             <li className={style["top-menu-item"]}>
                 <Button
-                    onClick={e => props.scrapeData()}
+                    onClick={_e => props.scrapeData()}
                     className={style["country-edit-button"]}
                     children="Save"
                     ref={null}
@@ -36,7 +36,7 @@ export const CityControls = (props: {
             </li>
             <li className={style["top-menu-item"]}>
                 <Button
-                    onClick={e => props.handleCancel()}
+                    onClick={_e => props.handleCancel()}
                     className={style["country-edit-button"]}
                     children="Cancel"
                     ref={null}
@@ -66,7 +66,7 @@ export const TopBarControls = (props: {
         <ul className={style["top-menu-list"]}>
             <li className={style["top-menu-item"]}>
                 <Button
-                    onClick={async e => {
+                    onClick={async _e => {
                         await props.setSelectedItems(props.selectedItems)
                         router.refresh()
                     }}
@@ -131,7 +131,7 @@ export const TopBarControls = (props: {
             </li>
             <li className={style["top-menu-item"]}>
                 <Button
-                    onClick={e => props.handleSave()}
+                    onClick={_e => props.handleSave()}
                     className={style["country-edit-button"]}
                     children="Save"
                     ref={null}
@@ -139,7 +139,7 @@ export const TopBarControls = (props: {
             </li>
             <li className={style["top-menu-item"]}>
                 <Button
-                    onClick={e => props.handleCancel()}
+                    onClick={_e => props.handleCancel()}
                     className={style["country-edit-button"]}
                     children="Cancel"
                     ref={null}

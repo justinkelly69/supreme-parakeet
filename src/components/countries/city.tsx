@@ -16,7 +16,7 @@ export const CityDetail = (props: {
 }) => {
     const router = useRouter()
 
-    const mapContainer = React.useRef<any>(null);
+    const mapContainer = React.useRef(null);
     const map = React.useRef<mapboxgl.Map | null>(null);
 
     const [longitude, setLongitude] = React.useState(props.city.longitude);
@@ -53,8 +53,8 @@ export const CityDetail = (props: {
                 }
                 controls={
                     <CityControls
-                        selectCity={(e: any) => e}
-                        scrapeData={async (e: any) => {
+                        selectCity={() => null}
+                        scrapeData={async () => {
                             await fetchAttractions({
                                 locationQuery: 'dublin, ie',
                                 searchStringArray: ['theaters', 'museums']
