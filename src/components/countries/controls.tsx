@@ -10,8 +10,8 @@ import { SortBy, SortOrder } from "@/lib/types";
 import { useRouter } from "next/navigation";
 
 export const CityControls = (props: {
-    handleEdit: Function,
-    handleSave: Function,
+    selectCity: Function,
+    scrapeData: Function,
     handleCancel: Function,
 }) => {
     const style = useContext(StyleContext)
@@ -20,7 +20,7 @@ export const CityControls = (props: {
         <ul className={style["top-menu-list"]}>
             <li className={style["top-menu-item"]}>
                 <Button
-                    onClick={e => props.handleEdit()}
+                    onClick={e => props.selectCity()}
                     className={style["country-edit-button"]}
                     children={"Enable"}
                     ref={null}
@@ -28,7 +28,7 @@ export const CityControls = (props: {
             </li>
             <li className={style["top-menu-item"]}>
                 <Button
-                    onClick={e => props.handleSave()}
+                    onClick={e => props.scrapeData()}
                     className={style["country-edit-button"]}
                     children="Save"
                     ref={null}

@@ -16,29 +16,33 @@ export const fetchAttractions = async ({
     })
 
     const actorRun = await client.actor('compass/crawler-google-places').call({
-        queries: {
-            "allPlacesNoSearchAction": "all_places_no_search_ocr",
-            "includeWebResults": false,
-            "language": "en",
-            "locationQuery": locationQuery,
-            "maxCrawledPlacesPerSearch": 100,
-            "maxImages": 10,
-            "maximumLeadsEnrichmentRecords": 10,
-            "scrapeContacts": false,
-            "scrapeDirectories": false,
-            "scrapeImageAuthors": false,
-            "scrapePlaceDetailPage": false,
-            "scrapeReviewsPersonalData": true,
-            "scrapeTableReservationProvider": false,
-            "searchStringsArray": searchStringArray,
-            "skipClosedPlaces": false
-        }
+        // queries: {
+        //     "allPlacesNoSearchAction": "all_places_no_search_ocr",
+        //     "includeWebResults": true,
+        //     "language": "en",
+        //     "locationQuery": locationQuery,
+        //     "maxCrawledPlacesPerSearch": 10,
+        //     "maxImages": 10,
+        //     "maximumLeadsEnrichmentRecords": 10,
+        //     "scrapeContacts": false,
+        //     "scrapeDirectories": false,
+        //     "scrapeImageAuthors": true,
+        //     "scrapePlaceDetailPage": true,
+        //     "scrapeReviewsPersonalData": true,
+        //     "scrapeTableReservationProvider": false,
+        //     "searchStringsArray": searchStringArray,
+        //     "skipClosedPlaces": false
+        // }
     })
 
-    const { items } = await client.dataset(actorRun.defaultDatasetId).listItems();
-    console.log(JSON.stringify(items, null, 4))
-
-    return items
+    try {
+        const { items } = await client.dataset(actorRun.defaultDatasetId).listItems();
+        console.log(JSON.stringify(items, null, 4))
+        return items
+    }
+    catch (e: any) {
+        console.error(e)
+    }
 }
 
 type OpeningHour = {
@@ -54,7 +58,7 @@ type AdditionalInfoItem = {
     [name: string]: boolean
 }
 
-type Attraction = {
+type GoogleAttraction = {
     title: string,
     subTitle: string,
     description?: string,
@@ -102,37 +106,43 @@ type Attraction = {
     kgmid?: string
 }
 
-// "additionalInfo": {
-//       "Service options": [
-//         {
-//           "Onsite services": true
-//         }
-//       ],
-//       "Highlights": [
-//         {
-//           "Picnics": true
-//         }
-//       ],
+// {
+//    k1  "Service options": [ 
+//      {
+//          "Onsite services": true
+//      } ,
+//      "Highlights": 
+//      {
+//          "Picnics": true
+//      }
+//      ]
+// }
+
+// {
+//     "Service options": [
+//         "Onsite services"
+//     ],
+//     "Highlights": [
+//         "Picnics"
+//     ]
+// }
 
 const processAttraction = ({
     attraction
-}:{
+}: {
     attraction: AdditionalInfo
 }) => {
-    const out :{
-        [name: string]:string[]
+    const out: {
+        [name: string]: string[]
     } = {}
 
     for (const key1 of Object.keys(attraction)) {
         const k1 = escapeApos(key1)
-        const k2:string[] = []
+        out[k1] = []
 
-        
+        for (const k2 of attraction[k1]) {
 
-
-
-
-        out[k1] = k2
+        }
 
     }
 
@@ -144,9 +154,9 @@ const escapeApos = (str: string) => {
 }
 
 const escapeArray = (arr: string[]) => {
-    let out:string[] = []
+    let out: string[] = []
 
-    for(const s of arr) {
+    for (const s of arr) {
         out.push(escapeApos(s))
     }
     return out
