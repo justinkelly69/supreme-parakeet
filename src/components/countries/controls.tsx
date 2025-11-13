@@ -10,9 +10,9 @@ import { SortBy, SortOrder } from "@/lib/types";
 import { useRouter } from "next/navigation";
 
 export const CityControls = (props: {
-    selectCity: () => null,
-    scrapeData: () => null,
-    handleCancel: () => null,
+    selectCity: () => void,
+    scrapeData: () => void,
+    handleCancel: () => void,
 }) => {
     const style = useContext(StyleContext)
 
