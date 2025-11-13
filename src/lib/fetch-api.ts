@@ -154,7 +154,7 @@ const escapeApos = (str: string) => {
 }
 
 const escapeArray = (arr: string[]) => {
-    let out: string[] = []
+    const out: string[] = []
 
     for (const s of arr) {
         out.push(escapeApos(s))

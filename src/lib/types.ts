@@ -16,7 +16,7 @@ export type Continent = {
 }
 
 export type ContinentCountries = {
-    continent_id: any;
+    continent_id: string;
     id: string,
     name: string,
 }
@@ -128,6 +128,19 @@ export type CityAttraction = {
     imageUrl: string,
 }
 
+type OpeningHour = {
+    "day": string,
+    "hours": string
+}
+
+type AdditionalInfo = {
+    [name: string]: AdditionalInfoItem[]
+}
+
+type AdditionalInfoItem = {
+    [name: string]: boolean
+}
+
 export type Attraction = {
     id: number,
     cityId: string,
@@ -154,10 +167,10 @@ export type Attraction = {
     permanentlyClosed: boolean,
     temporarilyClosed: boolean,
     placeId: string,
-    categories: any,
+    categories: string[],
     scrapedAt: string,
-    openingHours: any,
-    additionalInfo: any,
+    openingHours: OpeningHour[],
+    additionalInfo: AdditionalInfo[],
     imageUrl: string,
 }
 

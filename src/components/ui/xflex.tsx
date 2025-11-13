@@ -1,3 +1,5 @@
+import { ReactElement } from "react"
+
 export type FlexDirection = "row" | "row-reverse" | "column" | "column-reverse"
 export type AlignItems = "stretch" | "flex-start" | "flex-end" | "start" | "end" |
     "center" | "baseline" | "last-baseline"
@@ -10,7 +12,7 @@ export const FlexBox = (props: {
     alignItems: AlignItems,
     justifyContent: JustifyContent,
     height: string,
-    children: any,
+    children: ReactElement[],
 }) => {
     return (
         <div style={{
@@ -30,7 +32,7 @@ export const FlexCell = (props: {
     overflowX: Overflow,
     overflowY: Overflow,
     className?: string,
-    children: any,
+    children: ReactElement[],
 }) => {
     return (
         <div

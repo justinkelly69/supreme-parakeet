@@ -38,7 +38,7 @@ export const RadioButtons = (props: {
     labelClass?: string,
     radioButtonsData: RadioButtonData[],
     checkedValue: string,
-    setCheckedValue: Function,
+    setCheckedValue: (val: string) => void,
     ref: Ref<HTMLInputElement>
 
 }) => {

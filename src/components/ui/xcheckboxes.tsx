@@ -10,7 +10,7 @@ import { ChangeEventHandler, Ref } from "react"
 export const Checkbox = (props: {
     name: string,
     checkedValues: string[],
-    setCheckedValues: Function,
+    setCheckedValues: (names: string[]) => void,
     showCheckbox: boolean,
     className?: string,
     ref: Ref<HTMLInputElement>
