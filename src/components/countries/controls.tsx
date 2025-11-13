@@ -22,25 +22,28 @@ export const CityControls = (props: {
                 <Button
                     onClick={_e => props.selectCity()}
                     className={style["country-edit-button"]}
-                    children={"Enable"}
                     ref={null}
-                />
+                >
+                    Enable
+                </Button>
             </li>
             <li className={style["top-menu-item"]}>
                 <Button
                     onClick={_e => props.scrapeData()}
                     className={style["country-edit-button"]}
-                    children="Save"
                     ref={null}
-                />
+                >
+                    Save
+                </Button>
             </li>
             <li className={style["top-menu-item"]}>
                 <Button
                     onClick={_e => props.handleCancel()}
                     className={style["country-edit-button"]}
-                    children="Cancel"
                     ref={null}
-                />
+                >
+                    Cancel
+                </Button>
             </li>
         </ul>
     )
@@ -56,7 +59,7 @@ export const TopBarControls = (props: {
     setSortOrder: ChangeEventHandler<HTMLSelectElement>,
     setShowEnabled: Dispatch<SetStateAction<string[]>>,
     setSubstring: ChangeEventHandler<HTMLInputElement>,
-    setSelectedItems:Function,
+    setSelectedItems: Function,
     handleSave: Function,
     handleCancel: Function,
 }) => {
@@ -71,9 +74,10 @@ export const TopBarControls = (props: {
                         router.refresh()
                     }}
                     className={style["country-edit-button"]}
-                    children="Update Selection"
                     ref={null}
-                />
+                >
+                    Update Selection
+                </Button>
             </li>
             <li className={style["top-menu-item"]}>
                 <Select
@@ -133,17 +137,20 @@ export const TopBarControls = (props: {
                 <Button
                     onClick={_e => props.handleSave()}
                     className={style["country-edit-button"]}
-                    children="Save"
                     ref={null}
-                />
+                >
+                    Save
+                </Button>
             </li>
             <li className={style["top-menu-item"]}>
                 <Button
                     onClick={_e => props.handleCancel()}
                     className={style["country-edit-button"]}
-                    children="Cancel"
+
                     ref={null}
-                />
+                >
+                    Cancel
+                </Button>
             </li>
         </ul>
     )
