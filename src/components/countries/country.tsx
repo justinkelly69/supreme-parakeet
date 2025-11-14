@@ -2,7 +2,7 @@
 
 import { Country, CountryCities, SortBy, SortOrder } from "@/lib/types";
 import { useRouter } from "next/navigation";
-import { useContext, useEffect, useRef, useState } from "react";
+import { ChangeEventHandler, useContext, useEffect, useRef, useState } from "react";
 import { DetailsTemplate, ListTemplate, PageTemplate, SideMenu, StyleContext } from "./template";
 import { getMap } from "./map";
 import { TextArea } from "../ui/xtexts";
@@ -52,7 +52,7 @@ export const CountryDetail = (props: {
 
     const router = useRouter()
 
-    const mapContainer = useRef<any>(null);
+    const mapContainer = useRef(null);
     const map = useRef<mapboxgl.Map | null>(null);
 
     const [longitude, setLongitude] = useState(props.country.longitude);
@@ -107,7 +107,6 @@ export const CountryDetail = (props: {
                         setShowEnabled={setShowEnabled}
                         setSubstring={e => setSubstring(e.target.value)}
                         setSelectedItems={setEnabledCities}
-                        handleSave={(e: any) => e}
                         handleCancel={router.back}
                     />
                 }
@@ -123,7 +122,7 @@ export const CountryDetail = (props: {
                             showEnabled: showEnabled
                         })}
                         selectedItems={selectedCities}
-                        setSelectedItems={setSelectedCities}
+                        setSelectedItems={setSelectedCities as unknown as () => void}
                         substring={substring}
                         selectionURL='[continent]/[country]/[city]'
                         selectionPath={[props.country.continent_id, props.country.id]}

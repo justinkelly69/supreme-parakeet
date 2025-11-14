@@ -12,7 +12,7 @@ export const FlexBox = (props: {
     alignItems: AlignItems,
     justifyContent: JustifyContent,
     height: string,
-    children: ReactElement[],
+    children: ReactElement[] | ReactElement,
 }) => {
     return (
         <div style={{
@@ -32,7 +32,7 @@ export const FlexCell = (props: {
     overflowX: Overflow,
     overflowY: Overflow,
     className?: string,
-    children: ReactElement[],
+    children: ReactElement[] | ReactElement,
 }) => {
     return (
         <div

@@ -101,7 +101,6 @@ export const ContinentDetail = (props: {
                         setShowEnabled={setShowEnabled}
                         setSubstring={e => setSubstring(e.target.value)}
                         setSelectedItems={setEnabledCountries}
-                        handleSave={() => null}
                         handleCancel={router.back}
                     />
                 }
@@ -116,7 +115,7 @@ export const ContinentDetail = (props: {
                             showEnabled: showEnabled
                         })}
                         selectedItems={selectedCountries}
-                        setSelectedItems={setSelectedCountries}
+                        setSelectedItems={setSelectedCountries as unknown as () => void}
                         substring={substring}
                         selectionURL='[continent]/[country]'
                         selectionPath={[props.continent.id]}

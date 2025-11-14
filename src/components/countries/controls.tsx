@@ -59,9 +59,9 @@ export const TopBarControls = (props: {
     setSortOrder: ChangeEventHandler<HTMLSelectElement>,
     setShowEnabled: Dispatch<SetStateAction<string[]>>,
     setSubstring: ChangeEventHandler<HTMLInputElement>,
-    setSelectedItems: Function,
-    handleSave: Function,
-    handleCancel: Function,
+    setSelectedItems: (items: string[]) => void,
+    //handleSave: () => void,
+    handleCancel: () => void,
 }) => {
     const style = useContext(StyleContext)
     const router = useRouter()
@@ -135,7 +135,7 @@ export const TopBarControls = (props: {
             </li>
             <li className={style["top-menu-item"]}>
                 <Button
-                    onClick={_e => props.handleSave()}
+                    //onClick={_e => void}
                     className={style["country-edit-button"]}
                     ref={null}
                 >

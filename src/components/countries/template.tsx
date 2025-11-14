@@ -191,7 +191,7 @@ export const SideMenu = (props: {
     flag?: string,
     items: ContinentCountryCity[],
     selectedItems: string[],
-    setSelectedItems: Function,
+    setSelectedItems: () => void,
     substring: string,
     selectionURL: string,
     selectionPath: string[],
