@@ -10,6 +10,11 @@ export default async function Page({
 }): Promise<React.JSX.Element> {
 	const { continent } = await params
 	const my_continent = await fetchContinent(continent)
+	if (!my_continent) {
+		return (
+			<div>Continent not found</div>
+		)
+	}
 
 	return (
 		<Suspense fallback={<div>Loading world data...</div>}>
