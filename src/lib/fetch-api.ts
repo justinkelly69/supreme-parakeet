@@ -40,7 +40,7 @@ export const fetchAttractions = async ({
         console.log(JSON.stringify(items, null, 4))
         return items
     }
-    catch (e: any) {
+    catch (e) {
         console.error(e)
     }
 }

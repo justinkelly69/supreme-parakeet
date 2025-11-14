@@ -11,8 +11,8 @@ import { TextArea } from "../ui/xtexts";
 export const WorldDetail = (props: {
     continents: Continent[],
 }) => {
-    const mapContainer = useRef<any>(null);
-    const map = useRef<mapboxgl.Map | null>(null);
+    const mapContainer = useRef<HTMLDivElement | null>(null)
+    const map = useRef<mapboxgl.Map | null>(null)
 
     const style = useContext(StyleContext)
     const router = useRouter()
@@ -35,7 +35,7 @@ export const WorldDetail = (props: {
                 className="country"
                 title={
                     <h1 className={style['page-title']}>
-                        "Pick a Continent"
+                        Pick a Continent
                     </h1>
                 }
                 flag={
@@ -53,7 +53,7 @@ export const WorldDetail = (props: {
                         child_id={''}
                         items={props.continents}
                         selectedItems={[]}
-                        setSelectedItems={(f: any) => f}
+                        setSelectedItems={(...f: any[]) => {}}
                         substring={''}
                         selectionURL='[continent]'
                         selectionPath={[]}
