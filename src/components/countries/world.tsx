@@ -53,7 +53,7 @@ export const WorldDetail = (props: {
                         child_id={''}
                         items={props.continents}
                         selectedItems={[]}
-                        setSelectedItems={(...f: any[]) => {}}
+                        setSelectedItems={(...f: string[]) => {}}
                         substring={''}
                         selectionURL='[continent]'
                         selectionPath={[]}
