@@ -1,8 +1,8 @@
 'use client'
 
 import React, { useContext, ReactElement } from "react";
-//import { StyleContext } from "@/app/protected/geo/page";
-import { GridContainer, GridArea, em, emTotal } from "../ui/xgrid";
+import { GridContainer, GridArea} from "../ui/xgrid";
+import { em, emTotal } from "@/lib/utils";
 import { FlexBox, FlexCell } from "../ui/xflex";
 import { ContinentCountryCity, StyleContextType } from "@/lib/types";
 import styles from '@/app/protected/geo/page.module.css'
@@ -231,9 +231,7 @@ export const SideMenu = (props: {
                             </span> :
                             null
                         }
-
                     </Link>
-
                 </div>
         )
     return (

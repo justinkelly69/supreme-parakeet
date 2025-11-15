@@ -1,28 +1,5 @@
-//import { StyleContext } from "@/app/protected/countries/page"
 import * as React from "react"
-//import { useContext } from "react"
 
-export const em = (values: number[]) => valueSequence(values, "em")
-export const fr = (values: number[]) => valueSequence(values, "fr")
-
-const valueSequence = (values: number[], type: string) => {
-    const out = []
-    for (const w of values) {
-        out.push(`${w}${type}`)
-    }
-    return out.join(' ')
-}
-
-export const emTotal = (values: number[]) => valueTotal(values, "em")
-export const frTotal = (values: number[]) => valueTotal(values, "fr")
-
-const valueTotal = (values: number[], type: string) => {
-    let out: number = 0
-    for (let w = 0; w < values.length; w++) {
-        out += values[w]
-    }
-    return `${out}${type}`
-}
 
 export const GridContainer = (props: {
     cols: string,
