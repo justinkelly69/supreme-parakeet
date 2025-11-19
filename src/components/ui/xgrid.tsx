@@ -31,21 +31,15 @@ export const GridContainer = (props: {
 }
 
 export const GridArea = (props: {
-    gridRowStart: number,
-    gridRowEnd: number,
-    gridColumnStart: number,
-    gridColumnEnd: number,
-    className?: string,
+    gridArea: string,
+    className: string,
     children: React.JSX.Element | React.JSX.Element[] | string | null
 }) => {
     return (
         <div
             className={props.className}
             style={{
-                gridRowStart: props.gridRowStart,
-                gridRowEnd: props.gridRowEnd,
-                gridColumnStart: props.gridColumnStart,
-                gridColumnEnd: props.gridColumnEnd,
+                gridArea: props.gridArea,
             }}>
             {props.children}
         </div>

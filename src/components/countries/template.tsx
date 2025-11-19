@@ -36,64 +36,43 @@ export const PageTemplate = (props: {
             className="country"
         >
             <GridArea
-                gridRowStart={1}
-                gridRowEnd={2}
-                gridColumnStart={1}
-                gridColumnEnd={3}
+            gridArea="1/1/2/3"
                 className={style['country-heading']}
             >
                 {props.title}
             </GridArea>
             <GridArea
-                gridRowStart={1}
-                gridRowEnd={2}
-                gridColumnStart={3}
-                gridColumnEnd={4}
+                gridArea="1/3/2/4"
                 className={style['country-flag']}
             >
                 {props.flag}
             </GridArea>
             <GridArea
-                gridRowStart={2}
-                gridRowEnd={3}
-                gridColumnStart={1}
-                gridColumnEnd={4}
+            gridArea="2/1/3/4"
                 className={style['country-cell-header']}
             >
                 {props.controls}
             </GridArea>
             <GridArea
-                gridRowStart={3}
-                gridRowEnd={5}
-                gridColumnStart={1}
-                gridColumnEnd={2}
+                gridArea="3/1/5/2"
                 className={style['country-details']}
             >
                 {props.leftArea}
             </GridArea>
             <GridArea
-                gridRowStart={3}
-                gridRowEnd={4}
-                gridColumnStart={2}
-                gridColumnEnd={3}
+                gridArea="3/2/4/3"
                 className={style['country-map']}
             >
                 {props.mapArea}
             </GridArea>
             <GridArea
-                gridRowStart={4}
-                gridRowEnd={5}
-                gridColumnStart={2}
-                gridColumnEnd={3}
+                gridArea="4/2/5/3"
                 className={style['country-details']}
             >
                 {props.descriptionArea}
             </GridArea>
             <GridArea
-                gridRowStart={3}
-                gridRowEnd={5}
-                gridColumnStart={3}
-                gridColumnEnd={4}
+                gridArea="3/3/5/4"
                 className={style['country-details']}
             >
                 {props.rightArea}
