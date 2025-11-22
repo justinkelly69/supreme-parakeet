@@ -1,0 +1,40 @@
+[
+  {
+    "title": "Ha'penny Bridge",
+    "totalScore": 4.5,
+    "reviewsCount": 14459,
+    "street": "Ha'penny Bridge",
+    "city": "Dublin",
+    "state": null,
+    "countryCode": "IE",
+    "website": "https://www.bridgesofdublin.ie/bridges/hapenny-bridge",
+    "categoryName": "Bridge",
+    "url": "https://www.google.com/maps/search/?api=1&query=Ha'penny%20Bridge&query_place_id=ChIJFXuSYYMOZ0gRb7gtcRw21Uc"
+  },
+  {
+    "title": "Dublin Castle",
+    "totalScore": 4.3,
+    "reviewsCount": 36030,
+    "street": "Dame St",
+    "city": "Dublin 2",
+    "state": null,
+    "countryCode": "IE",
+    "website": "https://dublincastle.ie/",
+    "phone": "+353 46 942 2213",
+    "categoryName": "Castle",
+    "url": "https://www.google.com/maps/search/?api=1&query=Dublin%20Castle&query_place_id=ChIJif9mNYcOZ0gRhlbhwPbNDwU"
+  },
+  {
+    "title": "Drimnagh Medieval Castle and Gardens",
+    "totalScore": 4.7,
+    "reviewsCount": 607,
+    "street": "Medieval Castle, Long Mile Rd",
+    "city": "Dublin",
+    "state": null,
+    "countryCode": "IE",
+    "website": "http://www.drimnaghcastle.org/",
+    "phone": "+353 1 450 2530",
+    "categoryName": "Castle",
+    "url": "https://www.google.com/maps/search/?api=1&query=Drimnagh%20Medieval%20Castle%20and%20Gardens&query_place_id=ChIJCdMvZ44MZ0gRzzTlTibTlOs"
+  }
+]
