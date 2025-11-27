@@ -1,14 +1,18 @@
 
 import { fetchCountry } from "@/lib/fetch-data";
-import { CountryDetail } from "@/components/countries/country";
+import { CountryDetail } from "@/components/geo/country";
 import { Suspense } from "react";
 
 export default async function Page({
     params,
 }: {
-    params: { continent: string, country: string }
+    params: { 
+        continent: string, 
+        country: string 
+    }
 }): Promise<React.JSX.Element> {
-    const { country } = await params
+
+    const { continent, country } = await params
     const my_country = await fetchCountry(country)
 
     if (!my_country) {
@@ -19,7 +23,10 @@ export default async function Page({
 
     return (
         <Suspense fallback={<div>Loading country data...</div>}>
-            <CountryDetail country={my_country} />
+            <CountryDetail
+                path={[continent, country]}
+                country={my_country}
+            />
         </Suspense>
     )
 }

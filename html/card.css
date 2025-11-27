@@ -64,6 +64,14 @@ input {
     font-weight: lighter;
 }
 
+.close-x {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #999999;
+    float: right;
+    cursor: pointer;
+}
+
 .card-content {}
 
 .login-form {}

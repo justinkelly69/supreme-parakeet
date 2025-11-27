@@ -1,14 +1,19 @@
 
 import { fetchCity } from "@/lib/fetch-data";
-import { CityDetail } from "@/components/countries/city";
+import { CityDetail } from "@/components/geo/city";
 import { Suspense } from "react";
 
 export default async function Page({
     params,
 }: {
-    params: { continent: string, country: string, city: string }
+    params: { 
+        continent: string, 
+        country: string, 
+        city: string 
+    }
 }): Promise<React.JSX.Element> {
-    const { city } = await params
+
+    const { continent, country, city } = await params
     const my_city = await fetchCity(city)
 
     if (!my_city) {
@@ -19,7 +24,10 @@ export default async function Page({
 
     return (
         <Suspense fallback={<div>Loading city data...</div>}>
-            <CityDetail city={my_city} />
+            <CityDetail
+                path={[continent, country, city]}
+                city={my_city}
+            />
         </Suspense>
     )
 }

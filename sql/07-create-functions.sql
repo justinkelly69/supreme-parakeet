@@ -216,30 +216,32 @@ BEGIN
                 jsonb_build_object(
                     'id'                    , ca."id",
                     'city_id'              ,  ca."city_id",
+                    'visible'              ,  ca."visible",
                     'title'                 , ca."title",
                     'subtitle'              , ca."subtitle",
                     'description'           , ca."description",
-                    'price'                 , ca."price",
+                    --'price'                 , ca."price",
                     'category_name'         , ca."category_name",
                     'address'               , ca."address",
-                    'neighborhood'          , ca."neighborhood",
-                    'street'                , ca."street",
-                    'postal_code'           , ca."postal_code",
-                    'state'                 , ca."state",
+                    --'neighborhood'          , ca."neighborhood",
+                    --'street'                , ca."street",
+                    --'postal_code'           , ca."postal_code",
+                    --'state'                 , ca."state",
                     'city'                  , ca."city",
                     'country'               , ca."country",
                     'website'               , ca."website",
                     'phone'                 , ca."phone",
-                    'phone_unformatted'     , ca."phone_unformatted",
+                    --'phone_unformatted'     , ca."phone_unformatted",
                     'latitude'              , ca."latitude",
                     'longitude'             , ca."longitude",
-                    'located_in'            , ca."located_in",
+                    --'located_in'            , ca."located_in",
                     'total_score'           , ca."total_score",
                     'permanently_closed'    , ca."permanently_closed",
                     'temporarily_closed'    , ca."temporarily_closed",
                     'place_id'              , ca."place_id",
                     'categories'            , ca."categories",
                     'scraped_at'            , ca."scraped_at",
+                    'reviews_count'         , ca."reviews_count",
                     'opening_hours'         , ca."opening_hours",
                     'additional_info'       , ca."additional_info",
                     'image_url'             , ca."image_url"
@@ -253,6 +255,58 @@ BEGIN
     FROM    city_details ci
     WHERE   ci.id = city_id;
     
+    RETURN  result;
+END;
+$$;
+
+-------------------------------------------------------------------------------
+-- CREATE FUNCTION get_attraction
+-------------------------------------------------------------------------------
+DROP FUNCTION IF EXISTS     get_attraction;
+CREATE OR REPLACE FUNCTION  get_attraction(attraction_id INTEGER)
+RETURNS     JSONB
+LANGUAGE    plpgsql
+AS $$
+DECLARE
+    result  JSONB;
+BEGIN
+    SELECT jsonb_build_object (
+        'id'                    , wa."id",
+        'city_id'              ,  wa."city_id",
+        'visible'              ,  wa."visible",
+        'title'                 , wa."title",
+        'subtitle'              , wa."subtitle",
+        'description'           , wa."description",
+        --'price'                 , wa."price",
+        'category_name'         , wa."category_name",
+        'address'               , wa."address",
+        --'neighborhood'          , wa."neighborhood",
+        --'street'                , wa."street",
+        --'postal_code'           , wa."postal_code",
+        --'state'                 , wa."state",
+        'city'                  , wa."city",
+        'country'               , wa."country",
+        'website'               , wa."website",
+        'phone'                 , wa."phone",
+        --'phone_unformatted'     , wa."phone_unformatted",
+        'latitude'              , wa."latitude",
+        'longitude'             , wa."longitude",
+        --'located_in'            , wa."located_in",
+        'total_score'           , wa."total_score",
+        'permanently_closed'    , wa."permanently_closed",
+        'temporarily_closed'    , wa."temporarily_closed",
+        --'place_id'              , wa."place_id",
+        'categories'            , wa."categories",
+        'scraped_at'            , wa."scraped_at",
+        'reviews_count'         , wa."reviews_count",
+        'opening_hours'         , wa."opening_hours",
+        'additional_info'       , wa."additional_info",
+        'image_url'             , wa."image_url"
+    )
+    INTO    result
+    FROM    world.attractions wa
+    WHERE   wa.id = attraction_id;
+
     RETURN  result;
 END;
 $$;

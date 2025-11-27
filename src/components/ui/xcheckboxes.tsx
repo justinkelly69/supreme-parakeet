@@ -1,21 +1,14 @@
 import * as React from "react"
-import { ChangeEventHandler, Ref } from "react"
-
-// export type CheckBoxData = {
-//     checked?: boolean,
-//     name: string,
-//     label: string,
-// }
+import { Ref } from "react"
 
 export const Checkbox = (props: {
     name: string,
     checkedValues: string[],
     setCheckedValues: (names: string[]) => void,
-    showCheckbox: boolean,
     className?: string,
     ref: Ref<HTMLInputElement>
 }) => {
-    return props.showCheckbox ?
+    return (
         <input type="checkbox"
             name={props.name}
             className={props.className}
@@ -29,5 +22,6 @@ export const Checkbox = (props: {
                 }
             }}
             ref={props.ref}
-        /> : null
+        />
+    )
 }

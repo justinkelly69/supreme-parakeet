@@ -1,6 +1,6 @@
 
 import { fetchWorld } from '@/lib/fetch-data'
-import { WorldDetail } from '@/components/countries/world'
+import { WorldDetail } from '@/components/geo/world'
 import { Suspense } from 'react'
 
 export default async function Page() {

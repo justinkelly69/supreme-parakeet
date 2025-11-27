@@ -64,6 +64,22 @@ export const fetchCity = async (
     }
     return { ...data, id }
 }
+//-------------------------------------------------------------------------------
+//-- fetchAttraction
+//-------------------------------------------------------------------------------
+export const fetchAttraction = async (
+    id: number
+) => {
+    const { data, error } = await supabase.rpc(
+        'get_attraction', { 'attraction_id': id }
+    ) 
+
+    if (error || data.length === 0) {
+        console.error('Error fetching attraction:', error)
+        return
+    }
+    return { ...data, id }
+}
 
 //-------------------------------------------------------------------------------
 //-- setEnabledCountries
