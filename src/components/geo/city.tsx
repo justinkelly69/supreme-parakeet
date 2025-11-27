@@ -8,6 +8,7 @@ import { Attraction, City } from "@/lib/types"
 import { getMap } from "@/components/geo/map"
 import { CityControls } from "@/components/geo/controls"
 import { fetchAttractions } from "@/lib/fetch-api"
+import { getCategoriesFromAttractions } from "@/lib/utils"
 
 export const CityDetail = (props: {
     city: City,
@@ -26,9 +27,7 @@ export const CityDetail = (props: {
     const [showEnabled, setShowEnabled] = useState<string[]>(["ENABLED", "DISABLED"])
     const [sortBy, setSortBy] = useState<"name" | "population">("name")
     const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc")
-    //const [selectedAttractions, setSelectedAttractions] = useState<string[]>(
-        //getSelectedItems(props.city.attractions)
-    //)
+    const categories = getCategoriesFromAttractions(props.city.attractions || [])
 
     const style = useContext(StyleContext)
 
@@ -96,15 +95,11 @@ export const CityDetail = (props: {
                     <></>
                 }
                 rightArea={
-                    <DetailsTemplate rows={[
-                        ["Country", props.city.country],
-                        ["Name", props.city.name],
-                        ["Name (ascii)", props.city.name_ascii],
-                        ["ISO", props.city.iso3],
-                        ["Population", props.city.population],
-                        ["Latitude", props.city.latitude],
-                        ["Longitude", props.city.longitude],
-                    ]} />
+                    <ul>
+                        {categories.map((category, index) => (
+                            <li key={index}>{category}</li>
+                        ))} 
+                    </ul>
                 }
             />
         </main>

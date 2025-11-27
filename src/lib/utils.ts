@@ -1,6 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { City, ContinentCountry, ContinentWithCountries, Country, CountryCities, EnabledDisabled, EnabledItem, SortBy, SortOrder } from "./types";
+import { Attraction, City, ContinentCountry, ContinentWithCountries, Country, CountryCities, EnabledDisabled, EnabledItem, SortBy, SortOrder } from "./types";
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
@@ -83,3 +83,16 @@ export const sortNamePopulation = ({
 	}
 }
 
+export const getCategoriesFromAttractions = (attractions: Attraction[]):string[] => {
+	const categoriesSet: Set<string> = new Set()
+
+	for (const attraction of attractions) {
+		categoriesSet.add(attraction.category_name)
+
+		for (const category of attraction.categories) {
+			categoriesSet.add(category)
+		}
+	}
+
+	return Array.from(categoriesSet)
+}

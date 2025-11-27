@@ -36,7 +36,7 @@ my @fields   = (
         'total_score',
         #'permanently_closed',
         #'temporarily_closed',
-        'place_id',
+        #'place_id',
         'categories',
         'scraped_at',
         'reviews_count',
@@ -51,7 +51,12 @@ open(my $fh, "<", "$jsonFile") or die "Can't open < $jsonFile: $!";
     my $json = read_json($jsonFile);
 
     for my $place (@$json) {
-        push(@values, insertPlace($place, $city_id, \@fields));
+        if( $place->{'reviewsCount'} > 1000 &&
+            ! $place->{'permanentlyClosed'} &&
+            ! $place->{'temporarilyClosed'} 
+        ){
+            push(@values, insertPlace($place, $city_id, \@fields));
+        }
     }
 close($fh);
 
