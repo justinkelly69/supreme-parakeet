@@ -1,0 +1,62 @@
+:root {
+    --top-strip-bg-color: rgb(125, 125, 234);
+    --top-strip-fg-color: rgb(233, 238, 199);
+    --eu-color: rgb(105, 166, 67);
+    --no-eu-color: rgb(153, 5, 5);
+}
+
+body {
+    background-color: rgb(130, 230, 230);
+}
+
+.container {
+    display: block;
+    width: 100vh;
+    height: 100vh;
+    overflow: hidden;
+    padding: 0;
+    margin: 0;
+    background-color: var(--top-strip-bg-color);
+}
+
+.container-map {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    background-color: rgb(201, 203, 205);
+}  
+
+.container-breadcrumbs {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    background-color: black;
+    color: white;
+}
+
+.container-breadcrumbs ul {
+    list-style-type: circle;
+    padding: 0.5em;
+    margin-left: 1em;
+}
+
+.container-breadcrumbs ul li {
+    float: left;
+    margin-right: 2em;
+}
+
+.container-controls {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    background-color: green;
+}
+
+.container-content {
+    background-color: rgb(201, 203, 205);
+    overflow: auto;
+}       
+.container-footer {
+    background-color: black;
+    color: white;
+}

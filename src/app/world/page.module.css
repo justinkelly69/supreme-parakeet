@@ -1,0 +1,27 @@
+.container {
+    display: block;
+    width: 100vh;
+    height: 100vh;
+    overflow: hidden;
+    padding: 0;
+    margin: 0;
+    background-color: rgb(231, 61, 14);
+}
+
+.container-map {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+.container-breadcrumbs {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+.container-controls {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
