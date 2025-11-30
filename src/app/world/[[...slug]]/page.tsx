@@ -18,38 +18,40 @@ export default async function Page({
 	const path = Array.isArray(slug) ? slug : [slug];
 	let content: React.JSX.Element;
 
+	console.log(path)
+
 	switch (path.length) {
 
-		case 1:{
-			const continentsWithCountries = await fetchContinentsWithCountries()
+		case 1: {
+			const country = await fetchCountry(path[1])
+
+			if (!country) {
+				return (
+					<div>Country not found</div>
+				)
+			}
+
 			return (
-				<PageTemplate
-					crumbs={path}
-				>
-					<WorldDetail
-						continentsWithCountries={continentsWithCountries}
-						selectedContinent={path[0]}
+				<PageTemplate crumbs={path}>
+					<CountryDetail
+						country={country}
 					/>
 				</PageTemplate>
 			)
 			break
-}
-		// case 2:
-		// 	const country = fetchCountry(path[1])
-		// 	content = <CountryDetail countryCode={path[1]} />
-		// 	break
+		}
+		// case 2: {
 
+		// }
 		// case 3:
 		// 	const city = fetchCity(path[2])
 		// 	content = <CityDetail cityName={path[2]} />
 		// 	break
 
-		default:{
+		default: {
 			const continentsWithCountries = await fetchContinentsWithCountries()
 			return (
-				<PageTemplate
-					crumbs={path}
-				>
+				<PageTemplate crumbs={path}>
 					<WorldDetail
 						continentsWithCountries={continentsWithCountries}
 					/>

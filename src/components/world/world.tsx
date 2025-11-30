@@ -5,6 +5,7 @@ import { useState } from "react";
 import { FlexBox, FlexCell } from "../ui/xflex";
 import style from '@/app/world/page.module.css';
 import { Button } from "../ui/xbutton";
+import Link from "next/link";
 
 const continents = ['AF', 'AN', 'EU', 'OC', 'NA', 'SA', 'AS']
 
@@ -81,17 +82,21 @@ const WorldBody = (props: {
     selectedContinent: string,
 }) => {
 
-    const countries = props.continents.filter(c => c.id === props.selectedContinent)
+    const continent = props.continents.filter(c => c.id === props.selectedContinent)
 
     return (
         <div>
             <ul className={style['country-buttons']}>
-                {props.continents.filter(c => c.id === props.selectedContinent).flatMap(c => c.countries).map((country) => (
+                {continent[0].countries.map((country) => (
                     <li key={country.id}>
+                        <Link 
+                            href={`world/${country.id}`}
+                        >
                         <CountryButton
                             flag={country.flag}
                             name={country.name}
                         />
+                        </Link>
                     </li>
                 ))}
             </ul>
