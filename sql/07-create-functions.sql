@@ -89,6 +89,48 @@ $$
 LANGUAGE sql;
 
 -------------------------------------------------------------------------------
+-- CREATE FUNCTION get_world_continents_with_countries
+-------------------------------------------------------------------------------
+DROP FUNCTION IF EXISTS     get_world_continents_with_countries;
+CREATE OR REPLACE FUNCTION  get_world_continents_with_countries()
+RETURNS     JSONB
+LANGUAGE    plpgsql
+AS $$
+DECLARE
+    result  JSONB;
+BEGIN
+    SELECT jsonb_agg(
+        jsonb_build_object(
+            'id'            , "cd"."id",
+            'name'          , "cd"."name",
+            'longitude'     , "cd"."longitude",
+            'latitude'      , "cd"."latitude",
+            'zoom'          , "cd"."zoom",
+            'description'   , "cd"."description",
+            'countries', (
+                SELECT jsonb_agg(
+                    jsonb_build_object(
+                        'id'        , "c"."id",             
+                        'name'      , "c"."name",
+                        'flag'      , "c"."flag",
+                        'population', "c"."population",
+                        'is_enabled', "ec"."is_enabled"
+                    )
+                )
+                FROM  "country_details" "c"
+                JOIN  "world"."enabled_countries" "ec" 
+                ON "ec"."id" = "c"."id"
+                WHERE "c"."continent_id" = "cd"."id"
+            )
+        )
+    )
+    INTO    result
+    FROM    "continent_details"     "cd";  
+    RETURN  result;
+END;
+$$;
+
+-------------------------------------------------------------------------------
 -- CREATE FUNCTION get_continent_with_countries
 -------------------------------------------------------------------------------
 DROP FUNCTION IF EXISTS     get_continent_with_countries;

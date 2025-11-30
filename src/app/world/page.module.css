@@ -1,3 +1,19 @@
+:root {
+    --top-strip-bg-color: rgb(125, 125, 234);
+    --top-strip-fg-color: rgb(233, 238, 199);
+    --eu-color: rgb(105, 166, 67);
+    --no-eu-color: rgb(153, 5, 5);
+
+    --container-controls-bg-color:rgb(19, 102, 19);
+    --country-button-font-color: rgb(10, 5, 62);
+    --country-button-background-color: rgb(238, 222, 200);
+    --country-button-border-color: rgb(10, 5, 62);
+}
+
+body {
+    background-color: rgb(130, 230, 230);
+}
+
 .container {
     display: block;
     width: 100vh;
@@ -5,23 +21,115 @@
     overflow: hidden;
     padding: 0;
     margin: 0;
-    background-color: rgb(231, 61, 14);
+    background-color: var(--top-strip-bg-color);
 }
 
 .container-map {
     width: 100%;
     padding: 0;
     margin: 0;
+    background-color: rgb(201, 203, 205);
 }
 
 .container-breadcrumbs {
     width: 100%;
     padding: 0;
     margin: 0;
+    background-color: black;
+    color: white;
+}
+
+.container-breadcrumbs ul {
+    list-style-type: circle;
+    padding: 0.5em;
+    margin-left: 1em;
+}
+
+.container-breadcrumbs ul li {
+    float: left;
+    margin-right: 2em;
 }
 
 .container-controls {
     width: 100%;
     padding: 0;
     margin: 0;
+    background-color: var(--container-controls-bg-color);
+}
+
+.container-content {
+    background-color: rgb(201, 203, 205);
+    overflow: auto;
+}
+
+.container-footer {
+    background-color: black;
+    color: white;
+}
+
+ul.world-menu {
+    list-style-type: none;
+    padding: .2em;
+    margin: .2em;
+}
+
+ul.world-menu>li {
+    float: left;
+    cursor: pointer;
+}
+
+ul.world-menu>li>button {
+    color: #fff;
+    background-color: #000;
+    border: 1px solid #fff;
+    width: 8em;
+    height: 1.6em;
+    margin-left: 2em;
+    border-radius: .4em;
+}
+
+.selected {
+    color: rgb(2, 7, 29);
+    background-color: rgb(33, 106, 117);
+    border: 1px solid white;
+}
+
+ul.country-buttons {
+    list-style-type: none;
+}
+
+ul.country-buttons>li {
+    float: left;
+    margin-left: 1em;
+    margin-top: .6em;
+}
+
+.country-button {
+    display: block;
+    float: left;
+    height: 1.8em;
+    width: 16em;
+    background-color: var(--country-button-background-color);
+    color: var(--country-button-font-color);
+    border: 1px solid var(--country-button-border-color);
+    border-radius: .9em;
+}
+
+.country-button-flag {
+    display: block;
+    float: left;
+    height: 100%;
+    width: 2.4em;
+    text-align: center;
+    font-size: 1rem;
+}
+
+.country-button-name {
+    display: block;
+    float: left;
+    height: auto;
+    width: auto;
+    text-align: left;
+    font-size: .8rem;
+    padding: .4rem 0;
 }

@@ -1,5 +1,5 @@
 import { createClient } from '@/utils/supabase/client'
-import { Continent } from './types';
+import { Continent, ContinentWithCountries } from './types';
 
 const supabase = createClient()
 
@@ -14,6 +14,19 @@ export const fetchWorld = async () => {
         return
     }
     return (data ?? []).map((continent: Continent) => ({ ...continent }))
+}
+
+//-------------------------------------------------------------------------------
+//-- fetchWorld
+//-------------------------------------------------------------------------------
+export const fetchContinentsWithCountries = async () => {
+    const { data, error } = await supabase.rpc('get_world_continents_with_countries')
+
+    if (error) {
+        console.error('Error fetching continents:', error)
+        return
+    }
+    return (data ?? []).map((continents_with_countries: ContinentWithCountries[]) => ({ ...continents_with_countries }))
 }
 
 //-------------------------------------------------------------------------------

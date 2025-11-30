@@ -1,3 +1,8 @@
+"use client";
+
+import React, { ReactElement } from "react";
+import style from './map.module.css'
+
 import { useEffect, useRef } from "react";
 import { getMap } from "../geo/map";
 
@@ -18,8 +23,8 @@ const Map = (props: {
         map.current = getMap(
             mapContainer,
             map,
-            props.longitude,
-            props.latitude,
+            props.longitude || 0, // 40.77278437530158,
+            props.latitude || 0, // -73.9722936097462,
             props.zoom,
         ) || null
     }, []);

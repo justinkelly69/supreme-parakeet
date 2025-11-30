@@ -142,7 +142,6 @@ type AdditionalInfoItem = {
 }
 
 export type Attraction = {
-    [x: string]: string | StaticImport;
     id: number,
     cityId: string,
     title: string,

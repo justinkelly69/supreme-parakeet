@@ -419,7 +419,6 @@ VALUES
     ('pm', 'NA', 'Saint Pierre and Miquelon', '🇵🇲', 'pm', '508', false),
     ('pn', 'OC', 'Pitcairn Islands', '🇵🇳', 'pn', '64', false),
     ('pr', 'NA', 'Puerto Rico', '🇵🇷', 'pr', '1787,1939', false),
-    ('ps', 'AS', 'Palestine', '🇵🇸', 'ps', '970', false),
     ('pt', 'EU', 'Portugal', '🇵🇹', 'pt', '351', true),
     ('pw', 'OC', 'Palau', '🇵🇼', 'pw', '680', false),
     ('py', 'SA', 'Paraguay', '🇵🇾', 'py', '595', false),
