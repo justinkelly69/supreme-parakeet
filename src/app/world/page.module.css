@@ -5,9 +5,16 @@
     --no-eu-color: rgb(153, 5, 5);
 
     --container-controls-bg-color:rgb(19, 102, 19);
+    --container-controls-font-color:rgb(244, 247, 244);
+    --container-controls-variable-color:rgb(197, 196, 247);
+
     --country-button-font-color: rgb(10, 5, 62);
     --country-button-background-color: rgb(238, 222, 200);
     --country-button-border-color: rgb(10, 5, 62);
+
+    --input-font-color: rgb(10, 5, 62);
+    --input-background-color: rgb(244, 236, 226);
+    --input-border-color: rgb(10, 5, 62);
 }
 
 body {
@@ -55,6 +62,7 @@ body {
     padding: 0;
     margin: 0;
     background-color: var(--container-controls-bg-color);
+    color: var(--container-controls-font-color)
 }
 
 .container-content {
@@ -78,14 +86,58 @@ ul.world-menu>li {
     cursor: pointer;
 }
 
+ul.world-menu>li>h1 {
+    line-height: 100%;
+    font-size: 1.2rem;
+    margin: 0 .2em;
+}
+
+ul.world-menu>li>span {
+    margin: .2em;
+    font-size: 1rem;
+    line-height: 100%;
+    display: inline-block;
+}
+
+ul.world-menu>li>span.text-label {
+    margin-left: .6em;
+}
+
+ul.world-menu>li>span.text-value {
+    color: var(--container-controls-variable-color)
+}
+
+ul.world-menu>li>label{
+    line-height: 100%;
+    font-size: 1rem;
+    margin: .2em;
+}
 ul.world-menu>li>button {
-    color: #fff;
-    background-color: #000;
-    border: 1px solid #fff;
     width: 8em;
     height: 1.6em;
-    margin-left: 2em;
+    margin-left: .2em;
     border-radius: .4em;
+}
+
+ul.world-menu>li>button,
+ul.world-menu>li>select,
+ul.world-menu>li>input {
+    color: var(--input-font-color);
+    background-color: var(--input-background-color);
+    border: 1px solid var(--input-border-color);
+    font-size: .8rem;
+    border-radius: .4em;
+}
+
+ul.world-menu>li>input[type=text] {
+    height: 1.2rem;
+    margin: 0 .2em;
+    line-height: 100%;
+}
+
+ul.world-menu>li>input[type=checkbox] {
+    line-height: 100%;
+    margin: .2em;
 }
 
 .selected {
