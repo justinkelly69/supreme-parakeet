@@ -15,15 +15,15 @@ export default async function Page({
 	}
 }) {
 	const { slug } = await params;
-	const path = Array.isArray(slug) ? slug : [slug];
-	let content: React.JSX.Element;
+	const path = slug ? Array.isArray(slug) ? slug : [slug] : [];
 
-	console.log(path)
+	console.log('slug:', slug)
+	console.log('path:', path)
 
 	switch (path.length) {
 
 		case 1: {
-			const country = await fetchCountry(path[1])
+			const country = await fetchCountry(path[0])
 
 			if (!country) {
 				return (

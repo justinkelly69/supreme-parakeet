@@ -8,8 +8,8 @@ use Data::Dump qw(dump);
 use Scalar::Util qw(looks_like_number);
 
 
-my $jsonFile = './dublin-all.json';
-my $city_id  = 'IE-dublin';
+my $jsonFile = './insert-attractions.json';
+my $city_id  = 1238;
 my $sqlFile  = './insert-attractions.sql';
 my @values;
 my @fields   = (
@@ -143,7 +143,7 @@ sub insertPlace {
     my($place, $city_id, $fields) = @_;
 
     my %insertPlace = (
-        'city_id'               =>  str($city_id),
+        'city_id'               =>  $city_id,
         'visible'               =>  'TRUE',
         'title'                 =>  str(escape_quot($place->{'title'})),
         'subtitle'              =>  str(escape_quot($place->{'subTitle'})),

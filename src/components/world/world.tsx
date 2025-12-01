@@ -6,6 +6,7 @@ import { FlexBox, FlexCell } from "../ui/xflex";
 import style from '@/app/world/page.module.css';
 import { Button } from "../ui/xbutton";
 import Link from "next/link";
+import Body from "./body";
 
 const continents = ['AF', 'AN', 'EU', 'OC', 'NA', 'SA', 'AS']
 
@@ -20,39 +21,21 @@ const WorldDetail = (props: {
     );
 
     return (
-        <FlexBox
-            flexDirection={"column"}
-            flexWrap="nowrap"
-            alignItems={"stretch"}
-            justifyContent={"flex-start"}
-            className={style["container"]}
-            height={"100%"}
-        >
-            <FlexCell
-                flex="1 0 1em"
-                overflowX="hidden"
-                overflowY="hidden"
-                className={style["container-controls"]}
-            >
+        <Body
+            menu={
                 <WorldMenu
                     continents={props.continentsWithCountries}
                     selectedContinent={selectedContinent}
                     setSelectedContinent={setSelectedContinent}
                 />
-            </FlexCell>
-            <FlexCell
-                flex="20 0 1em"
-                overflowX="hidden"
-                overflowY="scroll"
-                className={style["container-map"]}
-            >
+            }
+            body={
                 <WorldBody
                     continents={props.continentsWithCountries}
                     selectedContinent={selectedContinent}
                 />
-            </FlexCell>
-        </FlexBox>
-
+            }
+        />
     )
 }
 export default WorldDetail
@@ -81,21 +64,22 @@ const WorldBody = (props: {
     continents: ContinentWithCountries[],
     selectedContinent: string,
 }) => {
-
-    const continent = props.continents.filter(c => c.id === props.selectedContinent)
+    const countries = props.continents.filter(
+        c => c.id === props.selectedContinent
+    )[0].countries
 
     return (
         <div>
             <ul className={style['country-buttons']}>
-                {continent[0].countries.map((country) => (
+                {countries.map((country) => (
                     <li key={country.id}>
-                        <Link 
-                            href={`world/${country.id}`}
+                        <Link
+                            href={`/world/${country.id}`}
                         >
-                        <CountryButton
-                            flag={country.flag}
-                            name={country.name}
-                        />
+                            <CountryButton
+                                flag={country.flag}
+                                name={country.name}
+                            />
                         </Link>
                     </li>
                 ))}
@@ -110,8 +94,12 @@ const CountryButton = (props: {
 }) => {
     return (
         <span className={style['country-button']}>
-            <span className={style['country-button-flag']}>{props.flag}</span>
-            <span className={style['country-button-name']}>{props.name}</span>
+            <span className={style['country-button-flag']}>
+                {props.flag}
+            </span>
+            <span className={style['country-button-name']}>
+                {props.name}
+            </span>
         </span>
     )
 }

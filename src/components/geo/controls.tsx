@@ -108,7 +108,6 @@ export const TopBarControls = (props: {
                     name="ENABLED"
                     checkedValues={props.showEnabled}
                     setCheckedValues={props.setShowEnabled}
-                    showCheckbox={true}
                     className={style["continent-list"]}
                     ref={null}
                 />
@@ -117,7 +116,6 @@ export const TopBarControls = (props: {
                     name="DISABLED"
                     checkedValues={props.showEnabled}
                     setCheckedValues={props.setShowEnabled}
-                    showCheckbox={true}
                     className={style["continent-list"]}
                     ref={null}
                 />

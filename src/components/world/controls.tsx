@@ -1,8 +1,5 @@
-import { fetchWorld } from "@/lib/fetch-data"
 import { Continent } from "@/lib/types"
 import Link from "next/link"
-
-
 
 export const WorldButtons = (props: {
     continents: Continent[]

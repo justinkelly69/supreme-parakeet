@@ -113,7 +113,7 @@ CREATE POLICY       "Users can enable/disable enabled_countries"
 -------------------------------------------------------------------------------
 CREATE TABLE 
     IF NOT EXISTS   "world"."enabled_cities" (
-    "id"            VARCHAR(20)     NOT NULL,
+    "id"            INTEGER         NOT NULL,
     "is_enabled"    BOOLEAN         NOT NULL DEFAULT FALSE,
     "latitude"      FLOAT,
     "longitude"     FLOAT,
@@ -160,10 +160,10 @@ CREATE POLICY       "Users can enable/disable enabled_cities"
 -------------------------------------------------------------------------------
 -- CREATE TABLE "world"."attractions"
 -------------------------------------------------------------------------------
-DROP TABLE IF EXISTS "world"."attractions";
-CREATE TABLE "world"."attractions" (
+CREATE TABLE
+    IF NOT EXISTS "world"."attractions" (
     "id"                    SERIAL              PRIMARY KEY,
-    "city_id"               VARCHAR(20)         NOT NULL,
+    "city_id"               INTEGER             NOT NULL,
     "visible"               BOOLEAN             NOT NULL DEFAULT TRUE,
     "title"                 TEXT                NOT NULL,
     "subtitle"              TEXT                NOT NULL DEFAULT '',

@@ -69,7 +69,7 @@ CREATE POLICY       "Users can read iso.countries"
 -------------------------------------------------------------------------------
 CREATE TABLE  
     IF NOT EXISTS "iso"."cities" (
-    "id"            VARCHAR(20)     NOT NULL,
+    "id"            SERIAL          PRIMARY KEY,
     "name"          VARCHAR(100)    NOT NULL,
     "name_ascii"    VARCHAR(100)    NOT NULL,
     "latitude"      FLOAT,
@@ -104,9 +104,9 @@ CREATE POLICY       "Users can read iso.cities"
 -------------------------------------------------------------------------------
 CREATE TABLE 
     IF NOT EXISTS   "iso"."languages" (
-    "id"            CHAR(3) PRIMARY KEY,
-    "name"          VARCHAR(100) UNIQUE,
-    "is_enabled"    BOOLEAN NOT NULL DEFAULT FALSE
+    "id"            CHAR(3)         PRIMARY KEY,
+    "name"          VARCHAR(100)    UNIQUE,
+    "is_enabled"    BOOLEAN         NOT NULL DEFAULT FALSE
 );
 
 ALTER TABLE         "iso"."languages" 
@@ -159,8 +159,8 @@ CREATE POLICY       "Users can read iso.country_languages"
 -------------------------------------------------------------------------------
 CREATE TABLE 
     IF NOT EXISTS "iso"."currencies" (
-    "id"            CHAR(3) NOT NULL PRIMARY KEY,
-    "name"          VARCHAR(100) NOT NULL
+    "id"            CHAR(3)         NOT NULL PRIMARY KEY,
+    "name"          VARCHAR(100)    NOT NULL
 );
 
 ALTER TABLE         "iso"."currencies" 
@@ -1366,7 +1366,6 @@ VALUES
     ('pn', 'eng'),
     ('pr', 'eng'),
     ('pr', 'spa'),
-    ('ps', 'ara'),
     ('pt', 'por'),
     ('pw', 'eng'),
     ('pw', 'pau'),
@@ -1676,7 +1675,6 @@ VALUES
     ('pm', 'EUR'),
     ('pn', 'NZD'),
     ('pr', 'USD'),
-    ('ps', 'ILS'),
     ('pt', 'EUR'),
     ('pw', 'USD'),
     ('py', 'PYG'),
