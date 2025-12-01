@@ -171,6 +171,7 @@ const CountryBody = (props: {
             >
                 {props.country.cities?.length > 0 ?
                     <CityButtons
+                        continent_id={props.country.continent_id}
                         cities={props.country.cities}
                         sortBy={props.sortBy}
                         sortOrder={props.sortOrder}
@@ -184,9 +185,9 @@ const CountryBody = (props: {
                 flex="1 0 1em"
                 overflowX="hidden"
                 overflowY="hidden"
-                className={style["country-details"]}
+                className={style["city-container"]}
             >
-                <CountryDetails
+                <CountryDetailsTable
                     country={props.country}
                 />
             </FlexCell>
@@ -195,6 +196,7 @@ const CountryBody = (props: {
 }
 
 const CityButtons = (props: {
+    continent_id: string,
     cities: CountryCities[],
     sortBy: SortBy,
     sortOrder: SortOrder,
@@ -203,7 +205,14 @@ const CityButtons = (props: {
 }) => {
     return (
         <div className={style['city-button-box']}>
-            <ul className={style['city-buttons']}>
+            <FlexBox
+                flexDirection={"column"}
+                flexWrap="nowrap"
+                alignItems={"stretch"}
+                justifyContent={"flex-start"}
+                className={style["city-container"]}
+                height={"100%"}
+            >
                 {props.cities && props.cities.filter(e =>
                     e.name.toLowerCase().includes(props.substring.toLowerCase()) ||
                     e.name_ascii.toLowerCase().includes(props.substring.toLowerCase())
@@ -212,17 +221,23 @@ const CityButtons = (props: {
                     sortOrder: props.sortOrder
                 }))
                     .map((city) => (
-                        <li key={city.id}>
+                        <FlexCell
+                            key={city.id}
+                            flex="4 0 1em"
+                            overflowX="hidden"
+                            overflowY="hidden"
+                            className={"x"}
+                        >
                             <Link
-                                href={`/world/${city.id}`}
+                                href={`/world/${props.continent_id}/${city.id}`}
                             >
                                 <CityButton
                                     city={city}
                                 />
                             </Link>
-                        </li>
+                        </FlexCell>
                     ))}
-            </ul>
+            </FlexBox>
         </div>
     )
 }
@@ -231,58 +246,109 @@ const CityButton = (props: {
     city: CountryCities,
 }) => {
     return (
-        <span className={style['city-button']}>
-            <span className={style['city-button-name']}>{props.city.name}</span>
-            <span className={style['city-button-population']}>({props.city.population})</span>
-        </span>
+        <FlexBox
+            flexDirection={"row"}
+            flexWrap="nowrap"
+            alignItems={"stretch"}
+            justifyContent={"flex-start"}
+            className={style["city-container"]}
+            height={"1.2em"}
+        >
+            <FlexCell
+                flex="4 0 1em"
+                overflowX="hidden"
+                overflowY="hidden"
+                className={style["table-value-cell"]}
+            >
+                <span>{props.city.name}</span>
+            </FlexCell>
+            <FlexCell
+                flex="1 0 1em"
+                overflowX="hidden"
+                overflowY="hidden"
+                className={style["table-value-cell"]}
+            >
+                <span>({props.city.population})</span>
+            </FlexCell>
+        </FlexBox>
     )
 }
 
-const CountryDetails = (props: {
+const CountryDetailsTable = (props: {
     country: Country
 }) => {
-    //const colWidths = em([20,20])
-    //const rowHeights= em([])
+
+    const fields = [
+        ['Population', props.country.population],
+        ['iso2', props.country.iso2],
+        ['tld', props.country.tld],
+        ['prefix', props.country.prefix],
+        ['density', props.country.density],
+        ['area', props.country.area],
+        ['gdp', props.country.gdp],
+        ['median_age', props.country.median_age],
+        ['website', props.country.website],
+        ['driving_side', props.country.driving_side],
+        ['religion', props.country.religion],
+    ]
+
     return (
-        <table>
-            <tbody>
-                <tr><th>iso2:</th><td>{props.country.iso2}</td></tr>
-                <tr><th>tld:</th><td>{props.country.tld}</td></tr>
-                <tr><th>prefix:</th><td>{props.country.prefix}</td></tr>
-                <tr><th>density:</th><td>{props.country.density}</td></tr>
-                <tr><th>area:</th><td>{props.country.area}</td></tr>
-                <tr><th>gdp:</th><td>{props.country.gdp}</td></tr>
-                <tr><th>median_age:</th><td>{props.country.median_age}</td></tr>
-                <tr><th>website:</th><td>{props.country.website}</td></tr>
-                <tr><th>driving_side:</th><td>{props.country.driving_side}</td></tr>
-                <tr><th>religion:</th><td>{props.country.religion}</td></tr>
-            </tbody>
-        </table>
+        <FlexBox
+            flexDirection={"column"}
+            flexWrap="nowrap"
+            alignItems={"stretch"}
+            justifyContent={"flex-start"}
+            className={style["city-container"]}
+            height={"1.6em"}
+        >
+            {fields.map(field => {
+                return (
+                    <FlexCell
+                        flex="1 0 1em"
+                        overflowX="hidden"
+                        overflowY="hidden"
+                        className={style["table-value-cell"]}
+                    >
+                        <CountryDetailsTableRow
+                            name={`${field[0]}`}
+                            value={`${field[1]}`}
+                        />
+                    </FlexCell>
+                )
+            })}
+        </FlexBox>
     )
 }
-/*
-id: string,
-continent_id: string,
-continent_name: string,
-name: string,
-flag: string,
-tld: string,
-prefix: string,
-is_eu: boolean,
-is_enabled: boolean,
-was_enabled: boolean,
-description: string,
-latitude: number,
-longitude: number,
-zoom: number,
-iso2: string,
-demonym: string,
-population: number,
-density: number,
-area: number,
-gdp: number,
-median_age: number,
-website: string,
-driving_side: string,
-un_member: boolean,
-religion: string, */
+
+const CountryDetailsTableRow = (props: {
+    name: string,
+    value: string,
+}) => {
+    return (
+        <FlexBox
+            flexDirection={"row"}
+            flexWrap="nowrap"
+            alignItems={"stretch"}
+            justifyContent={"flex-start"}
+            className={style["city-container"]}
+            height={"1.2em"}
+        >
+            <FlexCell
+                flex="4 0 1em"
+                overflowX="hidden"
+                overflowY="hidden"
+                className={style["table-value-cell"]}
+            >
+                <span>{props.name}</span>
+            </FlexCell>
+            <FlexCell
+                flex="1 0 1em"
+                overflowX="hidden"
+                overflowY="hidden"
+                className={style["table-value-cell"]}
+            >
+                <span>({props.value})</span>
+            </FlexCell>
+        </FlexBox>
+    )
+}

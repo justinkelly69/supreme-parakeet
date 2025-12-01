@@ -4,13 +4,13 @@
     --eu-color: rgb(105, 166, 67);
     --no-eu-color: rgb(153, 5, 5);
 
-    --container-controls-bg-color:rgb(19, 102, 19);
-    --container-controls-font-color:rgb(244, 247, 244);
-    --container-controls-variable-color:rgb(197, 196, 247);
+    --container-controls-bg-color: rgb(19, 102, 19);
+    --container-controls-font-color: rgb(244, 247, 244);
+    --container-controls-variable-color: rgb(197, 196, 247);
 
     --country-button-font-color: rgb(10, 5, 62);
-    --country-button-background-color: rgb(238, 222, 200);
-    --country-button-border-color: rgb(10, 5, 62);
+    --country-button-background-color: white;
+    --country-button-border-color: rgb(207, 205, 231);
 
     --input-font-color: rgb(10, 5, 62);
     --input-background-color: rgb(244, 236, 226);
@@ -107,11 +107,12 @@ ul.world-menu>li>span.text-value {
     color: var(--container-controls-variable-color)
 }
 
-ul.world-menu>li>label{
+ul.world-menu>li>label {
     line-height: 100%;
     font-size: 1rem;
     margin: .2em;
 }
+
 ul.world-menu>li>button {
     width: 8em;
     height: 1.6em;
@@ -184,4 +185,27 @@ ul.country-buttons>li {
     text-align: left;
     font-size: .8rem;
     padding: .4rem 0;
+}
+
+.city-button-box {
+    width: 36em;
+    height: 20em;
+    margin: 1em 4em;
+    display: block;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+.city-buttons {}
+
+.city-button-name {
+    background-color: var(--container-controls-bg-color);
+    color: var(--container-controls-font-color);
+    border: solid 1px var(--country-button-border-color);
+}
+
+.table-value-cell {
+    color: var(--country-button-font-color);
+    background-color: var(--country-button-background-color);
+    border-top: solid 1px var(--country-button-border-color);
 }
