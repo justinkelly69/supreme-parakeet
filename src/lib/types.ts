@@ -6,6 +6,10 @@ export type SortBy = "name" | "population"
 export type SortOrder = "asc" | "desc"
 export type EnabledDisabled = "ENABLED" | "DISABLED"
 
+export type Field = {
+    name: string,
+    value: string,
+}
 
 export type Continent = {
     id: string,

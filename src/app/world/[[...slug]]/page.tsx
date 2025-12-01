@@ -4,7 +4,6 @@ import { PageTemplate } from '@/components/world/templates'
 import WorldDetail from '@/components/world/world'
 import CountryDetail from '@/components/world/country'
 import CityDetail from '@/components/world/city'
-import ContinentDetail from '@/components/world/continent'
 import { fetchCity, fetchContinent, fetchContinentsWithCountries, fetchCountry, fetchWorld } from '@/lib/fetch-data'
 
 export default async function Page({

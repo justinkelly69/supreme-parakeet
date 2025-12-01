@@ -12,6 +12,7 @@ import { Checkbox } from "../ui/xcheckboxes";
 import { Input } from "../ui/xtexts";
 import { em, sortNamePopulation } from "@/lib/utils";
 import { GridArea, GridContainer } from "../ui/xgrid";
+import Table from "./table"
 
 const CountryDetail = (props: { country: Country }) => {
     const [showEnabled, setShowEnabled] = useState<string[]>(["ENABLED", "DISABLED"])
@@ -164,7 +165,7 @@ const CountryBody = (props: {
             height={"100vh"}
         >
             <FlexCell
-                flex="2 0 1em"
+                flex="1 0 1em"
                 overflowX="hidden"
                 overflowY="hidden"
                 className={style["container-map"]}
@@ -203,6 +204,16 @@ const CityButtons = (props: {
     showEnabled: string[],
     substring: string,
 }) => {
+
+    const buttons = props.cities && props.cities.filter(e =>
+        e.name.toLowerCase().includes(props.substring.toLowerCase()) ||
+        e.name_ascii.toLowerCase().includes(props.substring.toLowerCase())
+    ).sort(sortNamePopulation({
+        sortBy: props.sortBy,
+        sortOrder: props.sortOrder
+    }))
+
+
     return (
         <div className={style['city-button-box']}>
             <FlexBox
@@ -213,30 +224,23 @@ const CityButtons = (props: {
                 className={style["city-container"]}
                 height={"100%"}
             >
-                {props.cities && props.cities.filter(e =>
-                    e.name.toLowerCase().includes(props.substring.toLowerCase()) ||
-                    e.name_ascii.toLowerCase().includes(props.substring.toLowerCase())
-                ).sort(sortNamePopulation({
-                    sortBy: props.sortBy,
-                    sortOrder: props.sortOrder
-                }))
-                    .map((city) => (
-                        <FlexCell
-                            key={city.id}
-                            flex="4 0 1em"
-                            overflowX="hidden"
-                            overflowY="hidden"
-                            className={"x"}
+                {buttons.map((city) => (
+                    <FlexCell
+                        key={city.id}
+                        flex="4 0 1em"
+                        overflowX="hidden"
+                        overflowY="hidden"
+                        className={"x"}
+                    >
+                        <Link
+                            href={`/world/${props.continent_id}/${city.id}`}
                         >
-                            <Link
-                                href={`/world/${props.continent_id}/${city.id}`}
-                            >
-                                <CityButton
-                                    city={city}
-                                />
-                            </Link>
-                        </FlexCell>
-                    ))}
+                            <CityButton
+                                city={city}
+                            />
+                        </Link>
+                    </FlexCell>
+                ))}
             </FlexBox>
         </div>
     )
@@ -278,77 +282,23 @@ const CountryDetailsTable = (props: {
     country: Country
 }) => {
 
-    const fields = [
-        ['Population', props.country.population],
-        ['iso2', props.country.iso2],
-        ['tld', props.country.tld],
-        ['prefix', props.country.prefix],
-        ['density', props.country.density],
-        ['area', props.country.area],
-        ['gdp', props.country.gdp],
-        ['median_age', props.country.median_age],
-        ['website', props.country.website],
-        ['driving_side', props.country.driving_side],
-        ['religion', props.country.religion],
+    const fields: string[][] = [
+        ['Population', `${props.country.population ? props.country.population : ''}`],
+        ['iso2', `${props.country.iso2 ? props.country.iso2 : ''}`],
+        ['tld', `${props.country.tld ? props.country.tld : ''}`],
+        ['prefix', `${props.country.prefix ? props.country.prefix : ''}`],
+        ['density', `${props.country.density ? props.country.density : ''}`],
+        ['area', `${props.country.area ? props.country.area : ''}`],
+        ['gdp', `${props.country.gdp ? props.country.gdp : ''}`],
+        ['median_age', `${props.country.median_age ? props.country.median_age : ''}`],
+        ['website', `${props.country.website ? props.country.website : ''}`],
+        ['driving_side', `${props.country.driving_side ? props.country.driving_side : ''}`],
+        ['religion', `${props.country.religion ? props.country.religion : ''}`],
     ]
 
     return (
-        <FlexBox
-            flexDirection={"column"}
-            flexWrap="nowrap"
-            alignItems={"stretch"}
-            justifyContent={"flex-start"}
-            className={style["city-container"]}
-            height={"1.6em"}
-        >
-            {fields.map(field => {
-                return (
-                    <FlexCell
-                        flex="1 0 1em"
-                        overflowX="hidden"
-                        overflowY="hidden"
-                        className={style["table-value-cell"]}
-                    >
-                        <CountryDetailsTableRow
-                            name={`${field[0]}`}
-                            value={`${field[1]}`}
-                        />
-                    </FlexCell>
-                )
-            })}
-        </FlexBox>
-    )
-}
-
-const CountryDetailsTableRow = (props: {
-    name: string,
-    value: string,
-}) => {
-    return (
-        <FlexBox
-            flexDirection={"row"}
-            flexWrap="nowrap"
-            alignItems={"stretch"}
-            justifyContent={"flex-start"}
-            className={style["city-container"]}
-            height={"1.2em"}
-        >
-            <FlexCell
-                flex="4 0 1em"
-                overflowX="hidden"
-                overflowY="hidden"
-                className={style["table-value-cell"]}
-            >
-                <span>{props.name}</span>
-            </FlexCell>
-            <FlexCell
-                flex="1 0 1em"
-                overflowX="hidden"
-                overflowY="hidden"
-                className={style["table-value-cell"]}
-            >
-                <span>({props.value})</span>
-            </FlexCell>
-        </FlexBox>
+        <div className={style['city-button-box']}>
+            <Table fields={fields} widths={[1, 4]} />
+        </div>
     )
 }

@@ -198,11 +198,11 @@ ul.country-buttons>li {
 
 .city-buttons {}
 
-.city-button-name {
+/* .city-button-name {
     background-color: var(--container-controls-bg-color);
     color: var(--container-controls-font-color);
     border: solid 1px var(--country-button-border-color);
-}
+} */
 
 .table-value-cell {
     color: var(--country-button-font-color);

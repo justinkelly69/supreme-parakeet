@@ -83,16 +83,16 @@ export const sortNamePopulation = ({
 	}
 }
 
-export const getCategoriesFromAttractions = (attractions: Attraction[]):string[] => {
-	const categoriesSet: Set<string> = new Set()
+// export const getCategoriesFromAttractions = (attractions: Attraction[]):string[] => {
+// 	const categoriesSet: Set<string> = new Set()
 
-	for (const attraction of attractions) {
-		categoriesSet.add(attraction.category_name)
+// 	for (const attraction of attractions) {
+// 		categoriesSet.add(attraction.category_name)
 
-		for (const category of attraction.categories) {
-			categoriesSet.add(category)
-		}
-	}
+// 		for (const category of attraction.categories) {
+// 			categoriesSet.add(category)
+// 		}
+// 	}
 
-	return Array.from(categoriesSet)
-}
+// 	return Array.from(categoriesSet)
+// }
