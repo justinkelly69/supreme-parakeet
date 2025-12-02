@@ -193,16 +193,10 @@ ul.country-buttons>li {
     margin: 1em 4em;
     display: block;
     overflow-x: hidden;
-    overflow-y: scroll;
+    overflow-y: hidden;
 }
 
 .city-buttons {}
-
-/* .city-button-name {
-    background-color: var(--container-controls-bg-color);
-    color: var(--container-controls-font-color);
-    border: solid 1px var(--country-button-border-color);
-} */
 
 .table-value-cell {
     color: var(--country-button-font-color);

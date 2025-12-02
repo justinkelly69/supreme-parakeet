@@ -21,6 +21,8 @@ export const FlexBox = (props: {
     justifyContent?: JustifyContent,
     className?: string,
     height?: string | number,
+    overflowX?: Overflow,
+    overflowY?: Overflow,
     children?: ReactElement[] | ReactElement,
 }) => {
     return (
@@ -31,6 +33,8 @@ export const FlexBox = (props: {
             flexWrap: props.flexWrap,
             justifyContent: props.justifyContent,
             height: props.height,
+            overflowX: props.overflowX,
+            overflowY: props.overflowY,
         }}>
             {props.children}
         </div>

@@ -2,7 +2,7 @@ import { Field } from "@/lib/types";
 import { FlexBox, FlexCell } from "../ui/xflex"
 import style from '@/app/world/page.module.css';
 
-const Table = (props: {
+const FlexTable = (props: {
     fields: string[][],
     widths: number[],
 }) => {
@@ -13,7 +13,9 @@ const Table = (props: {
             alignItems={"stretch"}
             justifyContent={"flex-start"}
             className={style["city-container"]}
-            height={"1.6em"}
+            height={"100%"}
+            overflowX="hidden"
+            overflowY="auto"
         >
             {props.fields.map((field, index) => {
                 return (
@@ -24,7 +26,7 @@ const Table = (props: {
                         overflowY="hidden"
                         className={style["table-value-cell"]}
                     >
-                        <TableRow
+                        <FlexTableRow
                             field={field}
                             widths={props.widths}
                         />
@@ -35,7 +37,7 @@ const Table = (props: {
     )
 }
 
-const TableRow = (props: {
+const FlexTableRow = (props: {
     field: string[],
     widths: number[],
 }) => {
@@ -46,6 +48,8 @@ const TableRow = (props: {
             alignItems={"stretch"}
             justifyContent={"flex-start"}
             className={style["city-container"]}
+            overflowX="hidden"
+            overflowY="hidden"
             height={"auto"}
         >
             <FlexCell
@@ -68,4 +72,4 @@ const TableRow = (props: {
     )
 }
 
-export default Table
+export default FlexTable

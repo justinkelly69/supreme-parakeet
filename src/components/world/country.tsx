@@ -12,7 +12,7 @@ import { Checkbox } from "../ui/xcheckboxes";
 import { Input } from "../ui/xtexts";
 import { em, sortNamePopulation } from "@/lib/utils";
 import { GridArea, GridContainer } from "../ui/xgrid";
-import Table from "./table"
+import FlexTable from "./flextable"
 
 const CountryDetail = (props: { country: Country }) => {
     const [showEnabled, setShowEnabled] = useState<string[]>(["ENABLED", "DISABLED"])
@@ -162,8 +162,20 @@ const CountryBody = (props: {
             alignItems={"stretch"}
             justifyContent={"flex-start"}
             className={style["city-container"]}
+            overflowX="hidden"
+            overflowY="auto"
             height={"100vh"}
         >
+            <FlexCell
+                flex="1 0 1em"
+                overflowX="hidden"
+                overflowY="hidden"
+                className={style["city-container"]}
+            >
+                <CountryDetailsTable
+                    country={props.country}
+                />
+            </FlexCell>
             <FlexCell
                 flex="1 0 1em"
                 overflowX="hidden"
@@ -181,16 +193,6 @@ const CountryBody = (props: {
                     /> :
                     <div>No cities in {props.country.name}</div>
                 }
-            </FlexCell>
-            <FlexCell
-                flex="1 0 1em"
-                overflowX="hidden"
-                overflowY="hidden"
-                className={style["city-container"]}
-            >
-                <CountryDetailsTable
-                    country={props.country}
-                />
             </FlexCell>
         </FlexBox>
     )
@@ -222,6 +224,8 @@ const CityButtons = (props: {
                 alignItems={"stretch"}
                 justifyContent={"flex-start"}
                 className={style["city-container"]}
+                overflowX="hidden"
+                overflowY="auto"
                 height={"100%"}
             >
                 {buttons.map((city) => (
@@ -298,7 +302,7 @@ const CountryDetailsTable = (props: {
 
     return (
         <div className={style['city-button-box']}>
-            <Table fields={fields} widths={[1, 4]} />
+            <FlexTable fields={fields} widths={[1, 4]} />
         </div>
     )
 }

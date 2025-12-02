@@ -1,5 +1,5 @@
 import * as React from "react";
-import { StyleContext } from "@/components/geo/template";
+import { StyleContext } from "@/components/world/templates";
 import { useContext } from "react";
 
 interface CardHeaderProps {
