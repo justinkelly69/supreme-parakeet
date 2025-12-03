@@ -9,7 +9,7 @@ export const WorldButtons = (props: {
         <ul>
             {props.continents.map((continent) => (
                 <li key={continent.id}>
-                    <Link href={`/world/${continent.id}`}>
+                    <Link href={`/protected/world/${continent.id}`}>
                         <a>{continent.name}</a>
                     </Link>
                 </li>

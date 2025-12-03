@@ -3,7 +3,7 @@
 import { ContinentWithCountries } from "@/lib/types"
 import { useState } from "react";
 import { FlexBox, FlexCell } from "../ui/xflex";
-import style from '@/app/world/page.module.css';
+import style from '@/app/protected/world/page.module.css';
 import { Button } from "../ui/xbutton";
 import Link from "next/link";
 import Body from "./body";
@@ -74,7 +74,7 @@ const WorldBody = (props: {
                 {countries.map((country) => (
                     <li key={country.id}>
                         <Link
-                            href={`/world/${country.id}`}
+                            href={`/protected/world/${country.id}`}
                         >
                             <CountryButton
                                 flag={country.flag}

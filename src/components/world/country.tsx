@@ -3,7 +3,7 @@
 import { City, Country, CountryCities, SortBy, SortOrder } from "@/lib/types";
 import { ChangeEventHandler, Dispatch, SetStateAction, useState } from "react";
 import { FlexBox, FlexCell } from "../ui/xflex";
-import style from '@/app/world/page.module.css';
+import style from '@/app/protected/world/page.module.css';
 import { Button } from "../ui/xbutton";
 import Link from "next/link";
 import Body from "./body";
@@ -237,7 +237,7 @@ const CityButtons = (props: {
                         className={"x"}
                     >
                         <Link
-                            href={`/world/${props.continent_id}/${city.id}`}
+                            href={`/protected/world/${props.continent_id}/${city.id}`}
                         >
                             <CityButton
                                 city={city}

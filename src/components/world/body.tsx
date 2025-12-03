@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 import { FlexBox, FlexCell } from "../ui/xflex"
-import style from '@/app/world/page.module.css';
+import style from '@/app/protected/world/page.module.css';
 
 const Body = (props: {
     menu: ReactElement | ReactElement[] | string | null,

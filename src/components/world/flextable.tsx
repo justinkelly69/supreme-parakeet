@@ -1,6 +1,6 @@
 import { Field } from "@/lib/types";
 import { FlexBox, FlexCell } from "../ui/xflex"
-import style from '@/app/world/page.module.css';
+import style from '@/app/protected/world/page.module.css';
 
 const FlexTable = (props: {
     fields: string[][],

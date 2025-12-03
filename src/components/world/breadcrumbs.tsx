@@ -6,14 +6,14 @@ const Breadcrumbs = (props: { crumbs: string[] }) => {
         <nav aria-label="breadcrumb">
             <ul>
                 <li key={0}>
-                    <Link href={`/world`}>{'world'}</Link>
+                    <Link href={`/protected/world`}>{'world'}</Link>
                 </li>
                 {props.crumbs.map((crumb, index) => {
                     const href = props.crumbs.slice(0, index + 1).join('/')
 
                     return (
                         <li key={index}>
-                            <Link href={`/world/${href}`}>{crumb}</Link>
+                            <Link href={`/protected/world/${href}`}>{crumb}</Link>
                         </li>
                     )
                 })}

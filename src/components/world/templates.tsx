@@ -7,7 +7,7 @@ import Breadcrumbs from "@/components/world/breadcrumbs";
 import { WorldButtons } from "./controls";
 import Footer from "./footer";
 import { FlexBox, FlexCell } from "../ui/xflex";
-import styles from '@/app/world/page.module.css';
+import styles from '@/app/protected/world/page.module.css';
 import { Continent, StyleContextType } from "@/lib/types";
 
 export const StyleContext = createContext<StyleContextType>(styles);
